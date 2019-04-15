@@ -38,3 +38,15 @@ function getFirstReview( movieName ){
 }
 
 getFirstReview( 'Frozen' );
+
+function createSearchListener(){
+    var $searchButton = $('#search-button');
+    var $searchText = $('#search-text');
+    $searchButton.on('click', function(){
+        var searchedText = $searchText.val();
+        console.log('searched:', searchedText);
+
+        $searchText.val('');
+    })
+}
+createSearchListener();
