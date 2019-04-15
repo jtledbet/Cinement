@@ -2,6 +2,13 @@
 
 //https://api-us.faceplusplus.com/facepp/v3/detect?api_key=8dOqvd6QOBI7Uy45Sp5I2cSmlYZQva13
 
+function combineReviewsText( reviewsRaw ){
+    var combined = '';
+    for( var i =0; i < reviewsRaw.length; i++){
+        combined += reviewsRaw[i].content;
+    }
+    return combined;
+}
 
 function getFirstReview( movieName ){
     var urlBase = 'https://api.themoviedb.org/3/search/movie?';
@@ -21,7 +28,11 @@ function getFirstReview( movieName ){
             method: "GET"
         }).then(function (response) {
             console.log(response)
+            var reviewsRaw = response.results;
 
+            var combined = combineReviewsText( reviewsRaw );
+
+            console.log(combined) //will go into sentiment api
         })
     })
 }
