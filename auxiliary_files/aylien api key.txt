@@ -1,0 +1,4 @@
+
+app id: 	4847b0ec
+key: 63a2bfcb9ea276610d553a39aca78101
+endpoint: https://api.aylien.com/api/v1
