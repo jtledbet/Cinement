@@ -32,9 +32,30 @@ function getFirstReview( movieName ){
 
             var combined = combineReviewsText( reviewsRaw );
 
+            var sentiment = getParallelDotsSentiment( combined )
+
+            var movieDiv = createMovieDiv(firstRes, sentiment);
+            $('#movie-holder').append(movieDiv)
+
             console.log(combined) //will go into sentiment api
         })
     })
 }
 
 getFirstReview( 'Frozen' );
+
+function getParallelDotsSentiment( text ){
+    return $.post("https://apis.paralleldots.com/v4/sentiment",{ 
+        api_key: "nNrvGbJRqlR7VMkESMFaKRm6Rh5gnsmhYtf6N3trZzI", 
+        text: text 
+    }).then(function (response) { 
+        console.log(response)
+        return response;
+    })
+}
+
+function createMovieDiv (movieResponse, sentiment){
+    var movieDiv = $('<div>');
+    movieDiv.append($('<p>').text(movieResponse.title))
+    movieDiv.append($('<p>').text(sentiment))
+}
