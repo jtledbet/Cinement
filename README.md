@@ -1,4 +1,4 @@
-# Project_1
+# Movie Sentiment
 
 
 ![HTML](https://img.shields.io/badge/language-HTML-green.svg?logo=html5)
@@ -7,7 +7,7 @@
 ![jQuery](https://img.shields.io/badge/library-jQuery-yellow.svg?logo=jQuery)
 =====
 
-User enters a location into a form or clicks a button (for a preset location search) in order to receive a list of mugshots from JailBase. These mugshots are then processedthrough Face++ for facial data to display to the user along with their arrest details and conclusions extrapolated from the data available.
+User enters a movie search and reviews are fetched through The Movie Database. These reviews are run through Microsoft Azure's Text Analytics to find the sentiment of the reviews.
 
 # Group Members
 
@@ -17,8 +17,8 @@ User enters a location into a form or clicks a button (for a preset location sea
 
 # Powered By
 
-* [Jailbase](http://jailbase.com/)
-* [FacePlusPlus](https://www.faceplusplus.com/)
+* [The Movie Db](https://developers.themoviedb.org)
+* [Microsoft Azure Text Analytics](https://azure.microsoft.com/en-us/services/cognitive-services/text-analytics/)
 
 =====
 
