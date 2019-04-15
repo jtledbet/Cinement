@@ -1,0 +1,4 @@
+key: 8dOqvd6QOBI7Uy45Sp5I2cSmlYZQva13
+secret: wSKaHg1R5m2kEGEl-ReNubKSfWAMvvlq
+
+https://api-us.faceplusplus.com/facepp/v3/detect?api_key=8dOqvd6QOBI7Uy45Sp5I2cSmlYZQva13&api_secret=wSKaHg1R5m2kEGEl-ReNubKSfWAMvvlq
