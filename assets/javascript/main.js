@@ -136,6 +136,17 @@ function getFirstReview( movieName ){
 
 getFirstReview( 'Frozen' );
 
+function createSearchListener(){
+    var $searchButton = $('#search-button');
+    var $searchText = $('#search-text');
+    $searchButton.on('click', function(){
+        var searchedText = $searchText.val();
+        console.log('searched:', searchedText);
+
+        $searchText.val('');
+    })
+}
+createSearchListener();
 function getParallelDotsSentiment( text ){
     return $.post("https://apis.paralleldots.com/v4/sentiment",{ 
         api_key: "nNrvGbJRqlR7VMkESMFaKRm6Rh5gnsmhYtf6N3trZzI", 
