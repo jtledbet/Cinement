@@ -5,8 +5,6 @@ getTrending();
 createSearchListener();
 //getFirstReview('Frozen');
 
-
-
 var apiKeyMC = "480bfb040aaa88e722eb4a15ee9efd15"
 var baseURL = "http://api.meaningcloud.com/"
 var summaryURL = "summarization-1.0/"
@@ -15,7 +13,7 @@ var numSentences = 3;
 var queryURL = "";
 
 var gettysBurg = "Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal. Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure. We are met on a great battle-field of that war. We have come to dedicate a portion of that field, as a final resting place for those who here gave their lives that that nation might live. It is altogether fitting and proper that we should do this. But, in a larger sense, we can not dedicate -- we can not consecrate -- we can not hallow -- this ground. The brave men, living and dead, who struggled here, have consecrated it, far above our poor power to add or detract. The world will little note, nor long remember what we say here, but it can never forget what they did here. It is for us the living, rather, to be dedicated here to the unfinished work which they who fought here have thus far so nobly advanced. It is rather for us to be here dedicated to the great task remaining before us -- that from these honored dead we take increased devotion to that cause for which they gave the last full measure of devotion -- that we here highly resolve that these dead shall not have died in vain -- that this nation, under God, shall have a new birth of freedom -- and that government of the people, by the people, for the people, shall not perish from the earth."
-
+var veryBadReview = "I hated this movie. Hated, hated, hated, hated, hated this movie. Hated it. Hated every simpering stupid vacant audience-insulting moment of it. Hated the sensibility that thought anyone would like it. Hated the implied insult to the audience by its belief that anyone would be entertained by it."
 var ajaxOptions = {
     url: queryURL,
     method: "GET",
@@ -28,18 +26,14 @@ var ajaxOptions = {
     }
 }
 
-// getFirstReview( 'Frozen' );
 
-<<<<<<< HEAD
-// getSummary(gettysBurg)
-// getParallelDotsSentiment(gettysBurg)
-// getParallelDotsEmotion(gettysBurg)
-=======
-// isURL = true;
-// getSummary(queryText, isURL);
-// getSentiment(queryText, isURL);
->>>>>>> 9b0ec6c82b4b132a397afac0b65421b1eb46fb58
+getFeels(veryBadReview)
 
+function getFeels(text) {
+    getSummary(text)
+    getParallelDotsSentiment(text)
+    getParallelDotsEmotion(text)
+}
 
 function getSummary(text){
 
@@ -118,16 +112,10 @@ function getFirstReview( movieName ){
             // var movieDiv = createMovieDiv(firstRes, sentiment);
             // $('#movie-holder').append(movieDiv)
 
-            getSummary(combined)
-            getParallelDotsSentiment(combined)
-            getParallelDotsEmotion(combined)
+            getFeels(combined)
         })
     })
 }
-
-<<<<<<< HEAD
-=======
-//getFirstReview( 'Frozen' );
 
 function getTrending(){
     var apiKeyPD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
@@ -149,7 +137,6 @@ function getTrending(){
 
 }
 
->>>>>>> 9b0ec6c82b4b132a397afac0b65421b1eb46fb58
 function createSearchListener(){
     var $searchButton = $('#search-button');
     var $searchText = $('#search-text');
@@ -163,21 +150,9 @@ function createSearchListener(){
         $searchText.val('');
     })
 }
-<<<<<<< HEAD
+
 createSearchListener();
 
-=======
-
-function getParallelDotsSentiment( text ){
-    return $.post("https://apis.paralleldots.com/v4/sentiment",{ 
-        api_key: "nNrvGbJRqlR7VMkESMFaKRm6Rh5gnsmhYtf6N3trZzI", 
-        text: text 
-    }).then(function (response) { 
-        console.log(response)
-        return response;
-    })
-}
->>>>>>> 9b0ec6c82b4b132a397afac0b65421b1eb46fb58
 
 function getParallelDotsSentiment( text ){
     return $.post("https://apis.paralleldots.com/v4/sentiment",{ 
@@ -192,11 +167,13 @@ function getParallelDotsSentiment( text ){
         var neu = sent.neutral;
         var pos = sent.positive;
 
+        var percentage = 0;
         var sentimentResult = "" 
 
         // Assess general sentiment:
         if (pos > neu && pos > neg) {
             sentimentResult = "Somewhat Positive"
+            percentage = Math.floor(pos * 100)
             if (pos > 0.5) {
                 sentimentResult = "Positive"
                 if (pos > 0.7) {
@@ -206,24 +183,27 @@ function getParallelDotsSentiment( text ){
 		}
 		else if (neu > pos && neu > neg) {
             sentimentResult = "Somewhat Neutral"
-            if (pos > 0.5) {
+            percentage = Math.floor(neu * 100)
+            if (neu > 0.5) {
                 sentimentResult = "Neutral"
-                if (pos > 0.7) {
+                if (neu > 0.7) {
                     sentimentResult = "Very Neutral"
                 }
             }
 		}
 		else if (neg > pos && neg > neu) {
             sentimentResult = "Somewhat Negative"
-            if (pos > 0.5) {
+            percentage = Math.floor(neg * 100)
+            if (neg > 0.5) {
                 sentimentResult = "Negative"
-                if (pos > 0.7) {
+                if (neg > 0.7) {
                     sentimentResult = "Very Negative"
                 }
             }
-		}
+        }
 
-        $("#movie-info").append("<br><br>General Sentiment: " + sentimentResult); 
+        $("#movie-info").append("<br><br>General Sentiment: " + sentimentResult + " (" + percentage + "%)"); 
+        console.log("<br><br>General Sentiment: " + sentimentResult + " (" + percentage + "%)"); 
         return response;
     })
 }
@@ -264,6 +244,7 @@ function getParallelDotsEmotion(text) {
         var emoNums = [];
         var maxNum = 0;
         var emoIndex = 0;
+        var percentage = 0;
 
         emoNames.push("Angry")
         emoNums.push(emo.Angry)
@@ -286,10 +267,10 @@ function getParallelDotsEmotion(text) {
             }
         }
 
-        console.log(emoNums + '\n' + emoNames[emoIndex] + " " + maxNum);
-        console.log()
+        percentage = Math.floor(maxNum * 100);
 
-        $("#movie-info").append("<br><br>Emotional Reading: " + emoNames[emoIndex]); 
+        console.log("<br><br>Emotional Reading: " + emoNames[emoIndex] + " (" + percentage + "%)");
+        $("#movie-info").append("<br><br>Emotional Reading: " + emoNames[emoIndex] + " (" + percentage + "%)"); 
         return response; 
     })
 }
