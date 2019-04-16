@@ -29,7 +29,7 @@
 	<div class="top-bar" id="responsive-menu">
 		<div class="top-bar-left">
 			<ul class="dropdown menu" data-dropdown-menu="">
-				<li class="menu-text">Movie Sentament</li>
+				<li class="menu-text">Movie Sentiment</li>
 
 
 				<li>
@@ -51,10 +51,10 @@
 
 
 			<div class="input-group input-group-rounded">
-				<input class="input-group-field" type="search">
+				<input id="search-text" class="input-group-field" type="search">
 
 				<div class="input-group-button">
-					<input class="button secondary" type="submit" value="Search">
+					<input id="search-button" class="button secondary" type="submit" value="Search">
 				</div>
 			</div>
 		</div>
@@ -105,8 +105,8 @@
 			<h2 class="top">Trending Movies</h2>
 		</div>
 
-
-		<div class="grid-x grid-padding-x">
+		<div id="trending" class="grid-x grid-padding-x">
+            <!--
 			<div class="cell large-3 small-6 one">
 				<div class="grid-x">
 					<div class="cell shad"><!-- Place for Poster -->
@@ -168,22 +168,62 @@
 						What ever it says down here
 					</div>
 				</div>
-			</div>
+            </div>
+            -->
 		</div>
 	</div>
 
 
 	<footer>
-	</footer>
-	<script src="assets/javascript/vendor/jquery.js">
-	</script> 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/foundation.js">
-	</script> 
-	<script src="assets/javascript/app.js">
-	</script> 
+    </footer>
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js">
-	</script> 
+    </script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/foundation.js">
+    </script>
 	<script src="assets/javascript/main.js">
 	</script>
 </body>
 </html>
+
+<!--
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Movie Review Summary and Sentiments</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="screen" href="assets\css\style.css">
+</head>
+
+<body>
+
+<div class="card">
+    <div class="card-header" id="movie-title">Movie Title</div>
+    <div class="card-body" id="movie-image">Movie Image</div>
+    <div class="card-footer" id="movie-info"></div>
+</div>
+
+    <form class="w-full max-w-sm">
+        <div class="flex items-center border-b border-b-2 border-teal py-2">
+            <input id="search-text"
+                class="appearance-none bg-transparent border-none w-full text-grey-darker mr-3 py-1 px-2 leading-tight focus:outline-none"
+                type="text" placeholder="Movie Title" aria-label="Movie Search">
+            <button id="search-button"
+                class="flex-no-shrink bg-teal hover:bg-teal-dark border-teal hover:border-teal-dark text-sm border-4 text-white py-1 px-2 rounded"
+                type="button">
+                Search
+            </button>
+        </div>
+    </form>
+
+<h3>this is a test of the whole push/pull branch thing</h3>
+<div id="movie-holder"></div>
+<div id="trending"></div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+ <script src="node_modules\aylien_textapi\textapi.js"></script> 
+ <script src="..\Project_1_graveyard\main_PD.js"></script> 
+<script src="assets/javascript/main.js"></script>
+
+</body>-->
