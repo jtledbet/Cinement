@@ -1,3 +1,11 @@
+$(document).foundation()
+
+getTrending();
+
+createSearchListener();
+//getFirstReview('Frozen');
+
+
 
 var apiKeyMC = "480bfb040aaa88e722eb4a15ee9efd15"
 var baseURL = "http://api.meaningcloud.com/"
@@ -25,7 +33,6 @@ queryText = "this is great"
 // queryText = gettysBurg;
 
 // isURL = true;
-getFirstReview( 'Frozen' );
 // getSummary(queryText, isURL);
 // getSentiment(queryText, isURL);
 
@@ -169,19 +176,19 @@ function getTrending(){
         console.log( results );
 
         for(var i =0; i < 4; i++){
-            var movieDiv = createMovieDiv( results[i] )
+            var movieDiv = createTrendingDiv( results[i] )
             $('#trending').append( movieDiv )
         }
 
     })
 
 }
-//getTrending();
 
 function createSearchListener(){
     var $searchButton = $('#search-button');
     var $searchText = $('#search-text');
-    $searchButton.on('click', function(){
+    $searchButton.on('click', function(e){
+        e.preventDefault();
         var searchedText = $searchText.val();
         console.log('searched:', searchedText);
 
@@ -190,7 +197,6 @@ function createSearchListener(){
         $searchText.val('');
     })
 }
-createSearchListener();
 
 function getParallelDotsSentiment( text ){
     return $.post("https://apis.paralleldots.com/v4/sentiment",{ 
@@ -274,6 +280,38 @@ function createMovieDiv (movieResponse, sentiment){
     if( sentiment !== undefined ){
         movieDiv.append($('<p>').text(sentiment))
     }
+
+    return movieDiv;
+}
+
+function createTrendingDiv(movieResponse, sentiment) {
+    var poster = 'https://image.tmdb.org/t/p/w500' + movieResponse.poster_path;
+    var title = movieResponse.title;
+    var popularity = movieResponse.popularity;
+    var releaseDate = movieResponse.release_date;
+    var overview = movieResponse.overview;
+    var genres = movieResponse.genre_ids;
+    var id = movieResponse.id;
+
+    var movieDiv = $('<div>', { class: "cell large-3 small-6 one" });
+    movieDiv.append(
+        $('<div>', { class: "grid-x" }).append( 
+              $('<div>', {class: 'cell shad'}).append(
+                  $('<img>', {src: poster, alt: title})
+              )
+            )
+    )
+    var displayText = overview;
+    if (sentiment !== undefined){
+        displayText = sentiment;
+    }
+    movieDiv.append(
+        $('<div>', { class: "grid-x" }).append(
+            $('<div>', { class: 'cell text' }).text(
+                displayText
+            )
+        )
+    )
 
     return movieDiv;
 }
