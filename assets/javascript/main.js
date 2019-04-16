@@ -6,6 +6,9 @@ createSearchListener();
 //getFirstReview('Frozen');
 
 var apiKeyMC = "480bfb040aaa88e722eb4a15ee9efd15"
+var apiKeyPD = "N5Uc3tNnJ90gI9xCvMo7e0w4pFiFyyyz7LyX3HAvqNE"
+var apiKeyMD = "api_key=7c49e1342952d7c7e126e900862f9e64"
+
 var baseURL = "http://api.meaningcloud.com/"
 var summaryURL = "summarization-1.0/"
 var sentimentURL = "sentiment-2.1"
@@ -27,7 +30,7 @@ var ajaxOptions = {
 }
 
 
-getFeels(veryBadReview)
+// getFeels(veryBadReview)
 
 function getFeels(text) {
     getSummary(text)
@@ -42,7 +45,7 @@ function getSummary(text){
     }).then(function (response) { 
         console.log(response)
         console.log(response.summary)
-        $("#movie-info").append(response.summary)
+        $("#review-summary").text(response.summary)
         return response;
     })
 }
@@ -102,9 +105,7 @@ function getReviews( id ){
         // var movieDiv = createMovieDiv(firstRes, sentiment);
         // $('#movie-holder').append(movieDiv)
 
-        getSummary(combined)
-        getParallelDotsSentiment(combined)
-        getParallelDotsEmotion(combined)
+        getFeels(combined);
     })
 }
 
@@ -138,7 +139,7 @@ function getTrending(){
         var results = response.results;
         console.log( results );
 
-        for(var i =0; i < 4; i++){
+        for(var i = 0; i < 4; i++){
             var movieDiv = createTrendingDiv( results[i] )
             $('#trending').append( movieDiv )
         }
@@ -165,8 +166,8 @@ function createSearchListener(){
 
 function getParallelDotsSentiment( text ){
     return $.post("https://apis.paralleldots.com/v4/sentiment",{ 
-        api_key: "nNrvGbJRqlR7VMkESMFaKRm6Rh5gnsmhYtf6N3trZzI", 
-        text: text 
+        api_key: apiKeyPD, 
+        text: text,
     }).then(function (response) { 
         console.log(response)
 
@@ -211,7 +212,7 @@ function getParallelDotsSentiment( text ){
             }
         }
 
-        $("#movie-info").append("<br><br>General Sentiment: " + sentimentResult + " (" + percentage + "%)"); 
+        $("#gen-sent").text(sentimentResult + " (" + percentage + "%)"); 
         console.log("<br><br>General Sentiment: " + sentimentResult + " (" + percentage + "%)"); 
         return response;
     })
@@ -222,8 +223,8 @@ function getParallelDotsKeyword(text) {
     // form: {text:text,api_key:API_KEY}}
     // currently does not work (error 500)
 
-    return $.post("https://apis.paralleldots.com/v4/keywords_batch", {
-        api_key: "nNrvGbJRqlR7VMkESMFaKRm6Rh5gnsmhYtf6N3trZzI",
+    return $.post("https://apis.paralleldots.com/v4/keywords", {
+        api_key: apiKeyPD,
         text: text,
     }).then(function (response) {
         console.log(response)
@@ -244,7 +245,7 @@ function getParallelDotsEmotion(text) {
     // form: {text:text,api_key:API_KEY}}
 
     return $.post("https://apis.paralleldots.com/v4/emotion", {
-        api_key: "nNrvGbJRqlR7VMkESMFaKRm6Rh5gnsmhYtf6N3trZzI",
+        api_key: apiKeyPD,
         text: text,
     }).then(function (response) {
         console.log(response)
@@ -279,7 +280,7 @@ function getParallelDotsEmotion(text) {
         percentage = Math.floor(maxNum * 100);
 
         console.log("<br><br>Emotional Reading: " + emoNames[emoIndex] + " (" + percentage + "%)");
-        $("#movie-info").append("<br><br>Emotional Reading: " + emoNames[emoIndex] + " (" + percentage + "%)"); 
+        $("#emo-reading").text(emoNames[emoIndex] + " (" + percentage + "%)"); 
         return response; 
     })
 }
