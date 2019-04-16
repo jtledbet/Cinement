@@ -104,8 +104,8 @@ function combineReviewsText( reviewsRaw ){
 
 function getFirstReview( movieName ){
     var urlBase = 'https://api.themoviedb.org/3/search/movie?';
-    var apiKey = 'api_key=7c49e1342952d7c7e126e900862f9e64';
-    var movieSearch = urlBase + apiKey + '&query=' + movieName
+    var apiKeyPD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
+    var movieSearch = urlBase + apiKeyPD + '&query=' + movieName
     $.ajax({
         url: movieSearch,
         method: "GET"
@@ -114,7 +114,7 @@ function getFirstReview( movieName ){
         var firstRes = response.results[0];
 
         var reviewSearch = "https://api.themoviedb.org/3/movie/" + firstRes.id + "/reviews?"
-        reviewSearch += apiKey;
+        reviewSearch += apiKeyPD;
         $.ajax({
             url: reviewSearch,
             method: "GET"
@@ -134,7 +134,28 @@ function getFirstReview( movieName ){
     })
 }
 
-getFirstReview( 'Frozen' );
+//getFirstReview( 'Frozen' );
+
+function getTrending(){
+    var apiKeyPD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
+    var requestUrl = 'https://api.themoviedb.org/3/movie/popular?'+ apiKeyPD +'&language=en-US&page=1';
+
+    $.ajax({
+        url: requestUrl,
+        method: "GET"
+    }).then(function (response) {
+        var results = response.results;
+        console.log( results );
+
+        for(var i =0; i < 4; i++){
+            var movieDiv = createMovieDiv( results[i] )
+            $('#trending').append( movieDiv )
+        }
+
+    })
+
+}
+//getTrending();
 
 function createSearchListener(){
     var $searchButton = $('#search-button');
@@ -143,10 +164,13 @@ function createSearchListener(){
         var searchedText = $searchText.val();
         console.log('searched:', searchedText);
 
+        getFirstReview(searchedText);
+
         $searchText.val('');
     })
 }
 createSearchListener();
+
 function getParallelDotsSentiment( text ){
     return $.post("https://apis.paralleldots.com/v4/sentiment",{ 
         api_key: "nNrvGbJRqlR7VMkESMFaKRm6Rh5gnsmhYtf6N3trZzI", 
@@ -158,7 +182,19 @@ function getParallelDotsSentiment( text ){
 }
 
 function createMovieDiv (movieResponse, sentiment){
+    var poster = 'https://image.tmdb.org/t/p/w500'+ movieResponse.poster_path;
+    var title = movieResponse.title;
+    var popularity = movieResponse.popularity;
+    var releaseDate = movieResponse.release_date;
+    var overview = movieResponse.overview;
+    var genres = movieResponse.genre_ids;
+    var id = movieResponse.id;
+
     var movieDiv = $('<div>');
-    movieDiv.append($('<p>').text(movieResponse.title))
-    movieDiv.append($('<p>').text(sentiment))
+    movieDiv.append( $('<img>', {src: poster, alt: title}) )
+    if( sentiment !== undefined ){
+        movieDiv.append($('<p>').text(sentiment))
+    }
+
+    return movieDiv;
 }
