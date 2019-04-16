@@ -1,3 +1,17 @@
+<<<<<<< HEAD
+
+<<<<<<< HEAD
+var apiKeyMC = "480bfb040aaa88e722eb4a15ee9efd15"
+=======
+var apiKey = "480bfb040aaa88e722eb4a15ee9efd15"
+>>>>>>> beb88b53aae4de7a824c2aaa7c4987754065bb5b
+var baseURL = "http://api.meaningcloud.com/"
+var summaryURL = "summarization-1.0/"
+var sentimentURL = "sentiment-2.1"
+var queryURL = "";
+var queryText = ""
+var numSentences = 1;
+=======
 $(document).foundation()
 
 getTrending();
@@ -13,6 +27,7 @@ var summaryURL = "summarization-1.0/"
 var sentimentURL = "sentiment-2.1"
 var numSentences = 3;
 var queryURL = "";
+>>>>>>> 7b1d9d5de580b643465c294403949e8ddba569d0
 
 var gettysBurg = "Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal. Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure. We are met on a great battle-field of that war. We have come to dedicate a portion of that field, as a final resting place for those who here gave their lives that that nation might live. It is altogether fitting and proper that we should do this. But, in a larger sense, we can not dedicate -- we can not consecrate -- we can not hallow -- this ground. The brave men, living and dead, who struggled here, have consecrated it, far above our poor power to add or detract. The world will little note, nor long remember what we say here, but it can never forget what they did here. It is for us the living, rather, to be dedicated here to the unfinished work which they who fought here have thus far so nobly advanced. It is rather for us to be here dedicated to the great task remaining before us -- that from these honored dead we take increased devotion to that cause for which they gave the last full measure of devotion -- that we here highly resolve that these dead shall not have died in vain -- that this nation, under God, shall have a new birth of freedom -- and that government of the people, by the people, for the people, shall not perish from the earth."
 
@@ -28,6 +43,15 @@ var ajaxOptions = {
     }
 }
 
+<<<<<<< HEAD
+queryText = "this is great"
+// queryText = gettysBurg;
+
+// isURL = true;
+getFirstReview( 'Frozen' );
+// getSummary(queryText, isURL);
+// getSentiment(queryText, isURL);
+=======
 // getFirstReview( 'Frozen' );
 
 <<<<<<< HEAD
@@ -39,6 +63,7 @@ var ajaxOptions = {
 // getSummary(queryText, isURL);
 // getSentiment(queryText, isURL);
 >>>>>>> 9b0ec6c82b4b132a397afac0b65421b1eb46fb58
+>>>>>>> 7b1d9d5de580b643465c294403949e8ddba569d0
 
 
 function getSummary(text){
@@ -53,7 +78,11 @@ function getSummary(text){
     })
 }
 
+<<<<<<< HEAD
+function getSentiment (text){
+=======
 function getSentimentMC (text){
+>>>>>>> 7b1d9d5de580b643465c294403949e8ddba569d0
 // Sentiment response object:
 // agreement: "AGREEMENT"
 // confidence: "100"
@@ -82,6 +111,10 @@ function getSentimentMC (text){
     })
 }
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 7b1d9d5de580b643465c294403949e8ddba569d0
 function combineReviewsText( reviewsRaw ){
     var combined = '';
     for( var i = 0; i < reviewsRaw.length; i++){
@@ -90,7 +123,10 @@ function combineReviewsText( reviewsRaw ){
     return combined;
 }
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 7b1d9d5de580b643465c294403949e8ddba569d0
 function getFirstReview( movieName ){
     var urlBase = 'https://api.themoviedb.org/3/search/movie?';
     var apiKeyPD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
@@ -108,11 +144,83 @@ function getFirstReview( movieName ){
             url: reviewSearch,
             method: "GET"
         }).then(function (response) {
+<<<<<<< HEAD
+            // console.log(response)
+=======
+            console.log(response)
+>>>>>>> 7b1d9d5de580b643465c294403949e8ddba569d0
+            var reviewsRaw = response.results;
+
+            var combined = combineReviewsText( reviewsRaw );
+
+<<<<<<< HEAD
+            var sentiment = getParallelDotsSentiment( combined );
+
+            var movieDiv = createMovieDiv(firstRes);
+            $('#movie-title').append(movieDiv)
+
+            // console.log(combined); //will go into sentiment api
+            getSummary(combined);
+
+        })
+    })
+}
+//https://api-us.faceplusplus.com/facepp/v3/detect?api_key=8dOqvd6QOBI7Uy45Sp5I2cSmlYZQva13
+
+function combineReviewsText( reviewsRaw ){
+    var combined = '';
+    for( var i =0; i < reviewsRaw.length; i++){
+        combined += reviewsRaw[i].content;
+    }
+    return combined;
+}
+
+function getFirstReview( movieName ){
+    var urlBase = 'https://api.themoviedb.org/3/search/movie?';
+    var apiKey = 'api_key=7c49e1342952d7c7e126e900862f9e64';
+    var movieSearch = urlBase + apiKey + '&query=' + movieName
+    $.ajax({
+        url: movieSearch,
+        method: "GET"
+    }).then(function (response) {
+        console.log(response)
+        var firstRes = response.results[0];
+
+        var reviewSearch = "https://api.themoviedb.org/3/movie/" + firstRes.id + "/reviews?"
+        reviewSearch += apiKey;
+        $.ajax({
+            url: reviewSearch,
+            method: "GET"
+        }).then(function (response) {
             console.log(response)
             var reviewsRaw = response.results;
 
             var combined = combineReviewsText( reviewsRaw );
 
+            var sentiment = getParallelDotsSentiment( combined )
+
+            var movieDiv = createMovieDiv(firstRes, sentiment);
+            $('#movie-holder').append(movieDiv)
+
+            console.log(combined) //will go into sentiment api
+        })
+    })
+}
+
+getFirstReview( 'Frozen' );
+
+function createSearchListener(){
+    var $searchButton = $('#search-button');
+    var $searchText = $('#search-text');
+    $searchButton.on('click', function(){
+        var searchedText = $searchText.val();
+        console.log('searched:', searchedText);
+
+        $searchText.val('');
+    })
+}
+createSearchListener();
+=======
             // var sentiment = getParallelDotsSentiment( combined )
 
             // var movieDiv = createMovieDiv(firstRes, sentiment);
@@ -168,6 +276,7 @@ createSearchListener();
 
 =======
 
+>>>>>>> 7b1d9d5de580b643465c294403949e8ddba569d0
 function getParallelDotsSentiment( text ){
     return $.post("https://apis.paralleldots.com/v4/sentiment",{ 
         api_key: "nNrvGbJRqlR7VMkESMFaKRm6Rh5gnsmhYtf6N3trZzI", 
@@ -177,7 +286,10 @@ function getParallelDotsSentiment( text ){
         return response;
     })
 }
+<<<<<<< HEAD
+=======
 >>>>>>> 9b0ec6c82b4b132a397afac0b65421b1eb46fb58
+>>>>>>> 7b1d9d5de580b643465c294403949e8ddba569d0
 
 function getParallelDotsSentiment( text ){
     return $.post("https://apis.paralleldots.com/v4/sentiment",{ 
@@ -197,28 +309,58 @@ function getParallelDotsSentiment( text ){
         // Assess general sentiment:
         if (pos > neu && pos > neg) {
             sentimentResult = "Somewhat Positive"
+<<<<<<< HEAD
+            console.log("somewhat positive")
+            if (pos > 0.5) {
+                sentimentResult = "Positive"
+                console.log("positive")
+                if (pos > 0.7) {
+                    sentimentResult = "Very Positive"
+                    console.log("very positive")
+=======
             if (pos > 0.5) {
                 sentimentResult = "Positive"
                 if (pos > 0.7) {
                     sentimentResult = "Very Positive"
+>>>>>>> 7b1d9d5de580b643465c294403949e8ddba569d0
                 }
             }
 		}
 		else if (neu > pos && neu > neg) {
             sentimentResult = "Somewhat Neutral"
+<<<<<<< HEAD
+            console.log("somewhat neutral")
+            if (pos > 0.5) {
+                sentimentResult = "Neutral"
+                console.log("neutral")
+                if (pos > 0.7) {
+                    sentimentResult = "Very Neutral"
+                    console.log("very neutral")
+=======
             if (pos > 0.5) {
                 sentimentResult = "Neutral"
                 if (pos > 0.7) {
                     sentimentResult = "Very Neutral"
+>>>>>>> 7b1d9d5de580b643465c294403949e8ddba569d0
                 }
             }
 		}
 		else if (neg > pos && neg > neu) {
             sentimentResult = "Somewhat Negative"
+<<<<<<< HEAD
+            console.log("somewhat negative")
+            if (pos > 0.5) {
+                sentimentResult = "Negative"
+                console.log("negative")
+                if (pos > 0.7) {
+                    sentimentResult = "Very Negative"
+                    console.log("very negative")
+=======
             if (pos > 0.5) {
                 sentimentResult = "Negative"
                 if (pos > 0.7) {
                     sentimentResult = "Very Negative"
+>>>>>>> 7b1d9d5de580b643465c294403949e8ddba569d0
                 }
             }
 		}
@@ -228,6 +370,15 @@ function getParallelDotsSentiment( text ){
     })
 }
 
+<<<<<<< HEAD
+function createMovieDiv (movieResponse, sentiment){
+    var movieDiv = $('<div>');
+    movieDiv.append($('<p>').text(movieResponse.title))
+    movieDiv.append($('<p>').text(sentiment))
+
+    return movieDiv;
+}
+=======
 function getParallelDotsKeyword(text) {
 
     // form: {text:text,api_key:API_KEY}}
@@ -344,3 +495,4 @@ function createTrendingDiv(movieResponse, sentiment) {
 
     return movieDiv;
 }
+>>>>>>> 7b1d9d5de580b643465c294403949e8ddba569d0
