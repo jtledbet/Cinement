@@ -1,1 +1,25 @@
-# Project_1
+# Movie Sentiment
+
+
+![HTML](https://img.shields.io/badge/language-HTML-green.svg?logo=html5)
+![CSS](https://img.shields.io/badge/language-CSS-green.svg?logo=css3)
+![Javascript](https://img.shields.io/badge/language-Javascript-green.svg?logo=javascript)
+![jQuery](https://img.shields.io/badge/library-jQuery-yellow.svg?logo=jQuery)
+=====
+
+User enters a movie search and reviews are fetched through The Movie Database. These reviews are run through Microsoft Azure's Text Analytics to find the sentiment of the reviews.
+
+# Group Members
+
+* [Cody Swank](https://github.com/codyswank)
+* [Devin Price](https://github.com/devingprice)
+* [Jon Ledbetter](https://github.com/jtledbet)
+
+# Powered By
+
+* [The Movie Db](https://developers.themoviedb.org)
+* [Microsoft Azure Text Analytics](https://azure.microsoft.com/en-us/services/cognitive-services/text-analytics/)
+
+=====
+
+**Try it out [HERE!!!(coming soon)](#)**
