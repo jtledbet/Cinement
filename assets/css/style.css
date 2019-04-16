@@ -1,14 +1,113 @@
-/* Extra small devices (portrait phones, less than 576px)
-No media query for `xs` since this is the default in Bootstrap
+.img-container {
+	position: relative;
+}
+.caption-container {
+	position: absolute;
+	bottom: 50%;
+	left: 0;
+	color: #FFF;
+	width: 100%;
+	text-align: center;
+}
+.shad {
+	box-shadow: 2px 4px 8px 2px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.caption-content {
+	padding: emCalc(10px);
+	margin: 0;
+}
+body {
+	background: #57595d;
+}
+h1 {
+	font-family: 'Kanit', sans-serif;
+}
+.top {
+	color: white;
+	text-align: center;
+    font-family: 'Kanit', sans-serif;
+    margin-top: 10px;
+}
+a {
+	color: white;
+}
+a:hover {
+	color: lightgrey;
+}
+.top-bar, .dropdown {
+	background: black !important;
+	color: white;
+}
+.one {
+	padding: 10px;
+}
+footer {
+	height: 30px;
+	background: #444;
+	border-top: 2px solid grey;
+    margin-top: 20px;
+    box-shadow:inset 0 15px 5px -16px #111;
+}
+.text {
+    color: white;
+    padding: 5px;
+}
+.hero-section {
+	background: url("../movies.jpg") 50% no-repeat;
+	background-size: cover;
+	height: 25em;
+	text-align: center;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-align-items: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-justify-content: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.hero-section .hero-section-text {
+	color: #fefefe;
+	text-shadow: 1px 1px 2px #0a0a0a;
+}
+.input-group-rounded .input-group-field {
+	border-radius: 5000px 0 0 5000px;
+	padding-left: 1rem;
+}
+.input-group-rounded .input-group-button .button {
+	border-radius: 0 5000px 5000px 0;
+	font-size: 0.8rem;
+}
+/* Small only */
 
-Small devices (landscape phones, 576px and up)
-@media (min-width: 576px) { ... }
+@media screen and (max-width: 39.9375em) {
+	.hero-section {
+		background: url("../movies.jpg") 50% no-repeat;
+		background-size: cover;
+		height: 15em;
+		text-align: center;
+		display: -webkit-flex;
+		display: -ms-flexbox;
+		display: flex;
+		-webkit-align-items: center;
+		-ms-flex-align: center;
+		align-items: center;
+		-webkit-justify-content: center;
+		-ms-flex-pack: center;
+		justify-content: center;
+	}
+}
+/* Medium and up */
 
-Medium devices (tablets, 768px and up)
-@media (min-width: 768px) { ... }
+@media screen and (min-width: 40em) {}
+/* Medium only */
 
-Large devices (desktops, 992px and up)
-@media (min-width: 992px) { ... }
+@media screen and (min-width: 40em) and (max-width: 63.9375em) {}
+/* Large and up */
 
-Extra large devices (large desktops, 1200px and up)
-@media (min-width: 1200px) { ... } */
+@media screen and (min-width: 64em) {}
+/* Large only */
+
+@media screen and (min-width: 64em) and (max-width: 74.9375em) {}
