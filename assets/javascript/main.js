@@ -84,6 +84,27 @@ function combineReviewsText( reviewsRaw ){
     return combined;
 }
 
+function getReviews( id ){
+    var reviewSearch = "https://api.themoviedb.org/3/movie/" + id + "/reviews?"
+    reviewSearch += apiKeyPD;
+    $.ajax({
+        url: reviewSearch,
+        method: "GET"
+    }).then(function (response) {
+        console.log(response)
+        var reviewsRaw = response.results;
+
+        var combined = combineReviewsText(reviewsRaw);
+
+        // var sentiment = getParallelDotsSentiment( combined )
+        // var movieDiv = createMovieDiv(firstRes, sentiment);
+        // $('#movie-holder').append(movieDiv)
+
+        getSummary(combined)
+        getParallelDotsSentiment(combined)
+        getParallelDotsEmotion(combined)
+    })
+}
 
 function getFirstReview( movieName ){
     var urlBase = 'https://api.themoviedb.org/3/search/movie?';
@@ -96,26 +117,10 @@ function getFirstReview( movieName ){
         console.log(response)
         var firstRes = response.results[0];
 
-        var reviewSearch = "https://api.themoviedb.org/3/movie/" + firstRes.id + "/reviews?"
-        reviewSearch += apiKeyPD;
-        $.ajax({
-            url: reviewSearch,
-            method: "GET"
-        }).then(function (response) {
-            console.log(response)
-            var reviewsRaw = response.results;
-
-            var combined = combineReviewsText( reviewsRaw );
-
-            // var sentiment = getParallelDotsSentiment( combined )
-
-            // var movieDiv = createMovieDiv(firstRes, sentiment);
-            // $('#movie-holder').append(movieDiv)
-
-            getFeels(combined)
-        })
+        getReviews( firstRes.id )
     })
 }
+
 
 function getTrending(){
     var apiKeyPD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
@@ -150,8 +155,6 @@ function createSearchListener(){
         $searchText.val('');
     })
 }
-
-createSearchListener();
 
 
 function getParallelDotsSentiment( text ){
@@ -307,7 +310,7 @@ function createTrendingDiv(movieResponse, sentiment) {
     movieDiv.append(
         $('<div>', { class: "grid-x" }).append( 
               $('<div>', {class: 'cell shad'}).append(
-                  $('<img>', {src: poster, alt: title})
+                  $('<img>', {src: poster, alt: title, 'data-id': id, class:"trending-images"})
               )
             )
     )
@@ -325,3 +328,9 @@ function createTrendingDiv(movieResponse, sentiment) {
 
     return movieDiv;
 }
+
+
+$(document).on('click', '.trending-images', function(){
+    var id = $(this).attr('data-id');
+    getReviews(id)
+})
