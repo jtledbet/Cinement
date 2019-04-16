@@ -1,6 +1,37 @@
 .img-container {
 	position: relative;
 }
+
+.main-img {
+	height: 500px;
+	width: 350px;
+}
+
+.main {
+	padding: 10px;
+	margin-top: 10px;
+	color: white;
+	
+
+}
+
+.wrapper {
+	margin-right: 20em;
+	margin-left: 20em;
+	margin-top: 2em;
+	margin-bottom: 20px;
+
+
+}
+.shadow {
+	-moz-box-shadow:    inset 0 0 10px #000000;
+	-webkit-box-shadow: inset 0 0 10px #000000;
+	box-shadow:         inset 0 0 10px #000000;
+}
+
+.center {
+	text-align: center;
+}
 .caption-container {
 	position: absolute;
 	bottom: 50%;
@@ -18,6 +49,8 @@
 }
 body {
 	background: #57595d;
+	font-family: 'Kanit', sans-serif;
+
 }
 h1 {
 	font-family: 'Kanit', sans-serif;
@@ -98,16 +131,27 @@ footer {
 		-ms-flex-pack: center;
 		justify-content: center;
 	}
+
+	.wrapper {
+		margin: 0;
+	}
 }
 /* Medium and up */
 
 @media screen and (min-width: 40em) {}
+
 /* Medium only */
 
-@media screen and (min-width: 40em) and (max-width: 63.9375em) {}
+@media screen and (min-width: 40em) and (max-width: 63.9375em) {
+	.wrapper {margin: 0;}
+}
 /* Large and up */
 
 @media screen and (min-width: 64em) {}
 /* Large only */
 
-@media screen and (min-width: 64em) and (max-width: 74.9375em) {}
+@media screen and (min-width: 64em) and (max-width: 74.9375em) {
+	.wrapper {
+		margin:0;
+	}
+}
