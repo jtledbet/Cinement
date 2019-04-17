@@ -155,3 +155,8 @@ footer {
 		margin:0;
 	}
 }
+
+#focus {
+	overflow-y:hidden;
+	height:0;
+}

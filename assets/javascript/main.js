@@ -88,10 +88,10 @@ function combineReviewsText( reviewsRaw ){
 }
 
 function getReviews( id ){
-    var apiKeyMD = "api_key=7c49e1342952d7c7e126e900862f9e64"
+
+    var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
     var reviewSearch = "https://api.themoviedb.org/3/movie/" + id + "/reviews?"
     reviewSearch += apiKeyMD;
-    
     $.ajax({
         url: reviewSearch,
         method: "GET"
@@ -111,6 +111,7 @@ function getReviews( id ){
 
 function getFirstReview( movieName ){
     var urlBase = 'https://api.themoviedb.org/3/search/movie?';
+    var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
     var movieSearch = urlBase + apiKeyMD + '&query=' + movieName
     $.ajax({
         url: movieSearch,
@@ -119,13 +120,16 @@ function getFirstReview( movieName ){
         console.log(response)
         var firstRes = response.results[0];
 
+        var imageUrl = 'https://image.tmdb.org/t/p/w500' + firstRes.poster_path;
+
+        updateFocus( imageUrl )
         getReviews( firstRes.id )
     })
 }
 
 
 function getTrending(){
-    var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64'
+    var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
     var requestUrl = 'https://api.themoviedb.org/3/movie/popular?'+ apiKeyMD +'&language=en-US&page=1';
 
     $.ajax({
@@ -153,6 +157,7 @@ function createSearchListener(){
         console.log('searched:', searchedText);
 
         getFirstReview(searchedText);
+        showFocus();
 
         $searchText.val('');
     })
@@ -280,7 +285,7 @@ function getParallelDotsEmotion(text) {
     })
 }
 
-
+/*
 function createMovieDiv (movieResponse, sentiment){
     var poster = 'https://image.tmdb.org/t/p/w500'+ movieResponse.poster_path;
     var title = movieResponse.title;
@@ -297,6 +302,10 @@ function createMovieDiv (movieResponse, sentiment){
     }
 
     return movieDiv;
+}
+*/
+function updateFocus(imageUrl){
+    $('#focus-image').attr('src', imageUrl)
 }
 
 function createTrendingDiv(movieResponse, sentiment) {
@@ -335,4 +344,8 @@ function createTrendingDiv(movieResponse, sentiment) {
 $(document).on('click', '.trending-images', function(){
     var id = $(this).attr('data-id');
     getReviews(id)
+    showFocus();
 })
+function showFocus(){
+    $('#focus').attr('style', 'overflow-y:visible; height: auto;')
+}
