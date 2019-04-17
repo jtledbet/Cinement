@@ -2,35 +2,36 @@
 	position: relative;
 }
 
-.main-img {
-	height: 500px;
-	width: 350px;
-}
-
 .main {
 	padding: 10px;
 	margin-top: 10px;
 	color: white;
-	
-
 }
-
+.data {
+	border: 3px solid lightgrey;
+	padding: 10px;
+	box-shadow: 2px 4px 8px 2px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.sum {
+	padding: 10px;
+	font-family: 'Kanit', sans-serif;
+}
 .wrapper {
 	margin-right: 20em;
 	margin-left: 20em;
 	margin-top: 2em;
-	margin-bottom: 20px;
-
-
+	margin-bottom: 2em;
+}
+h3, h2, h1, p {
+	font-family: 'Kanit', sans-serif;
 }
 .shadow {
-	-moz-box-shadow:    inset 0 0 10px #000000;
+	-moz-box-shadow: inset 0 0 10px #000000;
 	-webkit-box-shadow: inset 0 0 10px #000000;
-	box-shadow:         inset 0 0 10px #000000;
+	box-shadow: inset 0 0 10px #000000;
 }
-
-.center {
-	text-align: center;
+.h3 {
+	font-family: 'Kanit', sans-serif;
 }
 .caption-container {
 	position: absolute;
@@ -50,7 +51,6 @@
 body {
 	background: #57595d;
 	font-family: 'Kanit', sans-serif;
-
 }
 h1 {
 	font-family: 'Kanit', sans-serif;
@@ -58,8 +58,8 @@ h1 {
 .top {
 	color: white;
 	text-align: center;
-    font-family: 'Kanit', sans-serif;
-    margin-top: 10px;
+	font-family: 'Kanit', sans-serif;
+	margin-top: 10px;
 }
 a {
 	color: white;
@@ -78,16 +78,17 @@ footer {
 	height: 30px;
 	background: #444;
 	border-top: 2px solid grey;
-    margin-top: 20px;
-    box-shadow:inset 0 15px 5px -16px #111;
+	margin-top: 20px;
+	box-shadow: inset 0 15px 5px -16px #111;
 }
 .text {
-    color: white;
-    padding: 5px;
+	color: white;
+	padding: 5px;
 }
 .hero-section {
 	background: url("../movies.jpg") 50% no-repeat;
 	background-size: cover;
+	font-family: 'Kanit', sans-serif;
 	height: 25em;
 	text-align: center;
 	display: -webkit-flex;
@@ -131,7 +132,6 @@ footer {
 		-ms-flex-pack: center;
 		justify-content: center;
 	}
-
 	.wrapper {
 		margin: 0;
 	}
@@ -139,11 +139,12 @@ footer {
 /* Medium and up */
 
 @media screen and (min-width: 40em) {}
-
 /* Medium only */
 
 @media screen and (min-width: 40em) and (max-width: 63.9375em) {
-	.wrapper {margin: 0;}
+	.wrapper {
+		margin: 0;
+	}
 }
 /* Large and up */
 
@@ -152,11 +153,6 @@ footer {
 
 @media screen and (min-width: 64em) and (max-width: 74.9375em) {
 	.wrapper {
-		margin:0;
+		margin: 0;
 	}
-}
-
-#focus {
-	overflow-y:hidden;
-	height:0;
 }

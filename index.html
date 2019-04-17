@@ -34,7 +34,7 @@
 
 
 				<li>
-					<a href="#0">Trending</a>
+					<a href="#trending">Trending</a>
 				</li>
 			</ul>
 		</div>
@@ -47,130 +47,153 @@
 
 
 			<div class="input-group input-group-rounded">
-				<input id="search-text" class="input-group-field" type="search">
+				<input class="input-group-field" id="search-text" type="search">
 
 				<div class="input-group-button">
-					<input id="search-button" class="button secondary" type="submit" value="Search">
+					<input class="button secondary" id="search-button" type="submit" value="Search">
 				</div>
 			</div>
 		</div>
 	</div>
 
 
-    <div class="grid-x shadow" id="focus">
-        <div class="cell">
-            <div class="wrapper">
-                <div class="grid-x grid-padding-x main">
-                    <div class="cell large-4 meduim-6 small-6">
-                        <img id="focus-image" class="shad" src="assets/poster.jpg">
-                    </div>
-    
-    
-                    <div class="cell large-8 medium-6 small-6">
-                        <div>
-                            <h3>Title:</h3>
-                        </div>
-                        <div>
-                        <br>
-                            <h3>Rating: </h3>
-                        </div>
-                        <hr>
-                        
-                        <div>
-                            <h2>Aggregate Data:</h2>
-                    <hr>
-                            <div>
-                                <h3>General Sentiment: </h3>
-                                <p id="gen-sent"></p>
-                            </div>
-                            <br>
-                    
-                            <div>
-                                <h3>Emotional Reading: </h3>
-                                <p id="emo-reading"></p>
-                            </div>
-                    <hr>
-                            <br>
-                        </div>
-    
-    
-                        <div>
-                            <h3>Summary: </h3><p id="review-summary">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio repudiandae soluta
-                            exercitationem esse iure, impedit corporis sed eaque? Iure inventore natus laudantium? Suscipit
-                            beatae pariatur explicabo quos sed. Deserunt, saepe.</p>
-                        </div>
-                        <br>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
+	<div class="grid-x shadow data-smooth-scroll">
+		<div class="cell">
+			<div class="wrapper">
+				<div class="grid-x grid-padding-x main">
+					<div class="cell large-4 meduim-6 small-6"><img class="shad" src="assets/poster.jpg">
+					</div>
+
+
+					<div class="cell large-8 medium-6 small-6">
+						<div class="grid-x">
+							<div class="cell">
+								<h3>Title:</h3>
+							</div>
+						</div>
+
+
+						<div class="grid-x">
+							<div class="cell">
+								<br>
+								<br>
+
+
+								<h3>Rating:</h3>
+							</div>
+						</div>
+
+
+						<div class="grid-x data">
+							<div class="cell">
+								<h2 class="text-center">Aggregate Data</h2>
+
+
+								<div>
+									<h3>General Sentiment:</h3>
+
+
+									<p id="gen-sent">
+									</p>
+								</div>
+							</div>
+							<br>
+
+
+							<div class="grid-x">
+								<div class="cell">
+									<h3>Emotional Reading:</h3>
+
+
+									<p id="emo-reading">
+									</p>
+								</div>
+							</div>
+							<br>
+						</div>
+					</div>
+
+
+					<div class="grid-x">
+						<div class="cell sum">
+							<h3>Summary:</h3>
+
+
+							<p id="review-summary">Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio repudiandae soluta exercitationem esse iure, impedit corporis sed eaque? Iure inventore natus laudantium? Suscipit beatae pariatur explicabo quos sed. Deserunt, saepe.</p>
+						</div>
+					</div>
+					<br>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 	<div class="grid-x bottom">
 		<div class="cell">
 			<h2 class="top">Trending Movies</h2>
 		</div>
 
-		<div id="trending" class="grid-x grid-padding-x">
-            <!--
-			<div class="cell large-3 small-6 one">
-				<div class="grid-x">
-					<div class="cell shad"><img src="assets/poster.jpg">
-					</div>
-				</div>
+
+		<div class="grid-x grid-padding-x" id="trending">
+			<!--
+            <div class="cell large-3 small-6 one">
+                <div class="grid-x">
+                    <div class="cell shad"><img src="assets/poster.jpg">
+                    </div>
+                </div>
 
 
-				<div class="grid-x">
-					<div class="cell text">
-						What ever it says down here
-					</div>
-				</div>
-			</div>
+                <div class="grid-x">
+                    <div class="cell text">
+                        What ever it says down here
+                    </div>
+                </div>
+            </div>
 
 
-			<div class="cell large-3 small-6 one">
-				<div class="grid-x">
-					<div class="cell shad"><img src="assets/poster.jpg">
-					</div>
-				</div>
+            <div class="cell large-3 small-6 one">
+                <div class="grid-x">
+                    <div class="cell shad"><img src="assets/poster.jpg">
+                    </div>
+                </div>
 
 
-				<div class="grid-x">
-					<div class="cell text">
-						What ever it says down here
-					</div>
-				</div>
-			</div>
+                <div class="grid-x">
+                    <div class="cell text">
+                        What ever it says down here
+                    </div>
+                </div>
+            </div>
 
 
-			<div class="cell large-3 small-6 one">
-				<div class="grid-x">
-					<div class="cell shad"><img src="assets/poster.jpg">
-					</div>
-				</div>
+            <div class="cell large-3 small-6 one">
+                <div class="grid-x">
+                    <div class="cell shad"><img src="assets/poster.jpg">
+                    </div>
+                </div>
 
 
-				<div class="grid-x">
-					<div class="cell text">
-						What ever it says down here
-					</div>
-				</div>
-			</div>
+                <div class="grid-x">
+                    <div class="cell text">
+                        What ever it says down here
+                    </div>
+                </div>
+            </div>
 
 
-			<div class="cell large-3 small-6 one">
-				<div class="grid-x">
-					<div class="cell shad"><img src="assets/poster.jpg">
-					</div>
-				</div>
+            <div class="cell large-3 small-6 one">
+                <div class="grid-x">
+                    <div class="cell shad"><img src="assets/poster.jpg">
+                    </div>
+                </div>
 
 
-				<div class="grid-x">
-					<div class="cell text">
-						What ever it says down here
-					</div>
-				</div>
+                <div class="grid-x">
+                    <div class="cell text">
+                        What ever it says down here
+                    </div>
+                </div>
             </div>
             -->
 		</div>
@@ -178,17 +201,13 @@
 
 
 	<footer>
-    </footer>
+	</footer>
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js">
-    </script> 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/foundation.js">
-    </script>
+	</script> 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/foundation.js">
+	</script> 
 	<script src="assets/javascript/main.js">
-	</script>
-</body>
-</html>
-
-<!--
+	</script><!--
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Movie Review Summary and Sentiments</title>
@@ -230,3 +249,5 @@ integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="ano
 <script src="assets/javascript/main.js"></script>
 
 </body>-->
+</body>
+</html>
