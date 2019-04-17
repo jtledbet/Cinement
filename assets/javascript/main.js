@@ -9,7 +9,7 @@ var apiKeyMC = "480bfb040aaa88e722eb4a15ee9efd15"
 var apiKeyPD = "N5Uc3tNnJ90gI9xCvMo7e0w4pFiFyyyz7LyX3HAvqNE"
 var apiKeyMD = "api_key=7c49e1342952d7c7e126e900862f9e64"
 
-var baseURL = "http://api.meaningcloud.com/"
+var baseURL = "https://api.meaningcloud.com/"
 var summaryURL = "summarization-1.0/"
 var sentimentURL = "sentiment-2.1"
 var numSentences = 3;
@@ -39,7 +39,7 @@ function getFeels(text) {
 }
 
 function getSummary(text){
-
+    console.log(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + text + "&sentences=" + numSentences )
     return $.post(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + text + "&sentences=" + numSentences,{ 
 
     }).then(function (response) { 
@@ -81,11 +81,15 @@ function getSentimentMC (text){
 
 function combineReviewsText( reviewsRaw ){
     var combined = '';
+
     for( var i = 0; i < reviewsRaw.length; i++){
-        if( combined.length + reviewsRaw[i].content >= 9000 ){
-            combined += reviewsRaw[i].content;
-        }
+        combined += reviewsRaw[i].content;
     }
+    if( combined.length > 9000 ){
+        combined = combined.substring(0, 9000)
+    }
+    
+    combined = encodeURIComponent(combined)
     return combined;
 }
 
@@ -100,9 +104,9 @@ function getReviews( id ){
     }).then(function (response) {
         console.log(response)
         var reviewsRaw = response.results;
-
+        console.log( reviewsRaw )
         var combined = combineReviewsText(reviewsRaw);
-
+        console.log( combined )
         // var sentiment = getParallelDotsSentiment( combined )
         // var movieDiv = createMovieDiv(firstRes, sentiment);
         // $('#movie-holder').append(movieDiv)
