@@ -18,7 +18,8 @@ User enters a movie search and reviews are fetched through The Movie Database. T
 # Powered By
 
 * [The Movie Db](https://developers.themoviedb.org)
-* [Microsoft Azure Text Analytics](https://azure.microsoft.com/en-us/services/cognitive-services/text-analytics/)
+* [Meaning Cloud](https://www.meaningcloud.com/developer/apis)
+* [Parallel Dots](https://www.paralleldots.com/)
 
 =====
 
