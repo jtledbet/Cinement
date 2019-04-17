@@ -129,16 +129,19 @@ function getFirstReview( movieName ){
 
         var imageUrl = 'https://image.tmdb.org/t/p/w500' + firstRes.poster_path;
 
-        updateFocus( imageUrl, firstRes.title )
+        updateFocus( imageUrl, firstRes.title, firstRes.release_date )
         getReviews( firstRes.id )
     })
 }
 
 
-function getTrending(){
+function getTrending(numTrending){
     var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
     var requestUrl = 'https://api.themoviedb.org/3/movie/popular?'+ apiKeyMD +'&language=en-US&page=1';
 
+    if ( numTrending === undefined){
+        numTrending = 4;
+    }
     $.ajax({
         url: requestUrl,
         method: "GET"
@@ -146,7 +149,8 @@ function getTrending(){
         var results = response.results;
         console.log( results );
 
-        for(var i = 0; i < 4; i++){
+        $('#trending').empty();
+        for(var i = 0; i < numTrending; i++){
             var movieDiv = createTrendingDiv( results[i] )
             $('#trending').append( movieDiv )
         }
@@ -318,9 +322,11 @@ function createMovieDiv (movieResponse, sentiment){
     return movieDiv;
 }
 */
-function updateFocus(imageUrl, imageTitle){
+function updateFocus(imageUrl, imageTitle, year){
     $('#focus-image').attr('src', imageUrl);
-    $('#focus-title').text( imageTitle )
+    console.log(imageTitle + '<span class="focus-year">(' + year.substring(0,4) + ')</span>' )
+    $('#focus-title').html(imageTitle + '<span class="focus-year">(' + year.substring(0, 4) + ')</span>');
+
 }
 
 function createTrendingDiv(movieResponse, sentiment) {
@@ -336,7 +342,7 @@ function createTrendingDiv(movieResponse, sentiment) {
     movieDiv.append(
         $('<div>', { class: "grid-x" }).append( 
               $('<div>', {class: 'cell shad'}).append(
-                  $('<img>', {src: poster, alt: title, 'data-id': id, 'data-title': title,class:"trending-images"})
+                  $('<img>', {src: poster, alt: title, 'data-id': id, 'data-title': title, 'data-year': releaseDate, class:"trending-images"})
               )
             )
     )
@@ -360,10 +366,14 @@ $(document).on('click', '.trending-images', function(){
     var id = $(this).attr('data-id');
     var imgSrc = $(this).attr('src');
     var title = $(this).attr('data-title');
+    var year = $(this).attr('data-year');
     getReviews(id)
     showFocus();
-    updateFocus(imgSrc, title)
+    updateFocus(imgSrc, title, year)
 })
 function showFocus(){
     $('#focus').attr('style', 'overflow-y:visible; height: auto;')
 }
+$('#trending-nav').on('click', function(){
+    getTrending(12);
+})

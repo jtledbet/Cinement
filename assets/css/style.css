@@ -7,6 +7,11 @@
 	margin-top: 10px;
 	color: white;
 }
+
+.focus-year {
+	font-size: 30px;
+	color: #c0c0c0;
+}
 .data {
 	border: 3px solid grey;
 	background: #777b7e;
