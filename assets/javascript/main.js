@@ -6,7 +6,11 @@ createSearchListener();
 //getFirstReview('Frozen');
 
 var apiKeyMC = "480bfb040aaa88e722eb4a15ee9efd15"
+<<<<<<< HEAD
+var apiKeyPD = "S8RrYUmtFK9VwZNdEesgF7F1droqAKYZ3HTP9nk6Jtk"
+=======
 var apiKeyPD = "z28L7rWwv7Sev26j9Un8wsbepfbZF2sBLyR1nHfAZvg"
+>>>>>>> a81ff043e213f70654a2e308d5b701a9ff661e0f
 var apiKeyMD = "api_key=7c49e1342952d7c7e126e900862f9e64"
 
 var baseURL = "https://api.meaningcloud.com/"
@@ -108,9 +112,12 @@ function getReviews( id ){
         var reviewsRaw = response.results;
 
         var combined = combineReviewsText(reviewsRaw);
+<<<<<<< HEAD
+=======
         // var sentiment = getParallelDotsSentiment( combined )
         // var movieDiv = createMovieDiv(firstRes, sentiment);
         // $('#movie-holder').append(movieDiv)
+>>>>>>> a81ff043e213f70654a2e308d5b701a9ff661e0f
 
         getFeels(combined);
     })
@@ -231,7 +238,7 @@ function getParallelDotsSentiment( text ){
         }
 
         $("#gen-sent").text(sentimentResult + " (" + percentage + "%)"); 
-        console.log("<br><br>General Sentiment: " + sentimentResult + " (" + percentage + "%)"); 
+        console.log("General Sentiment: " + sentimentResult + " (" + percentage + "%)"); 
         return response;
     })
 }
@@ -268,37 +275,35 @@ function getParallelDotsEmotion(text) {
     }).then(function (response) {
         console.log(response)
         var emo = response.emotion;
-        var emoNames = [];
-        var emoNums = [];
-        var maxNum = 0;
-        var emoIndex = 0;
         var percentage = 0;
+        
+        // Morgan wrote this:
+        var emoArray = [
+            {emotion: "Angry", num: emo.Angry},
+            {emotion: "Bored", num: emo.Bored}, 
+            {emotion: "Excited", num: emo.Excited},
+            {emotion: "Fear", num: emo.Fear},
+            {emotion: "Happy", num: emo.Happy},
+            {emotion: "Sad", num: emo.Sad}
+          ]
+          emoArray.sort(function(a, b) {
+              return a.num - b.num;
+          });
+          
+          emoArray.reverse();
+          console.log(emoArray)
 
-        emoNames.push("Angry")
-        emoNums.push(emo.Angry)
-        emoNames.push("Bored")
-        emoNums.push(emo.Bored)
-        emoNames.push("Excited")
-        emoNums.push(emo.Excited)
-        emoNames.push("Fear")
-        emoNums.push(emo.Fear)
-        emoNames.push("Happy")
-        emoNums.push(emo.Happy)
-        emoNames.push("Sad")
-        emoNums.push(emo.Sad)
-
-        maxNum = emoNums[0]
-        for (i = 1; i < 6; i++) {
-            if (emoNums[i] > maxNum) {
-                maxNum = emoNums[i]
-                emoIndex = i;
+        $("#emo-reading").empty();
+        for (var i = 0; i < emoArray.length; i++) {
+            percentage = Math.floor(emoArray[i].num * 100);
+            var emoOut = emoArray[i].emotion + " (" + percentage + "%)";
+            
+            if (percentage > 1) {
+                $("#emo-reading").append(emoOut + '<br>'); 
+                console.log(emoOut)
             }
         }
 
-        percentage = Math.floor(maxNum * 100);
-
-        console.log("<br><br>Emotional Reading: " + emoNames[emoIndex] + " (" + percentage + "%)");
-        $("#emo-reading").text(emoNames[emoIndex] + " (" + percentage + "%)"); 
         return response; 
     })
 }
@@ -352,15 +357,20 @@ function createTrendingDiv(movieResponse, sentiment) {
     }
     movieDiv.append(
         $('<div>', { class: "grid-x" }).append(
-            $('<div>', { class: 'cell text' }).text(
-                displayText
+            $('<div>', { class: 'cell text' }).append(
+                $('<button>', {class:'collapsible'}).text('Show Summary'),
+                $('<div>', {class:'content'}).text( displayText ).hide()
             )
         )
     )
 
     return movieDiv;
 }
-
+$(document).on('click', '.collapsible', function () {
+    $(this).toggleClass('active')
+    var $content = $(this).next();
+    $content.toggle();
+})
 
 $(document).on('click', '.trending-images', function(){
     var id = $(this).attr('data-id');
