@@ -6,10 +6,10 @@ createSearchListener();
 //getFirstReview('Frozen');
 
 var apiKeyMC = "480bfb040aaa88e722eb4a15ee9efd15"
-var apiKeyPD = "N5Uc3tNnJ90gI9xCvMo7e0w4pFiFyyyz7LyX3HAvqNE"
+var apiKeyPD = "S8RrYUmtFK9VwZNdEesgF7F1droqAKYZ3HTP9nk6Jtk"
 var apiKeyMD = "api_key=7c49e1342952d7c7e126e900862f9e64"
 
-var baseURL = "http://api.meaningcloud.com/"
+var baseURL = "https://api.meaningcloud.com/"
 var summaryURL = "summarization-1.0/"
 var sentimentURL = "sentiment-2.1"
 var numSentences = 3;
@@ -100,10 +100,6 @@ function getReviews( id ){
         var reviewsRaw = response.results;
 
         var combined = combineReviewsText(reviewsRaw);
-
-        // var sentiment = getParallelDotsSentiment( combined )
-        // var movieDiv = createMovieDiv(firstRes, sentiment);
-        // $('#movie-holder').append(movieDiv)
 
         getFeels(combined);
     })
@@ -208,7 +204,7 @@ function getParallelDotsSentiment( text ){
         }
 
         $("#gen-sent").text(sentimentResult + " (" + percentage + "%)"); 
-        console.log("<br><br>General Sentiment: " + sentimentResult + " (" + percentage + "%)"); 
+        console.log("General Sentiment: " + sentimentResult + " (" + percentage + "%)"); 
         return response;
     })
 }
@@ -245,37 +241,35 @@ function getParallelDotsEmotion(text) {
     }).then(function (response) {
         console.log(response)
         var emo = response.emotion;
-        var emoNames = [];
-        var emoNums = [];
-        var maxNum = 0;
-        var emoIndex = 0;
         var percentage = 0;
+        
+        // Morgan wrote this:
+        var emoArray = [
+            {emotion: "Angry", num: emo.Angry},
+            {emotion: "Bored", num: emo.Bored}, 
+            {emotion: "Excited", num: emo.Excited},
+            {emotion: "Fear", num: emo.Fear},
+            {emotion: "Happy", num: emo.Happy},
+            {emotion: "Sad", num: emo.Sad}
+          ]
+          emoArray.sort(function(a, b) {
+              return a.num - b.num;
+          });
+          
+          emoArray.reverse();
+          console.log(emoArray)
 
-        emoNames.push("Angry")
-        emoNums.push(emo.Angry)
-        emoNames.push("Bored")
-        emoNums.push(emo.Bored)
-        emoNames.push("Excited")
-        emoNums.push(emo.Excited)
-        emoNames.push("Fear")
-        emoNums.push(emo.Fear)
-        emoNames.push("Happy")
-        emoNums.push(emo.Happy)
-        emoNames.push("Sad")
-        emoNums.push(emo.Sad)
-
-        maxNum = emoNums[0]
-        for (i = 1; i < 6; i++) {
-            if (emoNums[i] > maxNum) {
-                maxNum = emoNums[i]
-                emoIndex = i;
+        $("#emo-reading").empty();
+        for (var i = 0; i < emoArray.length; i++) {
+            percentage = Math.floor(emoArray[i].num * 100);
+            var emoOut = emoArray[i].emotion + " (" + percentage + "%)";
+            
+            if (percentage > 1) {
+                $("#emo-reading").append(emoOut + '<br>'); 
+                console.log(emoOut)
             }
         }
 
-        percentage = Math.floor(maxNum * 100);
-
-        console.log("<br><br>Emotional Reading: " + emoNames[emoIndex] + " (" + percentage + "%)");
-        $("#emo-reading").text(emoNames[emoIndex] + " (" + percentage + "%)"); 
         return response; 
     })
 }
