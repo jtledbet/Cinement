@@ -7,7 +7,7 @@
 ![jQuery](https://img.shields.io/badge/library-jQuery-yellow.svg?logo=jQuery)
 =====
 
-User enters a movie search and reviews are fetched through The Movie Database. These reviews are run through Microsoft Azure's Text Analytics to find the sentiment of the reviews.
+User enters a movie search and reviews are fetched through The Movie Database. These reviews are run through Parallel Dots to find the sentiment of the reviews. Then the reviews are summarized by the Meaning Cloud api.
 
 # Group Members
 
