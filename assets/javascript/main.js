@@ -160,11 +160,18 @@ function createSearchListener(){
     var $searchText = $('#search-text');
     $searchButton.on('click', function(e){
         e.preventDefault();
-        var searchedText = $searchText.val();
-        console.log('searched:', searchedText);
 
-        getFirstReview(searchedText);
-        showFocus();
+        var searchedText = $searchText.val();
+
+        if( searchedText.length < 1){
+            console.log('empty search')
+        } else {
+            console.log('searched:', searchedText);
+
+            getFirstReview(searchedText);
+            showFocus();
+        }
+        
 
         $searchText.val('');
     })
