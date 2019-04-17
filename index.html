@@ -6,7 +6,7 @@
 	<meta content="IE=edge" http-equiv="X-UA-Compatible">
 	<link rel="icon" type="image/x-icon" href="assets/images/favicon/favicon.ico" />
 
-	<title>Cinement</title>
+	<title>Cinement™</title>
 	<meta content="width=device-width, initial-scale=1" name="viewport">
 	<link href="https://fonts.googleapis.com/css?family=Kanit" rel="stylesheet">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/css/foundation.css" rel="stylesheet">
@@ -26,7 +26,7 @@
 	<div class="top-bar" id="responsive-menu">
 		<div class="top-bar-left">
 			<ul class="dropdown menu" data-dropdown-menu="">
-				<li class="menu-text">Cinement</li>
+				<li class="menu-text"><b>Cinement™</b></li>
 
 
 				<li>
@@ -44,7 +44,7 @@
 
 	<div class="hero-section">
 		<div class="hero-section-text">
-			<h1>Search For A Movie</h1>
+			<h1>Search for a Movie</h1>
 
 
 			<div class="input-group input-group-rounded">
@@ -61,7 +61,7 @@
     
     
 	<div class="grid-x bottom shadow" id="focus">
-		<div class="cell">
+		<div class="cell" id="main-cell">
 			<div class="wrapper">
 				<div class="grid-x grid-padding-x main">
 					<div class="cell large-4 meduim-6 small-12"><img class="shad" id="focus-image" src="assets/poster.jpg">
@@ -71,7 +71,7 @@
 					<div class="cell large-8 medium-6 small-12">
 						<div class="grid-x">
 							<div class="cell title">
-								<h1 id="focus-title">Title:</h3>
+								<h1 id="focus-title"></h3>
 							</div>
 						</div>
 						<br>
@@ -80,11 +80,10 @@
 
 						<div class="grid-x data">
 							<div class="cell">
-								<h2 class="text-center">Aggregate Data</h2>
-
+								<h2 class="text-center"><span data-tooltip class="top" tabindex="2" title="These values are approximated from a vast pool of reviews for the film.">Aggregate Data</span></h2>
 
 								<div>
-									<h3>General Sentiment:</h3>
+									<h3>General <span data-tooltip class="top" tabindex="2" title="This is the general sentiment of the review authors, in aggregate.">Sentiment</span>:</h3>
 
 									<p id="gen-sent">
 									</p>
@@ -95,7 +94,7 @@
 
 							<div class="grid-x">
 								<div class="cell">
-									<h3>Emotional Reading:</h3>
+                                        <h3><span data-tooltip class="top" tabindex="2" title="These values represent the overall emotional sense of the bulk of reviews.">Emotional</span> Reading:</h3>
 
 
 									<p id="emo-reading">
