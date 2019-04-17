@@ -7,8 +7,14 @@
 	margin-top: 10px;
 	color: white;
 }
+
+.focus-year {
+	font-size: 30px;
+	color: #c0c0c0;
+}
 .data {
-	border: 3px solid lightgrey;
+	border: 3px solid grey;
+	background: #777b7e;
 	padding: 10px;
 	box-shadow: 2px 4px 8px 2px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
@@ -20,7 +26,7 @@
 	margin-right: 20em;
 	margin-left: 20em;
 	margin-top: 2em;
-	margin-bottom: 2em;
+	margin-bottom: 1em;
 }
 h3, h2, h1, p {
 	font-family: 'Kanit', sans-serif;
@@ -138,6 +144,7 @@ footer {
 	}
 	.title {
 		text-align: center;
+		margin-top: 20px;
 	}
 }
 /* Medium and up */
