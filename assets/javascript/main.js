@@ -6,7 +6,7 @@ createSearchListener();
 //getFirstReview('Frozen');
 
 var apiKeyMC = "480bfb040aaa88e722eb4a15ee9efd15"
-var apiKeyPD = "N5Uc3tNnJ90gI9xCvMo7e0w4pFiFyyyz7LyX3HAvqNE"
+var apiKeyPD = "z28L7rWwv7Sev26j9Un8wsbepfbZF2sBLyR1nHfAZvg"
 var apiKeyMD = "api_key=7c49e1342952d7c7e126e900862f9e64"
 
 var baseURL = "https://api.meaningcloud.com/"
@@ -39,7 +39,7 @@ function getFeels(text) {
 }
 
 function getSummary(text){
-    console.log( text.length )
+    text = text.substring(0,6000)
     console.log(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + text + "&sentences=" + numSentences )
     return $.post(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + text + "&sentences=" + numSentences,{ 
 
@@ -86,11 +86,12 @@ function combineReviewsText( reviewsRaw ){
     for( var i = 0; i < reviewsRaw.length; i++){
         combined += reviewsRaw[i].content;
     }
+    combined = encodeURIComponent(combined)
     if( combined.length > 9000 ){
         combined = combined.substring(0, 9000)
     }
-    
-    combined = encodeURIComponent(combined)
+
+    console.log(combined.length)
     return combined;
 }
 
@@ -105,9 +106,8 @@ function getReviews( id ){
     }).then(function (response) {
         console.log(response)
         var reviewsRaw = response.results;
-        console.log( reviewsRaw )
+
         var combined = combineReviewsText(reviewsRaw);
-        console.log( combined )
         // var sentiment = getParallelDotsSentiment( combined )
         // var movieDiv = createMovieDiv(firstRes, sentiment);
         // $('#movie-holder').append(movieDiv)
@@ -160,11 +160,18 @@ function createSearchListener(){
     var $searchText = $('#search-text');
     $searchButton.on('click', function(e){
         e.preventDefault();
-        var searchedText = $searchText.val();
-        console.log('searched:', searchedText);
 
-        getFirstReview(searchedText);
-        showFocus();
+        var searchedText = $searchText.val().trim();
+        
+        if( searchedText.length < 1){
+            console.log('empty search')
+        } else {
+            console.log('searched:', searchedText);
+
+            getFirstReview(searchedText);
+            showFocus();
+        }
+        
 
         $searchText.val('');
     })
@@ -329,7 +336,7 @@ function createTrendingDiv(movieResponse, sentiment) {
     movieDiv.append(
         $('<div>', { class: "grid-x" }).append( 
               $('<div>', {class: 'cell shad'}).append(
-                  $('<img>', {src: poster, alt: title, 'data-id': id, class:"trending-images"})
+                  $('<img>', {src: poster, alt: title, 'data-id': id, 'data-title': title,class:"trending-images"})
               )
             )
     )
@@ -351,8 +358,11 @@ function createTrendingDiv(movieResponse, sentiment) {
 
 $(document).on('click', '.trending-images', function(){
     var id = $(this).attr('data-id');
+    var imgSrc = $(this).attr('src');
+    var title = $(this).attr('data-title');
     getReviews(id)
     showFocus();
+    updateFocus(imgSrc, title)
 })
 function showFocus(){
     $('#focus').attr('style', 'overflow-y:visible; height: auto;')
