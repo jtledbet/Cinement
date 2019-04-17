@@ -161,8 +161,8 @@ function createSearchListener(){
     $searchButton.on('click', function(e){
         e.preventDefault();
 
-        var searchedText = $searchText.val();
-
+        var searchedText = $searchText.val().trim();
+        
         if( searchedText.length < 1){
             console.log('empty search')
         } else {
