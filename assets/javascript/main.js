@@ -135,10 +135,13 @@ function getFirstReview( movieName ){
 }
 
 
-function getTrending(){
+function getTrending(numTrending){
     var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
     var requestUrl = 'https://api.themoviedb.org/3/movie/popular?'+ apiKeyMD +'&language=en-US&page=1';
 
+    if ( numTrending === undefined){
+        numTrending = 4;
+    }
     $.ajax({
         url: requestUrl,
         method: "GET"
@@ -146,7 +149,8 @@ function getTrending(){
         var results = response.results;
         console.log( results );
 
-        for(var i = 0; i < 4; i++){
+        $('#trending').empty();
+        for(var i = 0; i < numTrending; i++){
             var movieDiv = createTrendingDiv( results[i] )
             $('#trending').append( movieDiv )
         }
@@ -367,3 +371,6 @@ $(document).on('click', '.trending-images', function(){
 function showFocus(){
     $('#focus').attr('style', 'overflow-y:visible; height: auto;')
 }
+$('#trending-nav').on('click', function(){
+    getTrending(12);
+})
