@@ -129,7 +129,7 @@ function getFirstReview( movieName ){
 
         var imageUrl = 'https://image.tmdb.org/t/p/w500' + firstRes.poster_path;
 
-        updateFocus( imageUrl, firstRes.title )
+        updateFocus( imageUrl, firstRes.title, firstRes.release_date )
         getReviews( firstRes.id )
     })
 }
@@ -322,9 +322,11 @@ function createMovieDiv (movieResponse, sentiment){
     return movieDiv;
 }
 */
-function updateFocus(imageUrl, imageTitle){
+function updateFocus(imageUrl, imageTitle, year){
     $('#focus-image').attr('src', imageUrl);
-    $('#focus-title').text( imageTitle )
+    console.log(imageTitle + '<span class="focus-year">(' + year.substring(0,4) + ')</span>' )
+    $('#focus-title').html(imageTitle + '<span class="focus-year">(' + year.substring(0, 4) + ')</span>');
+
 }
 
 function createTrendingDiv(movieResponse, sentiment) {
@@ -340,7 +342,7 @@ function createTrendingDiv(movieResponse, sentiment) {
     movieDiv.append(
         $('<div>', { class: "grid-x" }).append( 
               $('<div>', {class: 'cell shad'}).append(
-                  $('<img>', {src: poster, alt: title, 'data-id': id, 'data-title': title,class:"trending-images"})
+                  $('<img>', {src: poster, alt: title, 'data-id': id, 'data-title': title, 'data-year': releaseDate, class:"trending-images"})
               )
             )
     )
@@ -364,9 +366,10 @@ $(document).on('click', '.trending-images', function(){
     var id = $(this).attr('data-id');
     var imgSrc = $(this).attr('src');
     var title = $(this).attr('data-title');
+    var year = $(this).attr('data-year');
     getReviews(id)
     showFocus();
-    updateFocus(imgSrc, title)
+    updateFocus(imgSrc, title, year)
 })
 function showFocus(){
     $('#focus').attr('style', 'overflow-y:visible; height: auto;')
