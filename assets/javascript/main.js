@@ -337,7 +337,10 @@ function createTrendingDiv(movieResponse, sentiment) {
     movieDiv.append(
         $('<div>', { class: "grid-x" }).append( 
               $('<div>', {class: 'cell shad'}).append(
-                  $('<img>', {src: poster, alt: title, 'data-id': id, 'data-title': title, 'data-year': releaseDate, class:"trending-images"})
+                  $('<a>', {class: 'trending-image-cont', href: "#focus"}).append(
+                      $('<img>', {src: poster, alt: title, 'data-id': id, 'data-title': title, 'data-year': releaseDate, class:"trending-images"})
+                  )
+                  
               )
             )
     )
@@ -377,3 +380,12 @@ function showFocus(){
 $('#trending-nav').on('click', function(){
     getTrending(12);
 })
+
+//smooth scroll anchor links
+$(document).on('click', 'a[href^="#"]', function (event) {
+    event.preventDefault();
+
+    $('html, body').animate({
+        scrollTop: $($.attr(this, 'href')).offset().top
+    }, 500);
+});
