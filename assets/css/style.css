@@ -7,10 +7,14 @@
 	margin-top: 10px;
 	color: white;
 }
+#focus-image {
+	margin-top: 12px;
+}
 
 .focus-year {
 	font-size: 30px;
 	color: #c0c0c0;
+	font-weight: 500;
 }
 .data {
 	border: 3px solid grey;
@@ -35,6 +39,7 @@ h3, h2, h1, p {
 	-moz-box-shadow: inset 0 0 10px #000000;
 	-webkit-box-shadow: inset 0 0 10px #000000;
 	box-shadow: inset 0 0 10px #000000;
+	overflow: auto;
 }
 .h3 {
 	font-family: 'Kanit', sans-serif;
@@ -90,7 +95,7 @@ footer {
 }
 .text {
 	color: white;
-	padding: 5px;
+	position: relative
 }
 .hero-section {
 	background: url("../movies.jpg") 50% no-repeat;
@@ -194,9 +199,13 @@ footer {
 	background-color: #555;
 }
 
+
 .content {
-	padding: 0 18px;
+	padding: 10px;
 	display: none;
 	overflow: hidden;
-	background-color: #f1f1f1;
+	background-color: black;
+	opacity: 0.75;
+	position: absolute;
+	bottom: 100%;
 }
