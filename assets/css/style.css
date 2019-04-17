@@ -7,6 +7,9 @@
 	margin-top: 10px;
 	color: white;
 }
+#focus-image {
+	margin-top: 12px;
+}
 
 .focus-year {
 	font-size: 30px;
@@ -92,7 +95,7 @@ footer {
 }
 .text {
 	color: white;
-	padding: 5px;
+	position: relative
 }
 .hero-section {
 	background: url("../movies.jpg") 50% no-repeat;
@@ -195,9 +198,13 @@ footer {
 	background-color: #555;
 }
 
+
 .content {
-	padding: 0 18px;
+	padding: 10px;
 	display: none;
 	overflow: hidden;
-	background-color: #f1f1f1;
+	background-color: black;
+	opacity: 0.75;
+	position: absolute;
+	bottom: 100%;
 }
