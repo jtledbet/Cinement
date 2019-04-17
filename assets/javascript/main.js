@@ -39,6 +39,7 @@ function getFeels(text) {
 }
 
 function getSummary(text){
+    console.log( text.length )
     console.log(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + text + "&sentences=" + numSentences )
     return $.post(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + text + "&sentences=" + numSentences,{ 
 
