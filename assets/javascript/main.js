@@ -82,7 +82,9 @@ function getSentimentMC (text){
 function combineReviewsText( reviewsRaw ){
     var combined = '';
     for( var i = 0; i < reviewsRaw.length; i++){
-        combined += reviewsRaw[i].content;
+        if( combined.length + reviewsRaw[i].content >= 9000 ){
+            combined += reviewsRaw[i].content;
+        }
     }
     return combined;
 }
@@ -122,7 +124,7 @@ function getFirstReview( movieName ){
 
         var imageUrl = 'https://image.tmdb.org/t/p/w500' + firstRes.poster_path;
 
-        updateFocus( imageUrl )
+        updateFocus( imageUrl, firstRes.title )
         getReviews( firstRes.id )
     })
 }
@@ -304,8 +306,9 @@ function createMovieDiv (movieResponse, sentiment){
     return movieDiv;
 }
 */
-function updateFocus(imageUrl){
-    $('#focus-image').attr('src', imageUrl)
+function updateFocus(imageUrl, imageTitle){
+    $('#focus-image').attr('src', imageUrl);
+    $('#focus-title').text( imageTitle )
 }
 
 function createTrendingDiv(movieResponse, sentiment) {
