@@ -337,7 +337,10 @@ function createTrendingDiv(movieResponse, sentiment) {
     movieDiv.append(
         $('<div>', { class: "grid-x" }).append( 
               $('<div>', {class: 'cell shad'}).append(
-                  $('<img>', {src: poster, alt: title, 'data-id': id, 'data-title': title, 'data-year': releaseDate, class:"trending-images"})
+                  $('<a>', {class: 'trending-image-cont', href: "#focus"}).append(
+                      $('<img>', {src: poster, alt: title, 'data-id': id, 'data-title': title, 'data-year': releaseDate, class:"trending-images"})
+                  )
+                  
               )
             )
     )
@@ -372,8 +375,18 @@ $(document).on('click', '.trending-images', function(){
     updateFocus(imgSrc, title, year)
 })
 function showFocus(){
-    $('#focus').attr('style', 'overflow-y:visible; max-height: 1000px; transition: max-height 0.8s;')
+    $('#focus').attr('style', 'overflow-y:visible; max-height: 7000px; transition: max-height 0.8s;')
 }
+
 $('#trending-nav').on('click', function(){
     getTrending(12);
 })
+
+//smooth scroll anchor links
+$(document).on('click', 'a[href^="#"]', function (event) {
+    event.preventDefault();
+
+    $('html, body').animate({
+        scrollTop: $($.attr(this, 'href')).offset().top
+    }, 500);
+});
