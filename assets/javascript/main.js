@@ -357,15 +357,20 @@ function createTrendingDiv(movieResponse, sentiment) {
     }
     movieDiv.append(
         $('<div>', { class: "grid-x" }).append(
-            $('<div>', { class: 'cell text' }).text(
-                displayText
+            $('<div>', { class: 'cell text' }).append(
+                $('<button>', {class:'collapsible'}).text('Show Summary'),
+                $('<div>', {class:'content'}).text( displayText ).hide()
             )
         )
     )
 
     return movieDiv;
 }
-
+$(document).on('click', '.collapsible', function () {
+    $(this).toggleClass('active')
+    var $content = $(this).next();
+    $content.toggle();
+})
 
 $(document).on('click', '.trending-images', function(){
     var id = $(this).attr('data-id');
