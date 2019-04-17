@@ -6,7 +6,11 @@ createSearchListener();
 //getFirstReview('Frozen');
 
 var apiKeyMC = "480bfb040aaa88e722eb4a15ee9efd15"
+<<<<<<< HEAD
 var apiKeyPD = "S8RrYUmtFK9VwZNdEesgF7F1droqAKYZ3HTP9nk6Jtk"
+=======
+var apiKeyPD = "z28L7rWwv7Sev26j9Un8wsbepfbZF2sBLyR1nHfAZvg"
+>>>>>>> a81ff043e213f70654a2e308d5b701a9ff661e0f
 var apiKeyMD = "api_key=7c49e1342952d7c7e126e900862f9e64"
 
 var baseURL = "https://api.meaningcloud.com/"
@@ -39,7 +43,8 @@ function getFeels(text) {
 }
 
 function getSummary(text){
-
+    text = text.substring(0,6000)
+    console.log(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + text + "&sentences=" + numSentences )
     return $.post(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + text + "&sentences=" + numSentences,{ 
 
     }).then(function (response) { 
@@ -81,17 +86,24 @@ function getSentimentMC (text){
 
 function combineReviewsText( reviewsRaw ){
     var combined = '';
+
     for( var i = 0; i < reviewsRaw.length; i++){
         combined += reviewsRaw[i].content;
     }
+    combined = encodeURIComponent(combined)
+    if( combined.length > 9000 ){
+        combined = combined.substring(0, 9000)
+    }
+
+    console.log(combined.length)
     return combined;
 }
 
 function getReviews( id ){
-    var apiKeyMD = "api_key=7c49e1342952d7c7e126e900862f9e64"
+
+    var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
     var reviewSearch = "https://api.themoviedb.org/3/movie/" + id + "/reviews?"
     reviewSearch += apiKeyMD;
-    
     $.ajax({
         url: reviewSearch,
         method: "GET"
@@ -100,6 +112,12 @@ function getReviews( id ){
         var reviewsRaw = response.results;
 
         var combined = combineReviewsText(reviewsRaw);
+<<<<<<< HEAD
+=======
+        // var sentiment = getParallelDotsSentiment( combined )
+        // var movieDiv = createMovieDiv(firstRes, sentiment);
+        // $('#movie-holder').append(movieDiv)
+>>>>>>> a81ff043e213f70654a2e308d5b701a9ff661e0f
 
         getFeels(combined);
     })
@@ -107,6 +125,7 @@ function getReviews( id ){
 
 function getFirstReview( movieName ){
     var urlBase = 'https://api.themoviedb.org/3/search/movie?';
+    var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
     var movieSearch = urlBase + apiKeyMD + '&query=' + movieName
     $.ajax({
         url: movieSearch,
@@ -115,15 +134,21 @@ function getFirstReview( movieName ){
         console.log(response)
         var firstRes = response.results[0];
 
+        var imageUrl = 'https://image.tmdb.org/t/p/w500' + firstRes.poster_path;
+
+        updateFocus( imageUrl, firstRes.title, firstRes.release_date )
         getReviews( firstRes.id )
     })
 }
 
 
-function getTrending(){
-    var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64'
+function getTrending(numTrending){
+    var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
     var requestUrl = 'https://api.themoviedb.org/3/movie/popular?'+ apiKeyMD +'&language=en-US&page=1';
 
+    if ( numTrending === undefined){
+        numTrending = 4;
+    }
     $.ajax({
         url: requestUrl,
         method: "GET"
@@ -131,7 +156,8 @@ function getTrending(){
         var results = response.results;
         console.log( results );
 
-        for(var i = 0; i < 4; i++){
+        $('#trending').empty();
+        for(var i = 0; i < numTrending; i++){
             var movieDiv = createTrendingDiv( results[i] )
             $('#trending').append( movieDiv )
         }
@@ -145,10 +171,18 @@ function createSearchListener(){
     var $searchText = $('#search-text');
     $searchButton.on('click', function(e){
         e.preventDefault();
-        var searchedText = $searchText.val();
-        console.log('searched:', searchedText);
 
-        getFirstReview(searchedText);
+        var searchedText = $searchText.val().trim();
+        
+        if( searchedText.length < 1){
+            console.log('empty search')
+        } else {
+            console.log('searched:', searchedText);
+
+            getFirstReview(searchedText);
+            showFocus();
+        }
+        
 
         $searchText.val('');
     })
@@ -274,7 +308,7 @@ function getParallelDotsEmotion(text) {
     })
 }
 
-
+/*
 function createMovieDiv (movieResponse, sentiment){
     var poster = 'https://image.tmdb.org/t/p/w500'+ movieResponse.poster_path;
     var title = movieResponse.title;
@@ -292,6 +326,13 @@ function createMovieDiv (movieResponse, sentiment){
 
     return movieDiv;
 }
+*/
+function updateFocus(imageUrl, imageTitle, year){
+    $('#focus-image').attr('src', imageUrl);
+    console.log(imageTitle + '<span class="focus-year">(' + year.substring(0,4) + ')</span>' )
+    $('#focus-title').html(imageTitle + '<span class="focus-year">(' + year.substring(0, 4) + ')</span>');
+
+}
 
 function createTrendingDiv(movieResponse, sentiment) {
     var poster = 'https://image.tmdb.org/t/p/w500' + movieResponse.poster_path;
@@ -306,7 +347,7 @@ function createTrendingDiv(movieResponse, sentiment) {
     movieDiv.append(
         $('<div>', { class: "grid-x" }).append( 
               $('<div>', {class: 'cell shad'}).append(
-                  $('<img>', {src: poster, alt: title, 'data-id': id, class:"trending-images"})
+                  $('<img>', {src: poster, alt: title, 'data-id': id, 'data-title': title, 'data-year': releaseDate, class:"trending-images"})
               )
             )
     )
@@ -328,5 +369,16 @@ function createTrendingDiv(movieResponse, sentiment) {
 
 $(document).on('click', '.trending-images', function(){
     var id = $(this).attr('data-id');
+    var imgSrc = $(this).attr('src');
+    var title = $(this).attr('data-title');
+    var year = $(this).attr('data-year');
     getReviews(id)
+    showFocus();
+    updateFocus(imgSrc, title, year)
+})
+function showFocus(){
+    $('#focus').attr('style', 'overflow-y:visible; max-height: 1000px; transition: max-height 0.8s;')
+}
+$('#trending-nav').on('click', function(){
+    getTrending(12);
 })
