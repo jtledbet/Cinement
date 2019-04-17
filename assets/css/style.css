@@ -75,7 +75,8 @@ a:hover {
 	padding: 10px;
 }
 footer {
-	height: 30px;
+	padding: 20px;
+	text-align: center;
 	background: #444;
 	border-top: 2px solid grey;
 	margin-top: 20px;
@@ -134,6 +135,9 @@ footer {
 	}
 	.wrapper {
 		margin: 0;
+	}
+	.title {
+		text-align: center;
 	}
 }
 /* Medium and up */
