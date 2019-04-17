@@ -329,7 +329,7 @@ function createTrendingDiv(movieResponse, sentiment) {
     movieDiv.append(
         $('<div>', { class: "grid-x" }).append( 
               $('<div>', {class: 'cell shad'}).append(
-                  $('<img>', {src: poster, alt: title, 'data-id': id, class:"trending-images"})
+                  $('<img>', {src: poster, alt: title, 'data-id': id, 'data-title': title,class:"trending-images"})
               )
             )
     )
@@ -351,8 +351,11 @@ function createTrendingDiv(movieResponse, sentiment) {
 
 $(document).on('click', '.trending-images', function(){
     var id = $(this).attr('data-id');
+    var imgSrc = $(this).attr('src');
+    var title = $(this).attr('data-title');
     getReviews(id)
     showFocus();
+    updateFocus(imgSrc, title)
 })
 function showFocus(){
     $('#focus').attr('style', 'overflow-y:visible; height: auto;')
