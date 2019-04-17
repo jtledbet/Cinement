@@ -159,23 +159,35 @@ function getTrending(numTrending){
 function createSearchListener(){
     var $searchButton = $('#search-button');
     var $searchText = $('#search-text');
-    $searchButton.on('click', function(e){
+    function search(e){
         e.preventDefault();
 
         var searchedText = $searchText.val().trim();
-        
-        if( searchedText.length < 1){
+
+        if (searchedText.length < 1) {
             console.log('empty search')
         } else {
             console.log('searched:', searchedText);
 
             getFirstReview(searchedText);
             showFocus();
+            $('html, body').animate({
+                scrollTop: $('#focus').offset().top
+            }, 500);
         }
-        
+
 
         $searchText.val('');
-    })
+    }
+
+
+    $searchButton.on('click', search)
+
+    $searchText.keypress(function (event) {
+        if (event.keyCode == 13 || event.which == 13) {
+            search(event)
+        }
+    });
 }
 
 
@@ -390,3 +402,4 @@ $(document).on('click', 'a[href^="#"]', function (event) {
         scrollTop: $($.attr(this, 'href')).offset().top
     }, 500);
 });
+
