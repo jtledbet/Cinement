@@ -6,11 +6,7 @@ createSearchListener();
 //getFirstReview('Frozen');
 
 var apiKeyMC = "480bfb040aaa88e722eb4a15ee9efd15"
-<<<<<<< HEAD
 var apiKeyPD = "S8RrYUmtFK9VwZNdEesgF7F1droqAKYZ3HTP9nk6Jtk"
-=======
-var apiKeyPD = "z28L7rWwv7Sev26j9Un8wsbepfbZF2sBLyR1nHfAZvg"
->>>>>>> a81ff043e213f70654a2e308d5b701a9ff661e0f
 var apiKeyMD = "api_key=7c49e1342952d7c7e126e900862f9e64"
 
 var baseURL = "https://api.meaningcloud.com/"
@@ -112,13 +108,7 @@ function getReviews( id ){
         var reviewsRaw = response.results;
 
         var combined = combineReviewsText(reviewsRaw);
-<<<<<<< HEAD
-=======
-        // var sentiment = getParallelDotsSentiment( combined )
-        // var movieDiv = createMovieDiv(firstRes, sentiment);
-        // $('#movie-holder').append(movieDiv)
->>>>>>> a81ff043e213f70654a2e308d5b701a9ff661e0f
-
+        
         getFeels(combined);
     })
 }
