@@ -169,6 +169,9 @@ footer {
 }
 
 #focus {
-	height: 0;
+	max-height: 0;
 	overflow-y: hidden;
+}
+.trending-images:hover{
+	opacity: .7;
 }
