@@ -36,6 +36,10 @@ function getFeels(text) {
     getSummary(text)
     getParallelDotsSentiment(text)
     getParallelDotsEmotion(text)
+
+    $("#main-cell").fadeIn(1500 , function() {
+        // Animation complete
+    });
 }
 
 function getSummary(text){
