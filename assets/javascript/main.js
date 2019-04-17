@@ -377,6 +377,7 @@ $(document).on('click', '.trending-images', function(){
 function showFocus(){
     $('#focus').attr('style', 'overflow-y:visible; max-height: 7000px; transition: max-height 0.8s;')
 }
+
 $('#trending-nav').on('click', function(){
     getTrending(12);
 })
