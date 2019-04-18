@@ -2,7 +2,7 @@ $(document).foundation()
 
 getTrending();
 
-createSearchListener();
+//createSearchListener();
 //getFirstReview('Frozen');
 
 var apiKeyMC = "480bfb040aaa88e722eb4a15ee9efd15"
@@ -22,13 +22,14 @@ var ajaxOptions = {
     method: "GET",
     crossDomain: true,
 
-    beforeSend: function(xhrObj){
+    beforeSend: function (xhrObj) {
         // Request headers
-        xhrObj.setRequestHeader("Content-Type","application/json");
-        xhrObj.setRequestHeader("Accept","JSON");
+        xhrObj.setRequestHeader("Content-Type", "application/json");
+        xhrObj.setRequestHeader("Accept", "JSON");
     }
 }
 
+// API CALLS
 
 // getFeels(veryBadReview)
 
@@ -37,17 +38,17 @@ function getFeels(text) {
     getParallelDotsSentiment(text)
     getParallelDotsEmotion(text)
 
-    $("#main-cell").fadeIn(1500 , function() {
+    $("#main-cell").fadeIn(1500, function () {
         // Animation complete
     });
 }
 
-function getSummary(text){
-    var cutText = text.substring(0,6000)
-    console.log(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + cutText + "&sentences=" + numSentences )
-    return $.post(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + cutText + "&sentences=" + numSentences,{ 
+function getSummary(text) {
+    var cutText = text.substring(0, 6000)
+    console.log(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + cutText + "&sentences=" + numSentences)
+    return $.post(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + cutText + "&sentences=" + numSentences, {
 
-    }).then(function (response) { 
+    }).then(function (response) {
         console.log(response)
         console.log(response.summary)
         $("#review-summary").text(response.summary)
@@ -55,24 +56,24 @@ function getSummary(text){
     })
 }
 
-function getSentimentMC (text){
-// Sentiment response object:
-// agreement: "AGREEMENT"
-// confidence: "100"
-// irony: "NONIRONIC"
-// model: "general_en"
-// score_tag: "P+"
-// sentence_list: [{…}]
-// sentimented_concept_list: []
-// sentimented_entity_list: []
-// status: {code: "0", msg: "OK", credits: "1", remaining_credits: "19898"}
-// subjectivity: "OBJECTIVE"
+function getSentimentMC(text) {
+    // Sentiment response object:
+    // agreement: "AGREEMENT"
+    // confidence: "100"
+    // irony: "NONIRONIC"
+    // model: "general_en"
+    // score_tag: "P+"
+    // sentence_list: [{…}]
+    // sentimented_concept_list: []
+    // sentimented_entity_list: []
+    // status: {code: "0", msg: "OK", credits: "1", remaining_credits: "19898"}
+    // subjectivity: "OBJECTIVE"
 
-//  EVIDENTLY ONLY WORKS ON SINGLE SENTENCES?
+    //  EVIDENTLY ONLY WORKS ON SINGLE SENTENCES?
 
-    return $.post(baseURL + sentimentURL + "?key=" + apiKeyMC + "&txt=" + text + "&lang=en",{ 
+    return $.post(baseURL + sentimentURL + "?key=" + apiKeyMC + "&txt=" + text + "&lang=en", {
 
-    }).then(function (response) { 
+    }).then(function (response) {
         console.log(response)
         console.log(response.sentiment)
         console.log("agreement: " + response.agreement)
@@ -84,22 +85,7 @@ function getSentimentMC (text){
     })
 }
 
-function combineReviewsText( reviewsRaw ){
-    var combined = '';
-
-    for( var i = 0; i < reviewsRaw.length; i++){
-        combined += reviewsRaw[i].content;
-    }
-    combined = encodeURIComponent(combined)
-    if( combined.length > 9000 ){
-        combined = combined.substring(0, 9000)
-    }
-
-    console.log(combined.length)
-    return combined;
-}
-
-function getReviews( id , movieName){
+function getReviews(id) {
 
     var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
     var reviewSearch = "https://api.themoviedb.org/3/movie/" + id + "/reviews?"
@@ -112,23 +98,16 @@ function getReviews( id , movieName){
         var reviewsRaw = response.results;
 
         var combined = combineReviewsText(reviewsRaw);
-        
+
         getFeels(combined);
-        
-        // gather rating votes:
-        // (this does not work for reasons that should be obvious)
-        // work with Devin to resolve
-        console.log("%%% getRev " + currentMovie)
-        $("#ratings").html(getRatings(currentMovie));
     })
 }
 
-
-function getFirstReview( movieName ){
+function getFirstReview(movieName) {
     var urlBase = 'https://api.themoviedb.org/3/search/movie?';
     var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
     var movieSearch = urlBase + apiKeyMD + '&query=' + movieName
-    
+
     $.ajax({
         url: movieSearch,
         method: "GET"
@@ -138,32 +117,17 @@ function getFirstReview( movieName ){
 
         var imageUrl = 'https://image.tmdb.org/t/p/w500' + firstRes.poster_path;
 
-        updateFocus( imageUrl, firstRes.title, firstRes.release_date )
-        getReviews( firstRes.id, movieName )
-
-        // gather rating votes:
-        currentMovie = response;
-        $("#ratings").html(getRatings(response));
+        updateFocus(imageUrl, firstRes.title, firstRes.release_date, getRatings(firstRes))
+        getReviews(firstRes.id, movieName)
     })
 
 }
 
-function getRatings(response) {
-
-    var voteAvg = response.results[0].vote_average;
-    var voteCount = response.results[0].vote_count;
-    console.log("vote avg: " + voteAvg + " count: " + voteCount)
-    if (voteCount > 0) {
-        return("Average Rating: " + voteAvg + "<br>Total Votes: " + voteCount)
-    } else return("Average Rating: " + "N/A" + "<br>Total Votes: " + "N/A")
-
-}
-
-function getTrending(numTrending){
+function getTrending(numTrending) {
     var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
-    var requestUrl = 'https://api.themoviedb.org/3/movie/popular?'+ apiKeyMD +'&language=en-US&page=1';
+    var requestUrl = 'https://api.themoviedb.org/3/movie/popular?' + apiKeyMD + '&language=en-US&page=1';
 
-    if ( numTrending === undefined){
+    if (numTrending === undefined) {
         numTrending = 4;
     }
     $.ajax({
@@ -171,58 +135,65 @@ function getTrending(numTrending){
         method: "GET"
     }).then(function (response) {
         var results = response.results;
-        console.log( results );
+        console.log(results);
 
         $('#trending').empty();
-        for(var i = 0; i < numTrending; i++){
-            var movieDiv = createTrendingDiv( results[i] )
-            $('#trending').append( movieDiv )
+        for (var i = 0; i < numTrending; i++) {
+            var movieDiv = createTrendingDiv(results[i])
+            $('#trending').append(movieDiv)
         }
 
     })
 
 }
 
-function createSearchListener(){
-    var $searchButton = $('#search-button');
-    var $searchText = $('#search-text');
-    function search(e){
-        e.preventDefault();
+function getSummary(text) {
+    text = text.substring(0, 6000)
+    console.log(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + text + "&sentences=" + numSentences)
+    return $.post(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + text + "&sentences=" + numSentences, {
 
-        var searchedText = $searchText.val().trim();
-
-        if (searchedText.length < 1) {
-            console.log('empty search')
-        } else {
-            console.log('searched:', searchedText);
-
-            getFirstReview(searchedText);
-            showFocus();
-            $('html, body').animate({
-                scrollTop: $('#focus').offset().top
-            }, 500);
-        }
-
-
-        $searchText.val('');
-    }
-
-
-    $searchButton.on('click', search)
-
-    $searchText.keypress(function (event) {
-        if (event.keyCode == 13 || event.which == 13) {
-            search(event)
-        }
-    });
+    }).then(function (response) {
+        console.log(response)
+        console.log(response.summary)
+        $("#review-summary").text(response.summary)
+        return response;
+    })
 }
 
+function getSentimentMC(text) {
+    // Sentiment response object:
+    // agreement: "AGREEMENT"
+    // confidence: "100"
+    // irony: "NONIRONIC"
+    // model: "general_en"
+    // score_tag: "P+"
+    // sentence_list: [{…}]
+    // sentimented_concept_list: []
+    // sentimented_entity_list: []
+    // status: {code: "0", msg: "OK", credits: "1", remaining_credits: "19898"}
+    // subjectivity: "OBJECTIVE"
 
-function getParallelDotsSentiment( text ){
-    return $.post("https://apis.paralleldots.com/v4/sentiment",{ 
-        api_key: apiKeyPD, 
+    //  EVIDENTLY ONLY WORKS ON SINGLE SENTENCES?
+
+    return $.post(baseURL + sentimentURL + "?key=" + apiKeyMC + "&txt=" + text + "&lang=en", {
+
+    }).then(function (response) {
+        console.log(response)
+        console.log(response.sentiment)
+        console.log("agreement: " + response.agreement)
+        console.log("irony: " + response.irony)
+        console.log("subjectivity: " + response.subjectivity)
+        console.log("confidence: " + response.confidence)
+
+        return response;
+    })
+}
+
+function getParallelDotsSentiment(text) {
+    return $.post("https://apis.paralleldots.com/v4/sentiment", {
+        api_key: apiKeyPD,
         text: text,
-    }).then(function (response) { 
+    }).then(function (response) {
         console.log(response)
 
         var sent = response.sentiment;
@@ -232,7 +203,7 @@ function getParallelDotsSentiment( text ){
         var pos = sent.positive;
 
         var percentage = 0;
-        var sentimentResult = "" 
+        var sentimentResult = ""
 
         // Assess general sentiment:
         if (pos > neu && pos > neg) {
@@ -244,8 +215,8 @@ function getParallelDotsSentiment( text ){
                     sentimentResult = "Very Positive"
                 }
             }
-		}
-		else if (neu > pos && neu > neg) {
+        }
+        else if (neu > pos && neu > neg) {
             sentimentResult = "Somewhat Neutral"
             percentage = Math.floor(neu * 100)
             if (neu > 0.5) {
@@ -254,8 +225,8 @@ function getParallelDotsSentiment( text ){
                     sentimentResult = "Very Neutral"
                 }
             }
-		}
-		else if (neg > pos && neg > neu) {
+        }
+        else if (neg > pos && neg > neu) {
             sentimentResult = "Somewhat Negative"
             percentage = Math.floor(neg * 100)
             if (neg > 0.5) {
@@ -266,8 +237,8 @@ function getParallelDotsSentiment( text ){
             }
         }
 
-        $("#gen-sent").text(sentimentResult + " (" + percentage + "%)"); 
-        console.log("General Sentiment: " + sentimentResult + " (" + percentage + "%)"); 
+        $("#gen-sent").text(sentimentResult + " (" + percentage + "%)");
+        console.log("General Sentiment: " + sentimentResult + " (" + percentage + "%)");
         return response;
     })
 }
@@ -283,7 +254,7 @@ function getParallelDotsKeyword(text) {
     }).then(function (response) {
         console.log(response)
 
-        return response;    
+        return response;
     })
 }
 
@@ -305,61 +276,97 @@ function getParallelDotsEmotion(text) {
         console.log(response)
         var emo = response.emotion;
         var percentage = 0;
-        
+
         // Morgan wrote this:
         var emoArray = [
-            {emotion: "Angry", num: emo.Angry},
-            {emotion: "Bored", num: emo.Bored}, 
-            {emotion: "Excited", num: emo.Excited},
-            {emotion: "Fear", num: emo.Fear},
-            {emotion: "Happy", num: emo.Happy},
-            {emotion: "Sad", num: emo.Sad}
-          ]
-          emoArray.sort(function(a, b) {
-              return a.num - b.num;
-          });
-          
-          emoArray.reverse();
-          console.log(emoArray)
+            { emotion: "Angry", num: emo.Angry },
+            { emotion: "Bored", num: emo.Bored },
+            { emotion: "Excited", num: emo.Excited },
+            { emotion: "Fear", num: emo.Fear },
+            { emotion: "Happy", num: emo.Happy },
+            { emotion: "Sad", num: emo.Sad }
+        ]
+        emoArray.sort(function (a, b) {
+            return a.num - b.num;
+        });
+
+        emoArray.reverse();
+        console.log(emoArray)
 
         $("#emo-reading").empty();
         for (var i = 0; i < emoArray.length; i++) {
             percentage = Math.floor(emoArray[i].num * 100);
             var emoOut = emoArray[i].emotion + " (" + percentage + "%)";
-            
+
             if (percentage > 1) {
-                $("#emo-reading").append(emoOut + '<br>'); 
+                $("#emo-reading").append(emoOut + '<br>');
                 console.log(emoOut)
             }
         }
 
-        return response; 
+        return response;
     })
 }
 
-/*
-function createMovieDiv (movieResponse, sentiment){
-    var poster = 'https://image.tmdb.org/t/p/w500'+ movieResponse.poster_path;
-    var title = movieResponse.title;
-    var popularity = movieResponse.popularity;
-    var releaseDate = movieResponse.release_date;
-    var overview = movieResponse.overview;
-    var genres = movieResponse.genre_ids;
-    var id = movieResponse.id;
 
-    var movieDiv = $('<div>');
-    movieDiv.append( $('<img>', {src: poster, alt: title}) )
-    if( sentiment !== undefined ){
-        movieDiv.append($('<p>').text(sentiment))
+// getFeels(veryBadReview)
+
+function getFeels(text) {
+    getSummary(text)
+    getParallelDotsSentiment(text)
+    getParallelDotsEmotion(text)
+
+    $("#main-cell").fadeIn(1500, function () {
+        // Animation complete
+    });
+}
+
+function getRatings(movieData) {
+
+    var voteAvg = movieData.vote_average;
+    var voteCount = movieData.vote_count;
+    console.log("vote avg: " + voteAvg + " count: " + voteCount)
+    if (voteCount > 0) {
+        return ("Average Rating: " + voteAvg + "<br>Total Votes: " + voteCount)
+    } else return ("Average Rating: " + "N/A" + "<br>Total Votes: " + "N/A")
+
+}
+
+function combineReviewsText(reviewsRaw) {
+    var combined = '';
+
+    for (var i = 0; i < reviewsRaw.length; i++) {
+        combined += reviewsRaw[i].content;
+    }
+    combined = encodeURIComponent(combined)
+    if (combined.length > 9000) {
+        combined = combined.substring(0, 9000)
     }
 
-    return movieDiv;
+    console.log(combined.length)
+    return combined;
 }
-*/
-function updateFocus(imageUrl, imageTitle, year){
+
+function combineReviewsText(reviewsRaw) {
+    var combined = '';
+
+    for (var i = 0; i < reviewsRaw.length; i++) {
+        combined += reviewsRaw[i].content;
+    }
+    combined = encodeURIComponent(combined)
+    if (combined.length > 9000) {
+        combined = combined.substring(0, 9000)
+    }
+
+    console.log(combined.length)
+    return combined;
+}
+
+function updateFocus(imageUrl, imageTitle, year, rating) {
     $('#focus-image').attr('src', imageUrl);
-    console.log(imageTitle + '<span class="focus-year"> (' + year.substring(0,4) + ')</span>' )
+    console.log(imageTitle + '<span class="focus-year"> (' + year.substring(0, 4) + ')</span>')
     $('#focus-title').html(imageTitle + '<span class="focus-year"> (' + year.substring(0, 4) + ')</span>');
+    $("#ratings").html(rating);
 
 }
 
@@ -372,52 +379,60 @@ function createTrendingDiv(movieResponse, sentiment) {
     var genres = movieResponse.genre_ids;
     var id = movieResponse.id;
 
+    var rating = getRatings(movieResponse);
+
     var movieDiv = $('<div>', { class: "cell large-3 small-6 one" });
     movieDiv.append(
-        $('<div>', { class: "grid-x" }).append( 
-              $('<div>', {class: 'cell shad'}).append(
-                  $('<a>', {class: 'trending-image-cont', href: "#focus"}).append(
-                      $('<img>', {src: poster, alt: title, 'data-id': id, 'data-title': title, 'data-year': releaseDate, class:"trending-images"})
-                  )
-                  
-              )
+        $('<div>', { class: "grid-x" }).append(
+            $('<div>', { class: 'cell shad' }).append(
+                $('<a>', { class: 'trending-image-cont', href: "#focus" }).append(
+                    $('<img>', {
+                        src: poster, alt: title, 'data-id': id, 'data-title':
+                            title, 'data-year': releaseDate, 'data-rating': rating, class: "trending-images"
+                    })
+                )
+
             )
+        )
     )
     var displayText = overview;
-    if (sentiment !== undefined){
+    if (sentiment !== undefined) {
         displayText = sentiment;
     }
     movieDiv.append(
         $('<div>', { class: "grid-x" }).append(
             $('<div>', { class: 'cell text' }).append(
-                $('<button>', {class:'collapsible'}).text('Show Summary'),
-                $('<div>', {class:'content'}).text( displayText ).hide()
+                $('<button>', { class: 'collapsible' }).text('Show Summary'),
+                $('<div>', { class: 'content' }).text(displayText).hide()
             )
         )
     )
 
     return movieDiv;
 }
+
 $(document).on('click', '.collapsible', function () {
     $(this).toggleClass('active')
     var $content = $(this).next();
     $content.toggle();
 })
 
-$(document).on('click', '.trending-images', function(){
+$(document).on('click', '.trending-images', function () {
     var id = $(this).attr('data-id');
     var imgSrc = $(this).attr('src');
     var title = $(this).attr('data-title');
     var year = $(this).attr('data-year');
+    var rating = $(this).attr('data-rating')
     getReviews(id)
     showFocus();
-    updateFocus(imgSrc, title, year)
+    updateFocus(imgSrc, title, year, rating)
 })
-function showFocus(){
+
+function showFocus() {
     $('#focus').attr('style', 'overflow-y:visible; max-height: 7000px; transition: max-height 0.8s;')
 }
 
-$('#trending-nav').on('click', function(){
+$('#trending-nav').on('click', function () {
     getTrending(12);
 })
 
@@ -430,3 +445,30 @@ $(document).on('click', 'a[href^="#"]', function (event) {
     }, 500);
 });
 
+// Click search + enter key
+function searchMovie(e) {
+    e.preventDefault();
+
+    var searchedText = $('#search-text').val().trim();
+
+    if (searchedText.length < 1) {
+        console.log('empty search')
+    } else {
+        console.log('searched:', searchedText);
+
+        getFirstReview(searchedText);
+        showFocus();
+        $('html, body').animate({
+            scrollTop: $('#focus').offset().top
+        }, 500);
+    }
+    $('#search-text').val('');
+}
+
+$(document).on('click', '#search-button', searchMovie)
+
+$('#search-text').keypress(function (event) {
+    if (event.keyCode == 13 || event.which == 13) {
+        searchMovie(event)
+    }
+});
