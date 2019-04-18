@@ -443,7 +443,8 @@ $(document).on('click', '.trending-images', function () {
 })
 
 function showFocus() {
-    $('#focus').attr('style', 'overflow-y:visible; max-height: 7000px; transition: max-height 0.8s;')
+    //$('#focus').attr('style', 'overflow-y:visible; max-height: 7000px; transition: max-height 0.8s;')
+    $('#focus').toggleClass('focus-show');
 }
 
 $('#trending-nav').on('click', function () {
@@ -487,3 +488,6 @@ $('#search-text').keypress(function (event) {
     }
 });
 
+$('#focus-hide').on('click', function(){
+    showFocus();
+})

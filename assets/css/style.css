@@ -189,6 +189,7 @@ footer {
 #focus {
 	max-height: 0;
 	overflow-y: hidden;
+	transition: max-height 0.8s;
 }
 .trending-images:hover{
 	opacity: .7;
@@ -230,4 +231,14 @@ footer {
 
 .frosted {
 	filter: blur( 2px );
+}
+
+#focus-hide {
+	width: 100%;
+	text-align: center;
+}
+.focus-show {
+	overflow-y:visible!important; 
+	max-height: 7000px!important; 
+	transition: max-height 0.8s;
 }
