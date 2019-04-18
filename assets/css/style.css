@@ -22,6 +22,11 @@
 	color: #c0c0c0;
 	font-weight: 500;
 }
+
+#total-reviews{
+	color: #c0c0c0;
+}
+
 .data {
 	border: 3px solid grey;
 	background: #777b7e;
@@ -92,6 +97,7 @@ a:hover {
 	padding: 10px;
 }
 footer {
+	filter: grayscale(100%);
 	padding: 20px;
 	text-align: center;
 	background: #444;
@@ -218,4 +224,8 @@ footer {
 	max-height: 200px;
 	overflow-y: scroll;
 
+}
+
+.frosted {
+	filter: blur( 2px );
 }
