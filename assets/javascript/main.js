@@ -85,21 +85,6 @@ function getSentimentMC(text) {
     })
 }
 
-function combineReviewsText(reviewsRaw) {
-    var combined = '';
-
-    for (var i = 0; i < reviewsRaw.length; i++) {
-        combined += reviewsRaw[i].content;
-    }
-    combined = encodeURIComponent(combined)
-    if (combined.length > 9000) {
-        combined = combined.substring(0, 9000)
-    }
-
-    console.log(combined.length)
-    return combined;
-}
-
 function getReviews(id) {
 
     var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
@@ -345,6 +330,21 @@ function getRatings(movieData) {
         return ("Average Rating: " + voteAvg + "<br>Total Votes: " + voteCount)
     } else return ("Average Rating: " + "N/A" + "<br>Total Votes: " + "N/A")
 
+}
+
+function combineReviewsText(reviewsRaw) {
+    var combined = '';
+
+    for (var i = 0; i < reviewsRaw.length; i++) {
+        combined += reviewsRaw[i].content;
+    }
+    combined = encodeURIComponent(combined)
+    if (combined.length > 9000) {
+        combined = combined.substring(0, 9000)
+    }
+
+    console.log(combined.length)
+    return combined;
 }
 
 function combineReviewsText(reviewsRaw) {
