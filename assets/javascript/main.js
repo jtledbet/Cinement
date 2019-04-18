@@ -14,9 +14,6 @@ var summaryURL = "summarization-1.0/"
 var sentimentURL = "sentiment-2.1"
 var numSentences = 5;
 var queryURL = "";
-var currentMovie;
-var gettysBurg = "Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal. Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure. We are met on a great battle-field of that war. We have come to dedicate a portion of that field, as a final resting place for those who here gave their lives that that nation might live. It is altogether fitting and proper that we should do this. But, in a larger sense, we can not dedicate -- we can not consecrate -- we can not hallow -- this ground. The brave men, living and dead, who struggled here, have consecrated it, far above our poor power to add or detract. The world will little note, nor long remember what we say here, but it can never forget what they did here. It is for us the living, rather, to be dedicated here to the unfinished work which they who fought here have thus far so nobly advanced. It is rather for us to be here dedicated to the great task remaining before us -- that from these honored dead we take increased devotion to that cause for which they gave the last full measure of devotion -- that we here highly resolve that these dead shall not have died in vain -- that this nation, under God, shall have a new birth of freedom -- and that government of the people, by the people, for the people, shall not perish from the earth."
-var veryBadReview = "I hated this movie. Hated, hated, hated, hated, hated this movie. Hated it. Hated every simpering stupid vacant audience-insulting moment of it. Hated the sensibility that thought anyone would like it. Hated the implied insult to the audience by its belief that anyone would be entertained by it."
 var ajaxOptions = {
     url: queryURL,
     method: "GET",
@@ -55,35 +52,6 @@ function getSummary(text){
     })
 }
 
-function getSentimentMC (text){
-// Sentiment response object:
-// agreement: "AGREEMENT"
-// confidence: "100"
-// irony: "NONIRONIC"
-// model: "general_en"
-// score_tag: "P+"
-// sentence_list: [{…}]
-// sentimented_concept_list: []
-// sentimented_entity_list: []
-// status: {code: "0", msg: "OK", credits: "1", remaining_credits: "19898"}
-// subjectivity: "OBJECTIVE"
-
-//  EVIDENTLY ONLY WORKS ON SINGLE SENTENCES?
-
-    return $.post(baseURL + sentimentURL + "?key=" + apiKeyMC + "&txt=" + text + "&lang=en",{ 
-
-    }).then(function (response) { 
-        console.log(response)
-        console.log(response.sentiment)
-        console.log("agreement: " + response.agreement)
-        console.log("irony: " + response.irony)
-        console.log("subjectivity: " + response.subjectivity)
-        console.log("confidence: " + response.confidence)
-
-        return response;
-    })
-}
-
 function combineReviewsText( reviewsRaw ){
     var combined = '';
 
@@ -110,15 +78,14 @@ function getReviews( id , movieName){
     }).then(function (response) {
         console.log(response)
         var reviewsRaw = response.results;
-
         var combined = combineReviewsText(reviewsRaw);
         
+        $("#total-reviews").html("Total Reviews: " + reviewsRaw.length)
         getFeels(combined);
         
         // gather rating votes:
         // (this does not work for reasons that should be obvious)
         // work with Devin to resolve
-        console.log("%%% getRev " + currentMovie)
         $("#ratings").html(getRatings(currentMovie));
     })
 }
@@ -140,6 +107,7 @@ function getFirstReview( movieName ){
 
         updateFocus( imageUrl, firstRes.title, firstRes.release_date )
         getReviews( firstRes.id, movieName )
+        
 
         // gather rating votes:
         currentMovie = response;
@@ -356,6 +324,7 @@ function createMovieDiv (movieResponse, sentiment){
     return movieDiv;
 }
 */
+
 function updateFocus(imageUrl, imageTitle, year){
     $('#focus-image').attr('src', imageUrl);
     console.log(imageTitle + '<span class="focus-year"> (' + year.substring(0,4) + ')</span>' )
