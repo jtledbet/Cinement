@@ -21,6 +21,11 @@
 	color: #c0c0c0;
 	font-weight: 500;
 }
+
+#total-reviews{
+	color: #c0c0c0;
+}
+
 .data {
 	border: 3px solid grey;
 	background: #777b7e;
@@ -32,8 +37,8 @@
 	font-family: 'Kanit', sans-serif;
 }
 .wrapper {
-	margin-right: 20em;
-	margin-left: 20em;
+	margin-right: 15em;
+	margin-left: 15em;
 	margin-top: 2em;
 	margin-bottom: 1em;
 }
