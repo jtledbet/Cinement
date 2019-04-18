@@ -89,6 +89,10 @@ a {
 a:hover {
 	color: lightgrey;
 }
+a:visited{ 
+	color: white;
+}
+
 .top-bar, .dropdown {
 	background: black !important;
 	color: white;
