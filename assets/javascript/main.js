@@ -5,9 +5,20 @@ getTrending();
 //createSearchListener();
 //getFirstReview('Frozen');
 
-var apiKeyMC = "480bfb040aaa88e722eb4a15ee9efd15"
-var apiKeyPD = "N5Uc3tNnJ90gI9xCvMo7e0w4pFiFyyyz7LyX3HAvqNE"
+var apiKeyMC = "480bfb040aaa88e722eb4a15ee9efd15" 
 var apiKeyMD = "api_key=7c49e1342952d7c7e126e900862f9e64"
+
+var apiKeysArrayPD = ["N5Uc3tNnJ90gI9xCvMo7e0w4pFiFyyyz7LyX3HAvqNE",
+    "nNrvGbJRqlR7VMkESMFaKRm6Rh5gnsmhYtf6N3trZzI",
+    "z28L7rWwv7Sev26j9Un8wsbepfbZF2sBLyR1nHfAZvg",
+    "S8RrYUmtFK9VwZNdEesgF7F1droqAKYZ3HTP9nk6Jtk",
+    "T2nbpiiPwUFiT7u22E3tO2c5TdbXOpqfwCBP6frNLy0",
+    "4eEhIKrYp43KWV6sSDcjMnkbCewmL6XD1Ev2lx7QjMM",
+    "zI5z5Ad9mNji294DjE4SjQsOI5HivuyaJDtdliTb4wI",
+    "cxhtYdxQWfUvWRvT5Y0fXMbRu6mFOWLsat2P02fDOWg"]
+var apiKeyIndex = 0;
+
+var apiKeyPD = apiKeysArrayPD[apiKeyIndex];
 
 var baseURL = "https://api.meaningcloud.com/"
 var summaryURL = "summarization-1.0/"
@@ -200,50 +211,58 @@ function getParallelDotsSentiment(text) {
     }).then(function (response) {
         console.log(response)
 
-        var sent = response.sentiment;
+        if (response.code < 200 || response.code > 400) {
+            apiKeyPD = apiKeysArrayPD[apiKeyIndex % apiKeysArrayPD.length]
+            apiKeyIndex++;
+            console.log("switched to new Parallel Dots API_Key: " + apiKeyPD + " (" + apiKeyIndex + " --- " + (apiKeyIndex % apiKeysArrayPD.length ))
+            getParallelDotsSentiment(text)
+        } else {
+            console.log("(key still good.)")
+            var sent = response.sentiment;
 
-        var neg = sent.negative;
-        var neu = sent.neutral;
-        var pos = sent.positive;
+            var neg = sent.negative;
+            var neu = sent.neutral;
+            var pos = sent.positive;
 
-        var percentage = 0;
-        var sentimentResult = ""
+            var percentage = 0;
+            var sentimentResult = ""
 
-        // Assess general sentiment:
-        if (pos > neu && pos > neg) {
-            sentimentResult = "Somewhat Positive"
-            percentage = Math.floor(pos * 100)
-            if (pos > 0.5) {
-                sentimentResult = "Positive"
-                if (pos > 0.7) {
-                    sentimentResult = "Very Positive"
+            // Assess general sentiment:
+            if (pos > neu && pos > neg) {
+                sentimentResult = "Somewhat Positive"
+                percentage = Math.floor(pos * 100)
+                if (pos > 0.5) {
+                    sentimentResult = "Positive"
+                    if (pos > 0.7) {
+                        sentimentResult = "Very Positive"
+                    }
                 }
             }
-        }
-        else if (neu > pos && neu > neg) {
-            sentimentResult = "Somewhat Neutral"
-            percentage = Math.floor(neu * 100)
-            if (neu > 0.5) {
-                sentimentResult = "Neutral"
-                if (neu > 0.7) {
-                    sentimentResult = "Very Neutral"
+            else if (neu > pos && neu > neg) {
+                sentimentResult = "Somewhat Neutral"
+                percentage = Math.floor(neu * 100)
+                if (neu > 0.5) {
+                    sentimentResult = "Neutral"
+                    if (neu > 0.7) {
+                        sentimentResult = "Very Neutral"
+                    }
                 }
             }
-        }
-        else if (neg > pos && neg > neu) {
-            sentimentResult = "Somewhat Negative"
-            percentage = Math.floor(neg * 100)
-            if (neg > 0.5) {
-                sentimentResult = "Negative"
-                if (neg > 0.7) {
-                    sentimentResult = "Very Negative"
+            else if (neg > pos && neg > neu) {
+                sentimentResult = "Somewhat Negative"
+                percentage = Math.floor(neg * 100)
+                if (neg > 0.5) {
+                    sentimentResult = "Negative"
+                    if (neg > 0.7) {
+                        sentimentResult = "Very Negative"
+                    }
                 }
             }
-        }
 
         $("#gen-sent").text(sentimentResult + " (" + percentage + "%)");
         console.log("General Sentiment: " + sentimentResult + " (" + percentage + "%)");
         return response;
+        }
     })
 }
 
@@ -277,37 +296,44 @@ function getParallelDotsEmotion(text) {
         api_key: apiKeyPD,
         text: text,
     }).then(function (response) {
-        console.log(response)
-        var emo = response.emotion;
-        var percentage = 0;
 
-        // Morgan wrote this:
-        var emoArray = [
-            { emotion: "Angry", num: emo.Angry },
-            { emotion: "Bored", num: emo.Bored },
-            { emotion: "Excited", num: emo.Excited },
-            { emotion: "Fear", num: emo.Fear },
-            { emotion: "Happy", num: emo.Happy },
-            { emotion: "Sad", num: emo.Sad }
-        ]
-        emoArray.sort(function (a, b) {
-            return a.num - b.num;
-        });
+        if (response.code < 200 || response.code > 400) {
+            apiKeyPD = apiKeysArrayPD[apiKeyIndex % apiKeysArrayPD.length]
+            apiKeyIndex++;
+            console.log("switched to new Parallel Dots API_Key: " + apiKeyPD + " (" + apiKeyIndex + " --- " + (apiKeyIndex % apiKeysArrayPD.length ))
+            getParallelDotsEmotion(text)
+        } else {
+            console.log(response)
+            var emo = response.emotion;
+            var percentage = 0;
 
-        emoArray.reverse();
-        console.log(emoArray)
+            // Morgan wrote this:
+            var emoArray = [
+                { emotion: "Angry", num: emo.Angry },
+                { emotion: "Bored", num: emo.Bored },
+                { emotion: "Excited", num: emo.Excited },
+                { emotion: "Fear", num: emo.Fear },
+                { emotion: "Happy", num: emo.Happy },
+                { emotion: "Sad", num: emo.Sad }
+            ]
+            emoArray.sort(function (a, b) {
+                return a.num - b.num;
+            });
 
-        $("#emo-reading").empty();
-        for (var i = 0; i < emoArray.length; i++) {
-            percentage = Math.floor(emoArray[i].num * 100);
-            var emoOut = emoArray[i].emotion + " (" + percentage + "%)";
+            emoArray.reverse();
+            console.log(emoArray)
 
-            if (percentage > 1) {
-                $("#emo-reading").append(emoOut + '<br>');
-                console.log(emoOut)
+            $("#emo-reading").empty();
+            for (var i = 0; i < emoArray.length; i++) {
+                percentage = Math.floor(emoArray[i].num * 100);
+                var emoOut = emoArray[i].emotion + " (" + percentage + "%)";
+
+                if (percentage > 1) {
+                    $("#emo-reading").append(emoOut + '<br>');
+                    console.log(emoOut)
+                }
             }
         }
-
         return response;
     })
 }
@@ -316,7 +342,7 @@ function getParallelDotsEmotion(text) {
 // getFeels(veryBadReview)
 
 function getFeels(text, gotReview) {
-    console.log(text)
+
     if (gotReview) {
         getSummary(text)
         getParallelDotsSentiment(text)
@@ -355,21 +381,7 @@ function combineReviewsText(reviewsRaw) {
     }
 
     console.log(combined.length)
-    return combined;
-}
-
-function combineReviewsText(reviewsRaw) {
-    var combined = '';
-
-    for (var i = 0; i < reviewsRaw.length; i++) {
-        combined += reviewsRaw[i].content;
-    }
-    combined = encodeURIComponent(combined)
-    if (combined.length > 9000) {
-        combined = combined.substring(0, 9000)
-    }
-
-    console.log(combined.length)
+    $("#total-reviews").html("Total Number of Reviews Collected: " + reviewsRaw.length)
     return combined;
 }
 
