@@ -2,7 +2,7 @@ $(document).foundation()
 
 getTrending();
 
-createSearchListener();
+//createSearchListener();
 //getFirstReview('Frozen');
 
 var apiKeyMC = "480bfb040aaa88e722eb4a15ee9efd15"
@@ -22,10 +22,10 @@ var ajaxOptions = {
     method: "GET",
     crossDomain: true,
 
-    beforeSend: function(xhrObj){
+    beforeSend: function (xhrObj) {
         // Request headers
-        xhrObj.setRequestHeader("Content-Type","application/json");
-        xhrObj.setRequestHeader("Accept","JSON");
+        xhrObj.setRequestHeader("Content-Type", "application/json");
+        xhrObj.setRequestHeader("Accept", "JSON");
     }
 }
 
@@ -38,17 +38,17 @@ function getFeels(text) {
     getParallelDotsSentiment(text)
     getParallelDotsEmotion(text)
 
-    $("#main-cell").fadeIn(1500 , function() {
+    $("#main-cell").fadeIn(1500, function () {
         // Animation complete
     });
 }
 
-function getSummary(text){
-    var cutText = text.substring(0,6000)
-    console.log(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + cutText + "&sentences=" + numSentences )
-    return $.post(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + cutText + "&sentences=" + numSentences,{ 
+function getSummary(text) {
+    var cutText = text.substring(0, 6000)
+    console.log(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + cutText + "&sentences=" + numSentences)
+    return $.post(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + cutText + "&sentences=" + numSentences, {
 
-    }).then(function (response) { 
+    }).then(function (response) {
         console.log(response)
         console.log(response.summary)
         $("#review-summary").text(response.summary)
@@ -56,24 +56,24 @@ function getSummary(text){
     })
 }
 
-function getSentimentMC (text){
-// Sentiment response object:
-// agreement: "AGREEMENT"
-// confidence: "100"
-// irony: "NONIRONIC"
-// model: "general_en"
-// score_tag: "P+"
-// sentence_list: [{…}]
-// sentimented_concept_list: []
-// sentimented_entity_list: []
-// status: {code: "0", msg: "OK", credits: "1", remaining_credits: "19898"}
-// subjectivity: "OBJECTIVE"
+function getSentimentMC(text) {
+    // Sentiment response object:
+    // agreement: "AGREEMENT"
+    // confidence: "100"
+    // irony: "NONIRONIC"
+    // model: "general_en"
+    // score_tag: "P+"
+    // sentence_list: [{…}]
+    // sentimented_concept_list: []
+    // sentimented_entity_list: []
+    // status: {code: "0", msg: "OK", credits: "1", remaining_credits: "19898"}
+    // subjectivity: "OBJECTIVE"
 
-//  EVIDENTLY ONLY WORKS ON SINGLE SENTENCES?
+    //  EVIDENTLY ONLY WORKS ON SINGLE SENTENCES?
 
-    return $.post(baseURL + sentimentURL + "?key=" + apiKeyMC + "&txt=" + text + "&lang=en",{ 
+    return $.post(baseURL + sentimentURL + "?key=" + apiKeyMC + "&txt=" + text + "&lang=en", {
 
-    }).then(function (response) { 
+    }).then(function (response) {
         console.log(response)
         console.log(response.sentiment)
         console.log("agreement: " + response.agreement)
@@ -85,14 +85,14 @@ function getSentimentMC (text){
     })
 }
 
-function combineReviewsText( reviewsRaw ){
+function combineReviewsText(reviewsRaw) {
     var combined = '';
 
-    for( var i = 0; i < reviewsRaw.length; i++){
+    for (var i = 0; i < reviewsRaw.length; i++) {
         combined += reviewsRaw[i].content;
     }
     combined = encodeURIComponent(combined)
-    if( combined.length > 9000 ){
+    if (combined.length > 9000) {
         combined = combined.substring(0, 9000)
     }
 
@@ -100,7 +100,7 @@ function combineReviewsText( reviewsRaw ){
     return combined;
 }
 
-function getReviews( id , movieName){
+function getReviews(id) {
 
     var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
     var reviewSearch = "https://api.themoviedb.org/3/movie/" + id + "/reviews?"
@@ -115,20 +115,14 @@ function getReviews( id , movieName){
         var combined = combineReviewsText(reviewsRaw);
 
         getFeels(combined);
-        
-        // gather rating votes:
-        // (this does not work for reasons that should be obvious)
-        // work with Devin to resolve
-        //console.log("%%% getRev " + currentMovie)
-        //$("#ratings").html(getRatings(currentMovie));
     })
 }
 
-function getFirstReview( movieName ){
+function getFirstReview(movieName) {
     var urlBase = 'https://api.themoviedb.org/3/search/movie?';
     var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
     var movieSearch = urlBase + apiKeyMD + '&query=' + movieName
-    
+
     $.ajax({
         url: movieSearch,
         method: "GET"
@@ -138,15 +132,12 @@ function getFirstReview( movieName ){
 
         var imageUrl = 'https://image.tmdb.org/t/p/w500' + firstRes.poster_path;
 
-        updateFocus( imageUrl, firstRes.title, firstRes.release_date, getRatings(firstRes) )
-        getReviews( firstRes.id, movieName )
-
-        // gather rating votes:
-        //currentMovie = response;
-        //$("#ratings").html(getRatings(response));
+        updateFocus(imageUrl, firstRes.title, firstRes.release_date, getRatings(firstRes))
+        getReviews(firstRes.id, movieName)
     })
 
 }
+
 function getTrending(numTrending) {
     var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
     var requestUrl = 'https://api.themoviedb.org/3/movie/popular?' + apiKeyMD + '&language=en-US&page=1';
@@ -170,6 +161,7 @@ function getTrending(numTrending) {
     })
 
 }
+
 function getSummary(text) {
     text = text.substring(0, 6000)
     console.log(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + text + "&sentences=" + numSentences)
@@ -339,10 +331,11 @@ function getFeels(text) {
     getParallelDotsSentiment(text)
     getParallelDotsEmotion(text)
 
-    $("#main-cell").fadeIn(1500 , function() {
+    $("#main-cell").fadeIn(1500, function () {
         // Animation complete
     });
 }
+
 function getRatings(movieData) {
 
     var voteAvg = movieData.vote_average;
@@ -354,15 +347,14 @@ function getRatings(movieData) {
 
 }
 
-
-function combineReviewsText( reviewsRaw ){
+function combineReviewsText(reviewsRaw) {
     var combined = '';
 
-    for( var i = 0; i < reviewsRaw.length; i++){
+    for (var i = 0; i < reviewsRaw.length; i++) {
         combined += reviewsRaw[i].content;
     }
     combined = encodeURIComponent(combined)
-    if( combined.length > 9000 ){
+    if (combined.length > 9000) {
         combined = combined.substring(0, 9000)
     }
 
@@ -370,69 +362,11 @@ function combineReviewsText( reviewsRaw ){
     return combined;
 }
 
-
-// make document click #id listener
-function createSearchListener(){
-    var $searchButton = $('#search-button');
-    var $searchText = $('#search-text');
-    function search(e){
-        e.preventDefault();
-
-        var searchedText = $searchText.val().trim();
-
-        if (searchedText.length < 1) {
-            console.log('empty search')
-        } else {
-            console.log('searched:', searchedText);
-
-            getFirstReview(searchedText);
-            showFocus();
-            $('html, body').animate({
-                scrollTop: $('#focus').offset().top
-            }, 500);
-        }
-
-
-        $searchText.val('');
-    }
-
-
-    $searchButton.on('click', search)
-
-    $searchText.keypress(function (event) {
-        if (event.keyCode == 13 || event.which == 13) {
-            search(event)
-        }
-    });
-}
-
-
-
-
-/*
-function createMovieDiv (movieResponse, sentiment){
-    var poster = 'https://image.tmdb.org/t/p/w500'+ movieResponse.poster_path;
-    var title = movieResponse.title;
-    var popularity = movieResponse.popularity;
-    var releaseDate = movieResponse.release_date;
-    var overview = movieResponse.overview;
-    var genres = movieResponse.genre_ids;
-    var id = movieResponse.id;
-
-    var movieDiv = $('<div>');
-    movieDiv.append( $('<img>', {src: poster, alt: title}) )
-    if( sentiment !== undefined ){
-        movieDiv.append($('<p>').text(sentiment))
-    }
-
-    return movieDiv;
-}
-*/
-function updateFocus(imageUrl, imageTitle, year, rating){
+function updateFocus(imageUrl, imageTitle, year, rating) {
     $('#focus-image').attr('src', imageUrl);
-    console.log(imageTitle + '<span class="focus-year"> (' + year.substring(0,4) + ')</span>' )
+    console.log(imageTitle + '<span class="focus-year"> (' + year.substring(0, 4) + ')</span>')
     $('#focus-title').html(imageTitle + '<span class="focus-year"> (' + year.substring(0, 4) + ')</span>');
-    $("#ratings").html( rating ) ;
+    $("#ratings").html(rating);
 
 }
 
@@ -445,42 +379,45 @@ function createTrendingDiv(movieResponse, sentiment) {
     var genres = movieResponse.genre_ids;
     var id = movieResponse.id;
 
-    var rating = getRatings( movieResponse );
+    var rating = getRatings(movieResponse);
 
     var movieDiv = $('<div>', { class: "cell large-3 small-6 one" });
     movieDiv.append(
-        $('<div>', { class: "grid-x" }).append( 
-              $('<div>', {class: 'cell shad'}).append(
-                  $('<a>', {class: 'trending-image-cont', href: "#focus"}).append(
-                      $('<img>', {src: poster, alt: title, 'data-id': id, 'data-title': 
-                      title, 'data-year': releaseDate, 'data-rating': rating, class:"trending-images"})
-                  )
-                  
-              )
+        $('<div>', { class: "grid-x" }).append(
+            $('<div>', { class: 'cell shad' }).append(
+                $('<a>', { class: 'trending-image-cont', href: "#focus" }).append(
+                    $('<img>', {
+                        src: poster, alt: title, 'data-id': id, 'data-title':
+                            title, 'data-year': releaseDate, 'data-rating': rating, class: "trending-images"
+                    })
+                )
+
             )
+        )
     )
     var displayText = overview;
-    if (sentiment !== undefined){
+    if (sentiment !== undefined) {
         displayText = sentiment;
     }
     movieDiv.append(
         $('<div>', { class: "grid-x" }).append(
             $('<div>', { class: 'cell text' }).append(
-                $('<button>', {class:'collapsible'}).text('Show Summary'),
-                $('<div>', {class:'content'}).text( displayText ).hide()
+                $('<button>', { class: 'collapsible' }).text('Show Summary'),
+                $('<div>', { class: 'content' }).text(displayText).hide()
             )
         )
     )
 
     return movieDiv;
 }
+
 $(document).on('click', '.collapsible', function () {
     $(this).toggleClass('active')
     var $content = $(this).next();
     $content.toggle();
 })
 
-$(document).on('click', '.trending-images', function(){
+$(document).on('click', '.trending-images', function () {
     var id = $(this).attr('data-id');
     var imgSrc = $(this).attr('src');
     var title = $(this).attr('data-title');
@@ -490,11 +427,12 @@ $(document).on('click', '.trending-images', function(){
     showFocus();
     updateFocus(imgSrc, title, year, rating)
 })
-function showFocus(){
+
+function showFocus() {
     $('#focus').attr('style', 'overflow-y:visible; max-height: 7000px; transition: max-height 0.8s;')
 }
 
-$('#trending-nav').on('click', function(){
+$('#trending-nav').on('click', function () {
     getTrending(12);
 })
 
@@ -507,3 +445,30 @@ $(document).on('click', 'a[href^="#"]', function (event) {
     }, 500);
 });
 
+// Click search + enter key
+function searchMovie(e) {
+    e.preventDefault();
+
+    var searchedText = $('#search-text').val().trim();
+
+    if (searchedText.length < 1) {
+        console.log('empty search')
+    } else {
+        console.log('searched:', searchedText);
+
+        getFirstReview(searchedText);
+        showFocus();
+        $('html, body').animate({
+            scrollTop: $('#focus').offset().top
+        }, 500);
+    }
+    $('#search-text').val('');
+}
+
+$(document).on('click', '#search-button', searchMovie)
+
+$('#search-text').keypress(function (event) {
+    if (event.keyCode == 13 || event.which == 13) {
+        searchMovie(event)
+    }
+});
