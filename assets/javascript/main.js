@@ -6,7 +6,7 @@ getTrending();
 //getFirstReview('Frozen');
 
 var apiKeyMC = "480bfb040aaa88e722eb4a15ee9efd15"
-var apiKeyPD = "cxhtYdxQWfUvWRvT5Y0fXMbRu6mFOWLsat2P02fDOWg"
+var apiKeyPD = "N5Uc3tNnJ90gI9xCvMo7e0w4pFiFyyyz7LyX3HAvqNE"
 var apiKeyMD = "api_key=7c49e1342952d7c7e126e900862f9e64"
 
 var baseURL = "https://api.meaningcloud.com/"
@@ -82,20 +82,26 @@ function getSentimentMC(text) {
     })
 }
 
-function getReviews(id) {
+function getReviews(id, overView) {
 
     var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
     var reviewSearch = "https://api.themoviedb.org/3/movie/" + id + "/reviews?"
     reviewSearch += apiKeyMD;
+   
     $.ajax({
         url: reviewSearch,
         method: "GET"
     }).then(function (response) {
         console.log(response)
         var reviewsRaw = response.results;
-        var combined = combineReviewsText(reviewsRaw);
 
-        getFeels(combined);
+        if (reviewsRaw.length > 0) {
+            var combined = combineReviewsText(reviewsRaw);
+            getFeels(combined, true);
+        } else {
+            console.log(overView)
+            getFeels(overView, false);
+        }
     })
 }
 
@@ -112,9 +118,11 @@ function getFirstReview(movieName) {
         var firstRes = response.results[0];
 
         var imageUrl = 'https://image.tmdb.org/t/p/w500' + firstRes.poster_path;
+        var overView = firstRes.overview;
+        console.log(overView)
 
         updateFocus(imageUrl, firstRes.title, firstRes.release_date, getRatings(firstRes))
-        getReviews(firstRes.id, movieName)
+        getReviews(firstRes.id, overView)
     })
 
 }
@@ -307,10 +315,17 @@ function getParallelDotsEmotion(text) {
 
 // getFeels(veryBadReview)
 
-function getFeels(text) {
-    getSummary(text)
-    getParallelDotsSentiment(text)
-    getParallelDotsEmotion(text)
+function getFeels(text, gotReview) {
+    console.log(text)
+    if (gotReview) {
+        getSummary(text)
+        getParallelDotsSentiment(text)
+        getParallelDotsEmotion(text)
+    } else {
+        $("#review-summary").text(text)
+        getParallelDotsSentiment(text)
+        getParallelDotsEmotion(text)
+    }
 
     $("#main-cell").fadeIn(1500, function () {
         // Animation complete
@@ -471,3 +486,4 @@ $('#search-text').keypress(function (event) {
         searchMovie(event)
     }
 });
+
