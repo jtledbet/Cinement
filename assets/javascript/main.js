@@ -415,6 +415,9 @@ $(document).on('click', '.collapsible', function () {
     $(this).toggleClass('active')
     var $content = $(this).next();
     $content.toggle();
+
+    $associatedImg = $(this).parent().parent().prev().find('img');
+    $associatedImg.toggleClass('frosted');
 })
 
 $(document).on('click', '.trending-images', function () {

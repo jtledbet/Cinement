@@ -91,6 +91,7 @@ a:hover {
 	padding: 10px;
 }
 footer {
+	filter: grayscale(100%);
 	padding: 20px;
 	text-align: center;
 	background: #444;
@@ -216,4 +217,8 @@ footer {
 	max-height: 200px;
 	overflow-y: scroll;
 
+}
+
+.frosted {
+	filter: blur( 2px );
 }
