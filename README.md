@@ -23,4 +23,4 @@ User enters a movie search and reviews are fetched through The Movie Database. T
 
 =====
 
-**Try it out [HERE!!!](https://jtledbet.github.io/Project_1/)**
+**Try it out [HERE!!!](https://jtledbet.github.io/Cinement/)**
