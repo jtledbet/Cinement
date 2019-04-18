@@ -97,9 +97,10 @@ function getReviews(id, overView) {
 
         if (reviewsRaw.length > 0) {
             var combined = combineReviewsText(reviewsRaw);
-            getFeels(combined);
+            getFeels(combined, true);
         } else {
-            getFeels(overview);
+            console.log(overView)
+            getFeels(overView, false);
         }
     })
 }
@@ -118,9 +119,10 @@ function getFirstReview(movieName) {
 
         var imageUrl = 'https://image.tmdb.org/t/p/w500' + firstRes.poster_path;
         var overView = firstRes.overview;
+        console.log(overView)
 
         updateFocus(imageUrl, firstRes.title, firstRes.release_date, getRatings(firstRes))
-        getReviews(firstRes.id, movieName, overView)
+        getReviews(firstRes.id, overView)
     })
 
 }
@@ -313,10 +315,17 @@ function getParallelDotsEmotion(text) {
 
 // getFeels(veryBadReview)
 
-function getFeels(text) {
-    getSummary(text)
-    getParallelDotsSentiment(text)
-    getParallelDotsEmotion(text)
+function getFeels(text, gotReview) {
+    console.log(text)
+    if (gotReview) {
+        getSummary(text)
+        getParallelDotsSentiment(text)
+        getParallelDotsEmotion(text)
+    } else {
+        $("#review-summary").text(text)
+        getParallelDotsSentiment(text)
+        getParallelDotsEmotion(text)
+    }
 
     $("#main-cell").fadeIn(1500, function () {
         // Animation complete
