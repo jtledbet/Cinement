@@ -6,7 +6,7 @@ createSearchListener();
 //getFirstReview('Frozen');
 
 var apiKeyMC = "480bfb040aaa88e722eb4a15ee9efd15"
-var apiKeyPD = "T2nbpiiPwUFiT7u22E3tO2c5TdbXOpqfwCBP6frNLy0"
+var apiKeyPD = "cxhtYdxQWfUvWRvT5Y0fXMbRu6mFOWLsat2P02fDOWg"
 var apiKeyMD = "api_key=7c49e1342952d7c7e126e900862f9e64"
 
 var baseURL = "https://api.meaningcloud.com/"
@@ -14,7 +14,7 @@ var summaryURL = "summarization-1.0/"
 var sentimentURL = "sentiment-2.1"
 var numSentences = 5;
 var queryURL = "";
-
+var currentMovie;
 var gettysBurg = "Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal. Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure. We are met on a great battle-field of that war. We have come to dedicate a portion of that field, as a final resting place for those who here gave their lives that that nation might live. It is altogether fitting and proper that we should do this. But, in a larger sense, we can not dedicate -- we can not consecrate -- we can not hallow -- this ground. The brave men, living and dead, who struggled here, have consecrated it, far above our poor power to add or detract. The world will little note, nor long remember what we say here, but it can never forget what they did here. It is for us the living, rather, to be dedicated here to the unfinished work which they who fought here have thus far so nobly advanced. It is rather for us to be here dedicated to the great task remaining before us -- that from these honored dead we take increased devotion to that cause for which they gave the last full measure of devotion -- that we here highly resolve that these dead shall not have died in vain -- that this nation, under God, shall have a new birth of freedom -- and that government of the people, by the people, for the people, shall not perish from the earth."
 var veryBadReview = "I hated this movie. Hated, hated, hated, hated, hated this movie. Hated it. Hated every simpering stupid vacant audience-insulting moment of it. Hated the sensibility that thought anyone would like it. Hated the implied insult to the audience by its belief that anyone would be entertained by it."
 var ajaxOptions = {
@@ -43,9 +43,9 @@ function getFeels(text) {
 }
 
 function getSummary(text){
-    text = text.substring(0,6000)
-    console.log(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + text + "&sentences=" + numSentences )
-    return $.post(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + text + "&sentences=" + numSentences,{ 
+    var cutText = text.substring(0,6000)
+    console.log(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + cutText + "&sentences=" + numSentences )
+    return $.post(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + cutText + "&sentences=" + numSentences,{ 
 
     }).then(function (response) { 
         console.log(response)
@@ -99,7 +99,7 @@ function combineReviewsText( reviewsRaw ){
     return combined;
 }
 
-function getReviews( id ){
+function getReviews( id , movieName){
 
     var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
     var reviewSearch = "https://api.themoviedb.org/3/movie/" + id + "/reviews?"
@@ -114,13 +114,21 @@ function getReviews( id ){
         var combined = combineReviewsText(reviewsRaw);
         
         getFeels(combined);
+        
+        // gather rating votes:
+        // (this does not work for reasons that should be obvious)
+        // work with Devin to resolve
+        console.log("%%% getRev " + currentMovie)
+        $("#ratings").html(getRatings(currentMovie));
     })
 }
+
 
 function getFirstReview( movieName ){
     var urlBase = 'https://api.themoviedb.org/3/search/movie?';
     var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
     var movieSearch = urlBase + apiKeyMD + '&query=' + movieName
+    
     $.ajax({
         url: movieSearch,
         method: "GET"
@@ -131,10 +139,25 @@ function getFirstReview( movieName ){
         var imageUrl = 'https://image.tmdb.org/t/p/w500' + firstRes.poster_path;
 
         updateFocus( imageUrl, firstRes.title, firstRes.release_date )
-        getReviews( firstRes.id )
+        getReviews( firstRes.id, movieName )
+
+        // gather rating votes:
+        currentMovie = response;
+        $("#ratings").html(getRatings(response));
     })
+
 }
 
+function getRatings(response) {
+
+    var voteAvg = response.results[0].vote_average;
+    var voteCount = response.results[0].vote_count;
+    console.log("vote avg: " + voteAvg + " count: " + voteCount)
+    if (voteCount > 0) {
+        return("Average Rating: " + voteAvg + "<br>Total Votes: " + voteCount)
+    } else return("Average Rating: " + "N/A" + "<br>Total Votes: " + "N/A")
+
+}
 
 function getTrending(numTrending){
     var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
