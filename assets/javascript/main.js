@@ -19,7 +19,7 @@ var apiKeysArrayPD = ["N5Uc3tNnJ90gI9xCvMo7e0w4pFiFyyyz7LyX3HAvqNE",
 var apiKeyIndex = 0;
 
 // var apiKeyPD = apiKeysArrayPD[apiKeyIndex];
-apiKeyPD = "4eEhIKrYp43KWV6sSDcjMnkbCewmL6XD1Ev2lx7QjMM"
+apiKeyPD = "cxhtYdxQWfUvWRvT5Y0fXMbRu6mFOWLsat2P02fDOWg"
 
 var baseURL = "https://api.meaningcloud.com/"
 var summaryURL = "summarization-1.0/"
