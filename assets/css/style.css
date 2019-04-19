@@ -2,6 +2,11 @@
 	position: relative;
 }
 
+* {
+		color: white;
+		text-shadow: 2px 2px black;	
+}
+
 .main {
 	padding: 10px;
 	margin-top: 10px;
@@ -87,10 +92,10 @@ a {
 	color: white;
 }
 a:hover {
-	color: lightgrey;
+	color: gray;
 }
 a:visited{ 
-	color: white;
+	color: gray;
 }
 
 .top-bar, .dropdown {
