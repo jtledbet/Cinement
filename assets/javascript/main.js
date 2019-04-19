@@ -18,7 +18,8 @@ var apiKeysArrayPD = ["N5Uc3tNnJ90gI9xCvMo7e0w4pFiFyyyz7LyX3HAvqNE",
     "cxhtYdxQWfUvWRvT5Y0fXMbRu6mFOWLsat2P02fDOWg"]
 var apiKeyIndex = 0;
 
-var apiKeyPD = apiKeysArrayPD[apiKeyIndex];
+// var apiKeyPD = apiKeysArrayPD[apiKeyIndex];
+apiKeyPD = "4eEhIKrYp43KWV6sSDcjMnkbCewmL6XD1Ev2lx7QjMM"
 
 var baseURL = "https://api.meaningcloud.com/"
 var summaryURL = "summarization-1.0/"
@@ -211,12 +212,12 @@ function getParallelDotsSentiment(text) {
     }).then(function (response) {
         console.log(response)
 
-        if (response.code < 200 || response.code > 400) {
-            apiKeyPD = apiKeysArrayPD[apiKeyIndex % apiKeysArrayPD.length]
-            apiKeyIndex++;
-            console.log("switched to new Parallel Dots API_Key: " + apiKeyPD + " (" + apiKeyIndex + " --- " + (apiKeyIndex % apiKeysArrayPD.length ))
-            getParallelDotsSentiment(text)
-        } else {
+        // if (response.code < 200 || response.code > 400) {
+        //     apiKeyPD = apiKeysArrayPD[apiKeyIndex % apiKeysArrayPD.length]
+        //     apiKeyIndex++;
+        //     console.log("switched to new Parallel Dots API_Key: " + apiKeyPD + " (" + apiKeyIndex + " --- " + (apiKeyIndex % apiKeysArrayPD.length ))
+        //     getParallelDotsSentiment(text)
+        // } else {
             console.log("(key still good.)")
             var sent = response.sentiment;
 
@@ -262,9 +263,8 @@ function getParallelDotsSentiment(text) {
         $("#gen-sent").text(sentimentResult + " (" + percentage + "%)");
         console.log("General Sentiment: " + sentimentResult + " (" + percentage + "%)");
         return response;
-        }
-    })
-}
+    }
+    )}
 
 function getParallelDotsKeyword(text) {
 
@@ -297,12 +297,12 @@ function getParallelDotsEmotion(text) {
         text: text,
     }).then(function (response) {
 
-        if (response.code < 200 || response.code > 400) {
-            apiKeyPD = apiKeysArrayPD[apiKeyIndex % apiKeysArrayPD.length]
-            apiKeyIndex++;
-            console.log("switched to new Parallel Dots API_Key: " + apiKeyPD + " (" + apiKeyIndex + " --- " + (apiKeyIndex % apiKeysArrayPD.length ))
-            getParallelDotsEmotion(text)
-        } else {
+        // if (response.code < 200 || response.code > 400) {
+        //     apiKeyPD = apiKeysArrayPD[apiKeyIndex % apiKeysArrayPD.length]
+        //     apiKeyIndex++;
+        //     console.log("switched to new Parallel Dots API_Key: " + apiKeyPD + " (" + apiKeyIndex + " --- " + (apiKeyIndex % apiKeysArrayPD.length ))
+        //     getParallelDotsEmotion(text)
+        // } else {
             console.log(response)
             var emo = response.emotion;
             var percentage = 0;
@@ -333,7 +333,6 @@ function getParallelDotsEmotion(text) {
                     console.log(emoOut)
                 }
             }
-        }
         return response;
     })
 }
