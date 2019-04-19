@@ -4,7 +4,7 @@
 
 * {
 		color: white;
-		text-shadow: 2px 2px black;	
+		text-shadow: 1px 1px 2px black;	
 }
 
 .main {
@@ -96,6 +96,9 @@ a:hover {
 }
 a:visited{ 
 	color: gray;
+}
+#search-text {
+	text-shadow: none;
 }
 
 .top-bar, .dropdown {

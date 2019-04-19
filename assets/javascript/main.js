@@ -168,8 +168,8 @@ function getSummary(text) {
     return $.post(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + text + "&sentences=" + numSentences, {
 
     }).then(function (response) {
-        console.log(response)
-        console.log(response.summary)
+        // console.log(response)
+        // console.log(response.summary)
         $("#review-summary").text(response.summary)
         return response;
     })
@@ -233,7 +233,7 @@ function getParallelDotsSentiment(text) {
                 percentage = Math.floor(pos * 100)
                 if (pos > 0.5) {
                     sentimentResult = "Positive"
-                    if (pos > 0.7) {
+                    if (pos > 0.75) {
                         sentimentResult = "Very Positive"
                     }
                 }
@@ -243,7 +243,7 @@ function getParallelDotsSentiment(text) {
                 percentage = Math.floor(neu * 100)
                 if (neu > 0.5) {
                     sentimentResult = "Neutral"
-                    if (neu > 0.7) {
+                    if (neu > 0.75) {
                         sentimentResult = "Very Neutral"
                     }
                 }
@@ -253,7 +253,7 @@ function getParallelDotsSentiment(text) {
                 percentage = Math.floor(neg * 100)
                 if (neg > 0.5) {
                     sentimentResult = "Negative"
-                    if (neg > 0.7) {
+                    if (neg > 0.75) {
                         sentimentResult = "Very Negative"
                     }
                 }
