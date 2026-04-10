@@ -5,103 +5,36 @@ getTrending();
 //createSearchListener();
 //getFirstReview('Frozen');
 
+var apiKeyMC = "480bfb040aaa88e722eb4a15ee9efd15" 
 var apiKeyMD = "api_key=7c49e1342952d7c7e126e900862f9e64"
 
 var apiKeysArrayPD = ["N5Uc3tNnJ90gI9xCvMo7e0w4pFiFyyyz7LyX3HAvqNE",
-    "nNrvGbJRqlR7VMkESMFaKRm6Rh5gnsmHYtf6N3trzI",
+    "nNrvGbJRqlR7VMkESMFaKRm6Rh5gnsmhYtf6N3trZzI",
     "z28L7rWwv7Sev26j9Un8wsbepfbZF2sBLyR1nHfAZvg",
     "S8RrYUmtFK9VwZNdEesgF7F1droqAKYZ3HTP9nk6Jtk",
-    "T2nbpiiPwUFiT7u22E3tO2c5TdbXOqqwCBP6frNLy0",
+    "T2nbpiiPwUFiT7u22E3tO2c5TdbXOpqfwCBP6frNLy0",
     "4eEhIKrYp43KWV6sSDcjMnkbCewmL6XD1Ev2lx7QjMM",
     "zI5z5Ad9mNji294DjE4SjQsOI5HivuyaJDtdliTb4wI",
-    "cxhtYdxQWfUvWRvT5Y0XFMbRu6mFOWLsat2P02fDOWg"]
+    "cxhtYdxQWfUvWRvT5Y0fXMbRu6mFOWLsat2P02fDOWg"]
 var apiKeyIndex = 0;
 
 var apiKeyPD = apiKeysArrayPD[apiKeyIndex];
 
+var baseURL = "https://api.meaningcloud.com/"
+var summaryURL = "summarization-1.0/"
+var sentimentURL = "sentiment-2.1"
 var numSentences = 5;
+var queryURL = "";
+var ajaxOptions = {
+    url: queryURL,
+    method: "GET",
+    crossDomain: true,
 
-function summarizeTextLocal(text, sentenceCount) {
-    var cleanedText = text.replace(/\s+/g, " ").trim();
-
-    if (!cleanedText) {
-        return "";
+    beforeSend: function (xhrObj) {
+        // Request headers
+        xhrObj.setRequestHeader("Content-Type", "application/json");
+        xhrObj.setRequestHeader("Accept", "JSON");
     }
-
-    var sentences = cleanedText.match(/[^.!?]+[.!?]+["')\]]*|[^.!?]+$/g) || [cleanedText];
-    if (sentences.length <= sentenceCount) {
-        return sentences.join(" ");
-    }
-
-    var stopWords = {
-        "the": true, "a": true, "an": true, "and": true, "or": true, "but": true,
-        "if": true, "then": true, "than": true, "so": true, "to": true, "of": true,
-        "in": true, "on": true, "for": true, "with": true, "at": true, "by": true,
-        "from": true, "as": true, "is": true, "are": true, "was": true, "were": true,
-        "be": true, "been": true, "being": true, "it": true, "its": true, "this": true,
-        "that": true, "these": true, "those": true, "he": true, "she": true, "they": true,
-        "them": true, "his": true, "her": true, "their": true, "you": true, "your": true,
-        "we": true, "our": true, "i": true, "me": true, "my": true, "not": true, "no": true,
-        "do": true, "does": true, "did": true, "have": true, "has": true, "had": true,
-        "will": true, "would": true, "can": true, "could": true, "should": true,
-        "about": true, "into": true, "over": true, "after": true, "before": true,
-        "through": true, "during": true, "out": true, "up": true, "down": true,
-        "off": true, "again": true, "very": true
-    };
-
-    var frequencies = {};
-    var allWords = cleanedText.toLowerCase().match(/[a-z']+g/) || [];
-    for (var i = 0; i < allWords.length; i++) {
-        var word = allWords[i];
-        if (word.length < 3 || stopWords[word]) {
-            continue;
-        }
-        frequencies[word] = (frequencies[word] || 0) + 1;
-    }
-
-    var scored = [];
-    for (var sentenceIndex = 0; sentenceIndex < sentences.length; sentenceIndex++) {
-        var sentence = sentences[sentenceIndex].trim();
-        var words = sentence.toLowerCase().match(/[a-z']+/g) || [];
-        var score = 0;
-
-        for (var wordIndex = 0; wordIndex < words.length; wordIndex++) {
-            var sentenceWord = words[wordIndex];
-            if (frequencies[sentenceWord]) {
-                score += frequencies[sentenceWord];
-            }
-        }
-
-        if (words.length > 0) {
-            score = score / words.length;
-        }
-
-        if (sentenceIndex === 0) {
-            score = score * 1.15;
-        } else if (sentenceIndex === sentences.length - 1) {
-            score = score * 1.05;
-        }
-
-        scored.push({
-            index: sentenceIndex,
-            sentence: sentence,
-            score: score
-        });
-    }
-
-    scored.sort(function (a, b) {
-        return b.score - a.score;
-    });
-
-    return scored
-        .slice(0, sentenceCount)
-        .sort(function (a, b) {
-            return a.index - b.index;
-        })
-        .map(function (item) {
-            return item.sentence;
-        })
-        .join(" ");
 }
 
 // API CALLS
@@ -119,10 +52,47 @@ function getFeels(text) {
 }
 
 function getSummary(text) {
-    var summary = summarizeTextLocal(text.substring(0, 6000), numSentences);
-    $("#review-summary").text(summary || "No summary available.");
-    return $.Deferred().resolve({ summary: summary }).promise();
+    var cutText = text.substring(0, 6000)
+    console.log(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + cutText + "&sentences=" + numSentences)
+    return $.post(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + cutText + "&sentences=" + numSentences, {
+
+    }).then(function (response) {
+        console.log(response)
+        console.log(response.summary)
+        $("#review-summary").text(response.summary)
+        return response;
+    })
 }
+
+function getSentimentMC(text) {
+    // Sentiment response object:
+    // agreement: "AGREEMENT"
+    // confidence: "100"
+    // irony: "NONIRONIC"
+    // model: "general_en"
+    // score_tag: "P+"
+    // sentence_list: [{…}]
+    // sentimented_concept_list: []
+    // sentimented_entity_list: []
+    // status: {code: "0", msg: "OK", credits: "1", remaining_credits: "19898"}
+    // subjectivity: "OBJECTIVE"
+
+    //  EVIDENTLY ONLY WORKS ON SINGLE SENTENCES?
+
+    return $.post(baseURL + sentimentURL + "?key=" + apiKeyMC + "&txt=" + text + "&lang=en", {
+
+    }).then(function (response) {
+        console.log(response)
+        console.log(response.sentiment)
+        console.log("agreement: " + response.agreement)
+        console.log("irony: " + response.irony)
+        console.log("subjectivity: " + response.subjectivity)
+        console.log("confidence: " + response.confidence)
+
+        return response;
+    })
+}
+
 function getReviews(id, overView) {
 
     var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
@@ -182,10 +152,10 @@ function getTrending(numTrending) {
         var results = response.results;
         console.log(results);
 
-        $('trending').empty();
+        $('#trending').empty();
         for (var i = 0; i < numTrending; i++) {
-            var movieDiv = createTrendingDiw(results[i])
-            $('trending').append(movieDiv)
+            var movieDiv = createTrendingDiv(results[i])
+            $('#trending').append(movieDiv)
         }
 
     })
@@ -193,10 +163,47 @@ function getTrending(numTrending) {
 }
 
 function getSummary(text) {
-    var summary = summarizeTextLocal(text.substring(0, 6000), numSentences);
-    $("#review-summary").text(summary || "No summary available.");
-    return $.Deferred().resolve({ summary: summary }).promise();
+    text = text.substring(0, 6000)
+    console.log(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + text + "&sentences=" + numSentences)
+    return $.post(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + text + "&sentences=" + numSentences, {
+
+    }).then(function (response) {
+        // console.log(response)
+        // console.log(response.summary)
+        $("#review-summary").text(response.summary)
+        return response;
+    })
 }
+
+function getSentimentMC(text) {
+    // Sentiment response object:
+    // agreement: "AGREEMENT"
+    // confidence: "100"
+    // irony: "NONIRONIC"
+    // model: "general_en"
+    // score_tag: "P+"
+    // sentence_list: [{…}]
+    // sentimented_concept_list: []
+    // sentimented_entity_list: []
+    // status: {code: "0", msg: "OK", credits: "1", remaining_credits: "19898"}
+    // subjectivity: "OBJECTIVE"
+
+    //  EVIDENTLY ONLY WORKS ON SINGLE SENTENCES?
+
+    return $.post(baseURL + sentimentURL + "?key=" + apiKeyMC + "&txt=" + text + "&lang=en", {
+
+    }).then(function (response) {
+        console.log(response)
+        console.log(response.sentiment)
+        console.log("agreement: " + response.agreement)
+        console.log("irony: " + response.irony)
+        console.log("subjectivity: " + response.subjectivity)
+        console.log("confidence: " + response.confidence)
+
+        return response;
+    })
+}
+
 function getParallelDotsSentiment(text) {
     return $.post("https://apis.paralleldots.com/v4/sentiment", {
         api_key: apiKeyPD,
@@ -365,11 +372,9 @@ function combineReviewsText(reviewsRaw) {
     var combined = '';
 
     for (var i = 0; i < reviewsRaw.length; i++) {
-        combined += reviewsRaw[i].content + ' ';
+        combined += reviewsRaw[i].content;
     }
-
-    combined = combined.replace(/\s+/g, ' ').trim();
-
+    combined = encodeURIComponent(combined)
     if (combined.length > 9000) {
         combined = combined.substring(0, 9000)
     }
@@ -449,16 +454,16 @@ $(document).on('click', '.trending-images', function () {
 })
 
 function showFocus() {
-    //$('cfocus').attr('style', 'overflow-y:visible; max-height: 7000px; transition: max-height 0.8s;')
-    if ( !$('cfocus').hasClass('focus-show')){
-        $('cfocus').toggleClass('focus-show');
+    //$('#focus').attr('style', 'overflow-y:visible; max-height: 7000px; transition: max-height 0.8s;')
+    if ( !$('#focus').hasClass('focus-show')){
+        $('#focus').toggleClass('focus-show');
     }
 }
 function hideFocus(){
     $('#focus').removeClass('focus-show');
 }
 
-$('trending-nav').on('click', function () {
+$('#trending-nav').on('click', function () {
     getTrending(12);
 })
 
