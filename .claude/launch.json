@@ -1,0 +1,10 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "VS Code Live Server",
+      "port": 5500,
+      "note": "Use the 'Go Live!' button in VS Code (Live Server extension). Serves on http://localhost:5500"
+    }
+  ]
+}
