@@ -2,9 +2,16 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "VS Code Live Server",
-      "port": 5500,
-      "note": "Use the 'Go Live!' button in VS Code (Live Server extension). Serves on http://localhost:5500"
+      "name": "Python Static Server",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8080"],
+      "port": 8080
+    },
+    {
+      "name": "npx serve",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-l", "3000"],
+      "port": 3000
     }
   ]
 }
