@@ -5,15 +5,13 @@ getTrending();
 //createSearchListener();
 //getFirstReview('Frozen');
 
-var apiKeyMD = "api_key=7c49e1342952d7c7e126e900862f9e64"
-var apiKeyHF = "hf_YOUR_TOKEN_HERE" // replace with your Hugging Face access token
-var HF_BASE = "https://api-inference.huggingface.co/models/"
+// API keys are loaded from config.js (gitignored).
+// Copy config.example.js → config.js and fill in your keys before running locally.
 
 // API CALLS
 
 function getReviews(id, overView) {
 
-    var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
     var reviewSearch = "https://api.themoviedb.org/3/movie/" + id + "/reviews?"
     reviewSearch += apiKeyMD;
 
@@ -36,7 +34,6 @@ function getReviews(id, overView) {
 
 function getFirstReview(movieName) {
     var urlBase = 'https://api.themoviedb.org/3/search/movie?';
-    var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
     var movieSearch = urlBase + apiKeyMD + '&query=' + movieName
 
     $.ajax({
@@ -57,7 +54,6 @@ function getFirstReview(movieName) {
 }
 
 function getTrending(numTrending) {
-    var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
     var requestUrl = 'https://api.themoviedb.org/3/movie/popular?' + apiKeyMD + '&language=en-US&page=1';
 
     if (numTrending === undefined) {
