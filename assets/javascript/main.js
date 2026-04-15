@@ -5,100 +5,18 @@ getTrending();
 //createSearchListener();
 //getFirstReview('Frozen');
 
-var apiKeyMC = "480bfb040aaa88e722eb4a15ee9efd15" 
 var apiKeyMD = "api_key=7c49e1342952d7c7e126e900862f9e64"
-
-var apiKeysArrayPD = ["N5Uc3tNnJ90gI9xCvMo7e0w4pFiFyyyz7LyX3HAvqNE",
-    "nNrvGbJRqlR7VMkESMFaKRm6Rh5gnsmhYtf6N3trZzI",
-    "z28L7rWwv7Sev26j9Un8wsbepfbZF2sBLyR1nHfAZvg",
-    "S8RrYUmtFK9VwZNdEesgF7F1droqAKYZ3HTP9nk6Jtk",
-    "T2nbpiiPwUFiT7u22E3tO2c5TdbXOpqfwCBP6frNLy0",
-    "4eEhIKrYp43KWV6sSDcjMnkbCewmL6XD1Ev2lx7QjMM",
-    "zI5z5Ad9mNji294DjE4SjQsOI5HivuyaJDtdliTb4wI",
-    "cxhtYdxQWfUvWRvT5Y0fXMbRu6mFOWLsat2P02fDOWg"]
-var apiKeyIndex = 0;
-
-var apiKeyPD = apiKeysArrayPD[apiKeyIndex];
-
-var baseURL = "https://api.meaningcloud.com/"
-var summaryURL = "summarization-1.0/"
-var sentimentURL = "sentiment-2.1"
-var numSentences = 5;
-var queryURL = "";
-var ajaxOptions = {
-    url: queryURL,
-    method: "GET",
-    crossDomain: true,
-
-    beforeSend: function (xhrObj) {
-        // Request headers
-        xhrObj.setRequestHeader("Content-Type", "application/json");
-        xhrObj.setRequestHeader("Accept", "JSON");
-    }
-}
+var apiKeyHF = "hf_YOUR_TOKEN_HERE" // replace with your Hugging Face access token
+var HF_BASE = "https://api-inference.huggingface.co/models/"
 
 // API CALLS
-
-// getFeels(veryBadReview)
-
-function getFeels(text) {
-    getSummary(text)
-    getParallelDotsSentiment(text)
-    getParallelDotsEmotion(text)
-
-    $("#main-cell").fadeIn(1500, function () {
-        // Animation complete
-    });
-}
-
-function getSummary(text) {
-    var cutText = text.substring(0, 6000)
-    console.log(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + cutText + "&sentences=" + numSentences)
-    return $.post(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + cutText + "&sentences=" + numSentences, {
-
-    }).then(function (response) {
-        console.log(response)
-        console.log(response.summary)
-        $("#review-summary").text(response.summary)
-        return response;
-    })
-}
-
-function getSentimentMC(text) {
-    // Sentiment response object:
-    // agreement: "AGREEMENT"
-    // confidence: "100"
-    // irony: "NONIRONIC"
-    // model: "general_en"
-    // score_tag: "P+"
-    // sentence_list: [{…}]
-    // sentimented_concept_list: []
-    // sentimented_entity_list: []
-    // status: {code: "0", msg: "OK", credits: "1", remaining_credits: "19898"}
-    // subjectivity: "OBJECTIVE"
-
-    //  EVIDENTLY ONLY WORKS ON SINGLE SENTENCES?
-
-    return $.post(baseURL + sentimentURL + "?key=" + apiKeyMC + "&txt=" + text + "&lang=en", {
-
-    }).then(function (response) {
-        console.log(response)
-        console.log(response.sentiment)
-        console.log("agreement: " + response.agreement)
-        console.log("irony: " + response.irony)
-        console.log("subjectivity: " + response.subjectivity)
-        console.log("confidence: " + response.confidence)
-
-        return response;
-    })
-}
 
 function getReviews(id, overView) {
 
     var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
     var reviewSearch = "https://api.themoviedb.org/3/movie/" + id + "/reviews?"
     reviewSearch += apiKeyMD;
-   
+
     $.ajax({
         url: reviewSearch,
         method: "GET"
@@ -163,182 +81,116 @@ function getTrending(numTrending) {
 }
 
 function getSummary(text) {
-    text = text.substring(0, 6000)
-    console.log(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + text + "&sentences=" + numSentences)
-    return $.post(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + text + "&sentences=" + numSentences, {
-
-    }).then(function (response) {
-        // console.log(response)
-        // console.log(response.summary)
-        $("#review-summary").text(response.summary)
-        return response;
-    })
-}
-
-function getSentimentMC(text) {
-    // Sentiment response object:
-    // agreement: "AGREEMENT"
-    // confidence: "100"
-    // irony: "NONIRONIC"
-    // model: "general_en"
-    // score_tag: "P+"
-    // sentence_list: [{…}]
-    // sentimented_concept_list: []
-    // sentimented_entity_list: []
-    // status: {code: "0", msg: "OK", credits: "1", remaining_credits: "19898"}
-    // subjectivity: "OBJECTIVE"
-
-    //  EVIDENTLY ONLY WORKS ON SINGLE SENTENCES?
-
-    return $.post(baseURL + sentimentURL + "?key=" + apiKeyMC + "&txt=" + text + "&lang=en", {
-
-    }).then(function (response) {
+    var decoded;
+    try { decoded = decodeURIComponent(text); } catch(e) { decoded = text; }
+    decoded = decoded.substring(0, 1000);
+    return $.ajax({
+        url: HF_BASE + "facebook/bart-large-cnn",
+        method: "POST",
+        contentType: "application/json",
+        headers: { "Authorization": "Bearer " + apiKeyHF },
+        data: JSON.stringify({ inputs: decoded })
+    }).then(function(response) {
         console.log(response)
-        console.log(response.sentiment)
-        console.log("agreement: " + response.agreement)
-        console.log("irony: " + response.irony)
-        console.log("subjectivity: " + response.subjectivity)
-        console.log("confidence: " + response.confidence)
-
-        return response;
-    })
+        $("#review-summary").text(response[0].summary_text);
+    }).fail(function() {
+        $("#review-summary").text("Summary unavailable.");
+    });
 }
 
 function getParallelDotsSentiment(text) {
-    return $.post("https://apis.paralleldots.com/v4/sentiment", {
-        api_key: apiKeyPD,
-        text: text,
-    }).then(function (response) {
+    var decoded;
+    try { decoded = decodeURIComponent(text); } catch(e) { decoded = text; }
+    decoded = decoded.substring(0, 512);
+    return $.ajax({
+        url: HF_BASE + "cardiffnlp/twitter-roberta-base-sentiment-latest",
+        method: "POST",
+        contentType: "application/json",
+        headers: { "Authorization": "Bearer " + apiKeyHF },
+        data: JSON.stringify({ inputs: decoded })
+    }).then(function(response) {
         console.log(response)
+        var scores = {};
+        response[0].forEach(function(item) { scores[item.label] = item.score; });
+        var pos = scores["positive"] || 0;
+        var neu = scores["neutral"]  || 0;
+        var neg = scores["negative"] || 0;
 
-        if (response.code >= 400) {
-            apiKeyPD = apiKeysArrayPD[apiKeyIndex % apiKeysArrayPD.length]
-            apiKeyIndex++;
-            console.log("switched to new Parallel Dots API_Key: " + apiKeyPD + " (" + apiKeyIndex + " --- " + (apiKeyIndex % apiKeysArrayPD.length ))
-            getParallelDotsSentiment(text)
-        } else {
-            console.log("(key still good.)")
-            var sent = response.sentiment;
+        var percentage = 0;
+        var sentimentResult = ""
 
-            var neg = sent.negative;
-            var neu = sent.neutral;
-            var pos = sent.positive;
-
-            var percentage = 0;
-            var sentimentResult = ""
-
-            // Assess general sentiment:
-            if (pos > neu && pos > neg) {
-                sentimentResult = "Somewhat Positive"
-                percentage = Math.floor(pos * 100)
-                if (pos > 0.5) {
-                    sentimentResult = "Positive"
-                    if (pos > 0.75) {
-                        sentimentResult = "Very Positive"
-                    }
+        // Assess general sentiment:
+        if (pos > neu && pos > neg) {
+            sentimentResult = "Somewhat Positive"
+            percentage = Math.floor(pos * 100)
+            if (pos > 0.5) {
+                sentimentResult = "Positive"
+                if (pos > 0.75) {
+                    sentimentResult = "Very Positive"
                 }
             }
-            else if (neu > pos && neu > neg) {
-                sentimentResult = "Somewhat Neutral"
-                percentage = Math.floor(neu * 100)
-                if (neu > 0.5) {
-                    sentimentResult = "Neutral"
-                    if (neu > 0.75) {
-                        sentimentResult = "Very Neutral"
-                    }
+        }
+        else if (neu > pos && neu > neg) {
+            sentimentResult = "Somewhat Neutral"
+            percentage = Math.floor(neu * 100)
+            if (neu > 0.5) {
+                sentimentResult = "Neutral"
+                if (neu > 0.75) {
+                    sentimentResult = "Very Neutral"
                 }
             }
-            else if (neg > pos && neg > neu) {
-                sentimentResult = "Somewhat Negative"
-                percentage = Math.floor(neg * 100)
-                if (neg > 0.5) {
-                    sentimentResult = "Negative"
-                    if (neg > 0.75) {
-                        sentimentResult = "Very Negative"
-                    }
+        }
+        else if (neg > pos && neg > neu) {
+            sentimentResult = "Somewhat Negative"
+            percentage = Math.floor(neg * 100)
+            if (neg > 0.5) {
+                sentimentResult = "Negative"
+                if (neg > 0.75) {
+                    sentimentResult = "Very Negative"
                 }
             }
         }
         $("#gen-sent").text(sentimentResult + " (" + percentage + "%)");
         console.log("General Sentiment: " + sentimentResult + " (" + percentage + "%)");
-        return response;
-    }
-    )}
-
-function getParallelDotsKeyword(text) {
-
-    // form: {text:text,api_key:API_KEY}}
-    // currently does not work (error 500)
-
-    return $.post("https://apis.paralleldots.com/v4/keywords", {
-        api_key: apiKeyPD,
-        text: text,
-    }).then(function (response) {
-        console.log(response)
-
-        return response;
-    })
+    }).fail(function() {
+        $("#gen-sent").text("Sentiment unavailable.");
+    });
 }
 
 function getParallelDotsEmotion(text) {
+    var decoded;
+    try { decoded = decodeURIComponent(text); } catch(e) { decoded = text; }
+    decoded = decoded.substring(0, 512);
+    return $.ajax({
+        url: HF_BASE + "j-hartmann/emotion-english-distilroberta-base",
+        method: "POST",
+        contentType: "application/json",
+        headers: { "Authorization": "Bearer " + apiKeyHF },
+        data: JSON.stringify({ inputs: decoded })
+    }).then(function(response) {
+        console.log(response)
+        var emoArray = response[0].map(function(item) {
+            return {
+                emotion: item.label.charAt(0).toUpperCase() + item.label.slice(1),
+                num: item.score
+            };
+        });
+        emoArray.sort(function(a, b) { return b.num - a.num; });
+        console.log(emoArray)
 
-    // Angry: 0.0990534595
-    // Bored: 0.0390271503
-    // Excited: 0.2811283671
-    // Fear: 0.0782141498
-    // Happy: 0.4178697705
-    // Sad: 0.0847071027
-
-    // form: {text:text,api_key:API_KEY}}
-
-    return $.post("https://apis.paralleldots.com/v4/emotion", {
-        api_key: apiKeyPD,
-        text: text,
-    }).then(function (response) {
-
-        if (response.code >= 400) {
-            apiKeyPD = apiKeysArrayPD[apiKeyIndex % apiKeysArrayPD.length]
-            apiKeyIndex++;
-            console.log("switched to new Parallel Dots API_Key: " + apiKeyPD + " (" + apiKeyIndex + " --- " + (apiKeyIndex % apiKeysArrayPD.length ))
-            getParallelDotsEmotion(text)
-        } else {
-            console.log(response)
-            var emo = response.emotion;
-            var percentage = 0;
-
-            // Morgan wrote this:
-            var emoArray = [
-                { emotion: "Angry", num: emo.Angry },
-                { emotion: "Bored", num: emo.Bored },
-                { emotion: "Excited", num: emo.Excited },
-                { emotion: "Fear", num: emo.Fear },
-                { emotion: "Happy", num: emo.Happy },
-                { emotion: "Sad", num: emo.Sad }
-            ]
-            emoArray.sort(function (a, b) {
-                return a.num - b.num;
-            });
-
-            emoArray.reverse();
-            console.log(emoArray)
-
-            $("#emo-reading").empty();
-            for (var i = 0; i < emoArray.length; i++) {
-                percentage = Math.floor(emoArray[i].num * 100);
-                var emoOut = emoArray[i].emotion + " (" + percentage + "%)";
-
-                if (percentage > 1) {
-                    $("#emo-reading").append(emoOut + '<br>');
-                    console.log(emoOut)
-                }
+        $("#emo-reading").empty();
+        for (var i = 0; i < emoArray.length; i++) {
+            var percentage = Math.floor(emoArray[i].num * 100);
+            var emoOut = emoArray[i].emotion + " (" + percentage + "%)";
+            if (percentage > 1) {
+                $("#emo-reading").append(emoOut + '<br>');
+                console.log(emoOut)
             }
         }
-        return response;
-    })
+    }).fail(function() {
+        $("#emo-reading").text("Emotion data unavailable.");
+    });
 }
-
-
-// getFeels(veryBadReview)
 
 function getFeels(text, gotReview) {
 
