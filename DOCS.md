@@ -1,7 +1,9 @@
 # Cinement — Developer Documentation
 
 > Branch: `docs/cinement-documentation`
-> Last updated: 2026-04-10
+> Last updated: 2026-04-14
+
+> ⚠️ **Current API Status:** Parallel Dots keys are expired (all return `{"status":"Unauthorized"}`). MeaningCloud summarization is blocked by CORS when called from a browser. Both features are non-functional as of April 2026. See §9 for details and replacement options.
 
 ---
 
@@ -602,7 +604,7 @@ These are the existing problems you'll want to understand when continuing to fix
 
 ---
 
-### 9.2 MeaningCloud Summary API — Primary Active Issue
+### 9.2 MeaningCloud Summary API — Confirmed Broken (CORS)
 
 **Symptom:** `#review-summary` shows no text or stale placeholder after a search.
 
@@ -613,28 +615,30 @@ These are the existing problems you'll want to understand when continuing to fix
 - `167221f` — "remove broken patch-summary override"
 - `00e74e9` — "restore main.js and index.html to pre-summary-fix state" — code restored to pre-patch, meaning the MeaningCloud POST call is back as-is.
 
-**Current state:** `getSummary` (lines 165–176) calls `POST https://api.meaningcloud.com/summarization-1.0/` directly from the browser. The most likely failure modes are:
-1. **CORS:** MeaningCloud may not allow cross-origin POST from a GitHub Pages domain
-2. **API key exhaustion / account inactive:** The embedded key may be out of credits
-3. **API deprecation:** MeaningCloud has changed pricing/endpoints since 2019
+**Root cause (confirmed April 2026):** MeaningCloud's API is designed for server-side use (Python/PHP SDKs only). It does not support CORS for browser-originated requests, meaning `$.post(...)` calls from a GitHub Pages domain will always fail. The free tier (~40k calls/month) still exists and the key may be valid, but the API cannot be called directly from the browser without a backend proxy.
 
-The `getSentimentMC` function Jon wrote (lines 178–205) suffers from the same CORS/key issues and is additionally never called.
+**Replacement options (free, browser-compatible):**
+1. **Chrome Summarizer API** — `window.ai.summarizer` — free, runs locally, no CORS, no key required. Requires Chrome 138+ with ~22GB disk / 4GB VRAM for the on-device model. Chrome-only.
+2. **Backend proxy** — a small serverless function (Cloudflare Workers free tier, Vercel, etc.) that forwards the request to MeaningCloud, bypassing CORS. Adds a backend dependency.
+3. **Client-side extractive summarizer** — a pure JS library (e.g. `node-summarizer`, custom sentence-scoring) that runs in the browser with no API at all. No accounts, no limits, works everywhere.
+
+The `getSentimentMC` function (lines 178–205) has the same CORS problem and is additionally never called — it is dead code.
 
 ---
 
-### 9.3 Rate-Limit Detection Logic Bug (Parallel Dots)
+### 9.3 Rate-Limit Detection Logic Bug — Fixed
 
-Both `getParallelDotsSentiment` and `getParallelDotsEmotion` contain:
+~~Both `getParallelDotsSentiment` and `getParallelDotsEmotion` had an inverted condition that fired key rotation on every *successful* call.~~ **Fixed in commit `b56d213`** — condition corrected from `response.code <= 200 || response.code >= 400` to `response.code >= 400`.
 
-```javascript
-if (response.code <= 200 || response.code >= 400) {
-    // rotate key and retry
-}
-```
+### 9.3a Parallel Dots API Keys — All Expired (Confirmed April 2026)
 
-**This condition is inverted.** A successful Parallel Dots response has `code: 200`. The intent is clearly to rotate on error codes (≥ 400), but `<= 200` catches the success case too, meaning the key rotation fires on every successful call — burning through the key array even when nothing is wrong.
+All 8 keys in `apiKeysArrayPD` return `{"status":"Unauthorized"}`. The keys are from 2019; Parallel Dots has changed ownership and pricing since then. The key rotation system is intact but has nothing valid to rotate through.
 
-The condition should be `response.code >= 400` (or equivalently, check for `!== 200`).
+**Replacement options (free tier, browser-compatible via CORS):**
+1. **VADER / `compromise` JS** — client-side sentiment via pure JS NLP library. No API, no account, no CORS. Less accurate than ML-based APIs.
+2. **Hugging Face Inference API (free tier)** — hosted ML models, CORS-friendly, requires a free account and token. Rate-limited but functional.
+3. **Twinword Sentiment API** — has a free tier and CORS support. Replacement for both sentiment and emotion in one endpoint.
+4. **owen-api / text-processing.com** — older free NLP APIs, varying reliability.
 
 ---
 

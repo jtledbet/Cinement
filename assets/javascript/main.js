@@ -211,7 +211,7 @@ function getParallelDotsSentiment(text) {
     }).then(function (response) {
         console.log(response)
 
-        if (response.code <= 200 || response.code >= 400) {
+        if (response.code >= 400) {
             apiKeyPD = apiKeysArrayPD[apiKeyIndex % apiKeysArrayPD.length]
             apiKeyIndex++;
             console.log("switched to new Parallel Dots API_Key: " + apiKeyPD + " (" + apiKeyIndex + " --- " + (apiKeyIndex % apiKeysArrayPD.length ))
@@ -296,7 +296,7 @@ function getParallelDotsEmotion(text) {
         text: text,
     }).then(function (response) {
 
-        if (response.code <= 200 || response.code >= 400) {
+        if (response.code >= 400) {
             apiKeyPD = apiKeysArrayPD[apiKeyIndex % apiKeysArrayPD.length]
             apiKeyIndex++;
             console.log("switched to new Parallel Dots API_Key: " + apiKeyPD + " (" + apiKeyIndex + " --- " + (apiKeyIndex % apiKeysArrayPD.length ))
