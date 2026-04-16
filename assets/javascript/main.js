@@ -39,60 +39,6 @@ var ajaxOptions = {
 
 // API CALLS
 
-// getFeels(veryBadReview)
-
-function getFeels(text) {
-    getSummary(text)
-    getParallelDotsSentiment(text)
-    getParallelDotsEmotion(text)
-
-    $("#main-cell").fadeIn(1500, function () {
-        // Animation complete
-    });
-}
-
-function getSummary(text) {
-    var cutText = text.substring(0, 6000)
-    console.log(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + cutText + "&sentences=" + numSentences)
-    return $.post(baseURL + summaryURL + "?key=" + apiKeyMC + "&txt=" + cutText + "&sentences=" + numSentences, {
-
-    }).then(function (response) {
-        console.log(response)
-        console.log(response.summary)
-        $("#review-summary").text(response.summary)
-        return response;
-    })
-}
-
-function getSentimentMC(text) {
-    // Sentiment response object:
-    // agreement: "AGREEMENT"
-    // confidence: "100"
-    // irony: "NONIRONIC"
-    // model: "general_en"
-    // score_tag: "P+"
-    // sentence_list: [{…}]
-    // sentimented_concept_list: []
-    // sentimented_entity_list: []
-    // status: {code: "0", msg: "OK", credits: "1", remaining_credits: "19898"}
-    // subjectivity: "OBJECTIVE"
-
-    //  EVIDENTLY ONLY WORKS ON SINGLE SENTENCES?
-
-    return $.post(baseURL + sentimentURL + "?key=" + apiKeyMC + "&txt=" + text + "&lang=en", {
-
-    }).then(function (response) {
-        console.log(response)
-        console.log(response.sentiment)
-        console.log("agreement: " + response.agreement)
-        console.log("irony: " + response.irony)
-        console.log("subjectivity: " + response.subjectivity)
-        console.log("confidence: " + response.confidence)
-
-        return response;
-    })
-}
-
 function getReviews(id, overView) {
 
     var apiKeyMD = 'api_key=7c49e1342952d7c7e126e900862f9e64';
@@ -211,7 +157,7 @@ function getParallelDotsSentiment(text) {
     }).then(function (response) {
         console.log(response)
 
-        if (response.code <= 200 || response.code >= 400) {
+        if (response.code >= 400) {
             apiKeyPD = apiKeysArrayPD[apiKeyIndex % apiKeysArrayPD.length]
             apiKeyIndex++;
             console.log("switched to new Parallel Dots API_Key: " + apiKeyPD + " (" + apiKeyIndex + " --- " + (apiKeyIndex % apiKeysArrayPD.length ))
@@ -296,7 +242,7 @@ function getParallelDotsEmotion(text) {
         text: text,
     }).then(function (response) {
 
-        if (response.code <= 200 || response.code >= 400) {
+        if (response.code >= 400) {
             apiKeyPD = apiKeysArrayPD[apiKeyIndex % apiKeysArrayPD.length]
             apiKeyIndex++;
             console.log("switched to new Parallel Dots API_Key: " + apiKeyPD + " (" + apiKeyIndex + " --- " + (apiKeyIndex % apiKeysArrayPD.length ))

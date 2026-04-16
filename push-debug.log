@@ -1,0 +1,314 @@
+19:40:55.177584 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/bin
+19:40:55.206812 git.c:479               trace: built-in: git push -v origin master
+19:40:55.219761 run-command.c:667       trace: run_command: GIT_DIR=.git git remote-https origin https://github.com/jtledbet/Cinement.git
+19:40:55.219761 run-command.c:928       trace: start_command: git remote-https origin https://github.com/jtledbet/Cinement.git
+19:40:55.256765 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+19:40:55.273794 git.c:783               trace: exec: git-remote-https origin https://github.com/jtledbet/Cinement.git
+19:40:55.273794 run-command.c:667       trace: run_command: git-remote-https origin https://github.com/jtledbet/Cinement.git
+19:40:55.275237 run-command.c:928       trace: start_command: git-remote-https origin https://github.com/jtledbet/Cinement.git
+19:40:55.301486 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+19:40:55.336189 http.c:938              == Info: Couldn't find host github.com in the .netrc file; using defaults
+19:40:55.384165 http.c:938              == Info: Host github.com:443 was resolved.
+19:40:55.384165 http.c:938              == Info: IPv6: (none)
+19:40:55.384165 http.c:938              == Info: IPv4: 140.82.112.3
+19:40:55.384165 http.c:938              == Info:   Trying 140.82.112.3:443...
+19:40:55.398375 http.c:938              == Info: ALPN: curl offers h2,http/1.1
+19:40:55.399371 http.c:938              == Info: TLSv1.3 (OUT), TLS handshake, Client hello (1):
+19:40:55.825335 http.c:938              == Info:  CAfile: C:/Program Files/Git/mingw64/etc/ssl/certs/ca-bundle.crt
+19:40:55.825335 http.c:938              == Info:  CApath: none
+19:40:55.825335 http.c:938              == Info: TLSv1.3 (IN), TLS handshake, Server hello (2):
+19:40:55.826324 http.c:938              == Info: TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
+19:40:55.826324 http.c:938              == Info: TLSv1.3 (IN), TLS handshake, Certificate (11):
+19:40:55.830489 http.c:938              == Info: TLSv1.3 (IN), TLS handshake, CERT verify (15):
+19:40:55.830489 http.c:938              == Info: TLSv1.3 (IN), TLS handshake, Finished (20):
+19:40:55.832068 http.c:938              == Info: TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
+19:40:55.832068 http.c:938              == Info: TLSv1.3 (OUT), TLS handshake, Finished (20):
+19:40:55.832068 http.c:938              == Info: SSL connection using TLSv1.3 / TLS_AES_128_GCM_SHA256 / x25519 / id-ecPublicKey
+19:40:55.832068 http.c:938              == Info: ALPN: server accepted h2
+19:40:55.832068 http.c:938              == Info: Server certificate:
+19:40:55.832068 http.c:938              == Info:  subject: CN=github.com
+19:40:55.832068 http.c:938              == Info:  start date: Mar  6 00:00:00 2026 GMT
+19:40:55.832068 http.c:938              == Info:  expire date: Jun  3 23:59:59 2026 GMT
+19:40:55.832068 http.c:938              == Info:  subjectAltName: host "github.com" matched cert's "github.com"
+19:40:55.832068 http.c:938              == Info:  issuer: C=GB; O=Sectigo Limited; CN=Sectigo Public Server Authentication CA DV E36
+19:40:55.832068 http.c:938              == Info:  SSL certificate verify ok.
+19:40:55.832068 http.c:938              == Info:   Certificate level 0: Public key type EC/prime256v1 (256/128 Bits/secBits), signed using ecdsa-with-SHA256
+19:40:55.832068 http.c:938              == Info:   Certificate level 1: Public key type EC/prime256v1 (256/128 Bits/secBits), signed using ecdsa-with-SHA384
+19:40:55.832068 http.c:938              == Info:   Certificate level 2: Public key type EC/secp384r1 (384/192 Bits/secBits), signed using ecdsa-with-SHA384
+19:40:55.833668 http.c:938              == Info: Connected to github.com (140.82.112.3) port 443
+19:40:55.833668 http.c:938              == Info: using HTTP/2
+19:40:55.833668 http.c:938              == Info: [HTTP/2] [1] OPENED stream for https://github.com/jtledbet/Cinement.git/info/refs?service=git-receive-pack
+19:40:55.833668 http.c:938              == Info: [HTTP/2] [1] [:method: GET]
+19:40:55.833668 http.c:938              == Info: [HTTP/2] [1] [:scheme: https]
+19:40:55.833668 http.c:938              == Info: [HTTP/2] [1] [:authority: github.com]
+19:40:55.833668 http.c:938              == Info: [HTTP/2] [1] [:path: /jtledbet/Cinement.git/info/refs?service=git-receive-pack]
+19:40:55.833668 http.c:938              == Info: [HTTP/2] [1] [user-agent: git/2.47.0.windows.2]
+19:40:55.833668 http.c:938              == Info: [HTTP/2] [1] [accept: */*]
+19:40:55.833668 http.c:938              == Info: [HTTP/2] [1] [accept-encoding: deflate, gzip, br, zstd]
+19:40:55.833668 http.c:938              == Info: [HTTP/2] [1] [pragma: no-cache]
+19:40:55.833668 http.c:885              => Send header, 0000000197 bytes (0x000000c5)
+19:40:55.833668 http.c:897              => Send header: GET /jtledbet/Cinement.git/info/refs?service=git-receive-pack HTTP/2
+19:40:55.833668 http.c:897              => Send header: Host: github.com
+19:40:55.833668 http.c:897              => Send header: User-Agent: git/2.47.0.windows.2
+19:40:55.833668 http.c:897              => Send header: Accept: */*
+19:40:55.833668 http.c:897              => Send header: Accept-Encoding: deflate, gzip, br, zstd
+19:40:55.833668 http.c:897              => Send header: Pragma: no-cache
+19:40:55.833668 http.c:897              => Send header:
+19:40:55.833668 http.c:938              == Info: Request completely sent off
+19:40:55.846230 http.c:938              == Info: TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+19:40:55.914975 http.c:938              == Info: TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+19:40:55.915511 http.c:885              <= Recv header, 0000000013 bytes (0x0000000d)
+19:40:55.915511 http.c:897              <= Recv header: HTTP/2 401
+19:40:55.915511 http.c:885              <= Recv header, 0000000026 bytes (0x0000001a)
+19:40:55.915511 http.c:897              <= Recv header: server: GitHub-Babel/3.0
+19:40:55.915511 http.c:885              <= Recv header, 0000000054 bytes (0x00000036)
+19:40:55.915511 http.c:897              <= Recv header: content-security-policy: default-src 'none'; sandbox
+19:40:55.915511 http.c:885              <= Recv header, 0000000041 bytes (0x00000029)
+19:40:55.915511 http.c:897              <= Recv header: content-type: text/plain; charset=UTF-8
+19:40:55.915511 http.c:885              <= Recv header, 0000000040 bytes (0x00000028)
+19:40:55.915511 http.c:897              <= Recv header: www-authenticate: Basic realm="GitHub"
+19:40:55.915511 http.c:885              <= Recv header, 0000000020 bytes (0x00000014)
+19:40:55.915511 http.c:897              <= Recv header: content-length: 26
+19:40:55.915511 http.c:885              <= Recv header, 0000000037 bytes (0x00000025)
+19:40:55.915511 http.c:897              <= Recv header: date: Thu, 09 Apr 2026 23:40:57 GMT
+19:40:55.915511 http.c:885              <= Recv header, 0000000059 bytes (0x0000003b)
+19:40:55.915511 http.c:897              <= Recv header: x-github-request-id: 1390:151CD8:2215AB6:2DB52F5:69D83908
+19:40:55.915511 http.c:885              <= Recv header, 0000000023 bytes (0x00000017)
+19:40:55.915511 http.c:897              <= Recv header: x-frame-options: DENY
+19:40:55.915511 http.c:885              <= Recv header, 0000000073 bytes (0x00000049)
+19:40:55.915511 http.c:897              <= Recv header: strict-transport-security: max-age=31536000; includeSubDomains; preload
+19:40:55.915511 http.c:885              <= Recv header, 0000000002 bytes (0x00000002)
+19:40:55.915511 http.c:897              <= Recv header:
+19:40:55.915511 http.c:938              == Info: Connection #0 to host github.com left intact
+19:40:55.915511 run-command.c:667       trace: run_command: 'git credential-manager get'
+19:40:55.916533 run-command.c:928       trace: start_command: 'C:/Program Files/Git/usr/bin/sh.exe' -c 'git credential-manager get' 'git credential-manager get'
+19:40:56.010859 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+19:40:56.028429 git.c:783               trace: exec: git-credential-manager get
+19:40:56.028429 run-command.c:667       trace: run_command: git-credential-manager get
+19:40:56.028429 run-command.c:928       trace: start_command: git-credential-manager get
+19:40:56.174916 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+19:40:56.190453 git.c:479               trace: built-in: git config --null --list
+19:40:56.281683 ...\Application.cs:106  trace: [RunInternalAsync] Version: 2.6.0.0
+19:40:56.287063 ...\Application.cs:107  trace: [RunInternalAsync] Runtime: .NET Framework 4.8.9221.0
+19:40:56.287063 ...\Application.cs:108  trace: [RunInternalAsync] Platform: Windows (x86-64)
+19:40:56.287063 ...\Application.cs:109  trace: [RunInternalAsync] OSVersion: 10.0 (build 26200)
+19:40:56.287063 ...\Application.cs:110  trace: [RunInternalAsync] AppPath: C:\Program Files\Git\mingw64\bin\git-credential-manager.exe
+19:40:56.287063 ...\Application.cs:111  trace: [RunInternalAsync] InstallDir: C:\Program Files\Git\mingw64\bin\
+19:40:56.287063 ...\Application.cs:112  trace: [RunInternalAsync] Arguments: get
+19:40:56.343773 ...GitCommandBase.cs:32 trace: [ExecuteAsync] Start 'get' command...
+19:40:56.367634 ...GitCommandBase.cs:46 trace: [ExecuteAsync] Detecting host provider for input:
+19:40:56.370176 ...GitCommandBase.cs:47 trace: [ExecuteAsync] 	capability[]=authtype
+19:40:56.370176 ...GitCommandBase.cs:47 trace: [ExecuteAsync] 	capability[]=state
+19:40:56.371375 ...GitCommandBase.cs:47 trace: [ExecuteAsync] 	protocol=https
+19:40:56.371375 ...GitCommandBase.cs:47 trace: [ExecuteAsync] 	host=github.com
+19:40:56.371375 ...GitCommandBase.cs:47 trace: [ExecuteAsync] 	wwwauth=Basic realm="GitHub"
+19:40:56.378446 ...viderRegistry.cs:149 trace: [GetProviderAsync] Performing auto-detection of host provider.
+19:40:56.378446 ...viderRegistry.cs:162 trace: [GetProviderAsync] Auto-detect probe timeout is 2 ms.
+19:40:56.380992 ...viderRegistry.cs:170 trace: [GetProviderAsync] Checking against 4 host providers registered with priority 'Normal'.
+19:40:56.384541 ...GitCommandBase.cs:49 trace: [ExecuteAsync] Host provider 'GitHub' was selected.
+19:40:56.407248 ...bHostProvider.cs:142 trace: [GetCredentialAsync] Found 2 accounts in the store for service=https://github.com:
+19:40:56.407248 ...bHostProvider.cs:145 trace: [GetCredentialAsync]   Personal Access Token
+19:40:56.407248 ...bHostProvider.cs:145 trace: [GetCredentialAsync]   jtledbet
+19:40:56.408773 ...bHostProvider.cs:218 trace: [FilterAccounts] Account filtering is enabled.
+19:40:56.413719 ...bHostProvider.cs:226 trace: [FilterAccounts] Filtering based on WWW-Authenticate header information...
+19:40:56.413719 ...bHostProvider.cs:229 trace: [FilterAccounts] Matched 2 accounts with public domain:
+19:40:56.413719 ...bHostProvider.cs:234 trace: [FilterAccounts]   Personal Access Token
+19:40:56.413719 ...bHostProvider.cs:234 trace: [FilterAccounts]   jtledbet
+19:40:56.413719 ...bHostProvider.cs:158 trace: [GetCredentialAsync] Multiple accounts available - prompting user to select one...
+19:40:56.469901 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+19:40:56.485187 git.c:479               trace: built-in: git version
+19:40:56.525285 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+19:40:56.537219 git.c:479               trace: built-in: git config --null --type=path credential.https://github.com.gitHubHelper
+19:40:56.563054 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+19:40:56.583812 git.c:479               trace: built-in: git config --null --type=path credential.github.com.gitHubHelper
+19:40:56.607085 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+19:40:56.619485 git.c:479               trace: built-in: git config --null --type=path credential.gitHubHelper
+19:41:01.961744 ...bHostProvider.cs:175 trace: [GetCredentialAsync] Looking for existing credential in store with service=https://github.com account=jtledbet...
+19:41:01.972018 ...bHostProvider.cs:190 trace: [GetCredentialAsync] Existing credential found.
+19:41:01.972018 ...\GetCommand.cs:39    trace: [ExecuteInternalAsync] Writing credentials to output:
+19:41:01.973128 ...\GetCommand.cs:40    trace: [ExecuteInternalAsync] 	protocol=https
+19:41:01.973128 ...\GetCommand.cs:40    trace: [ExecuteInternalAsync] 	host=github.com
+19:41:01.973128 ...\GetCommand.cs:40    trace: [ExecuteInternalAsync] 	username=jtledbet
+19:41:01.973128 ...\GetCommand.cs:40    trace: [ExecuteInternalAsync] 	password=********
+19:41:01.973128 ...GitCommandBase.cs:53 trace: [ExecuteAsync] End 'get' command...
+19:41:02.153620 http.c:938              == Info: Re-using existing connection with host github.com
+19:41:02.153620 http.c:938              == Info: Server auth using Basic with user 'jtledbet'
+19:41:02.154633 http.c:938              == Info: [HTTP/2] [3] OPENED stream for https://github.com/jtledbet/Cinement.git/info/refs?service=git-receive-pack
+19:41:02.154633 http.c:938              == Info: [HTTP/2] [3] [:method: GET]
+19:41:02.154633 http.c:938              == Info: [HTTP/2] [3] [:scheme: https]
+19:41:02.154633 http.c:938              == Info: [HTTP/2] [3] [:authority: github.com]
+19:41:02.154633 http.c:938              == Info: [HTTP/2] [3] [:path: /jtledbet/Cinement.git/info/refs?service=git-receive-pack]
+19:41:02.154633 http.c:938              == Info: [HTTP/2] [3] [authorization: Basic <redacted>]
+19:41:02.154633 http.c:938              == Info: [HTTP/2] [3] [user-agent: git/2.47.0.windows.2]
+19:41:02.154633 http.c:938              == Info: [HTTP/2] [3] [accept: */*]
+19:41:02.154633 http.c:938              == Info: [HTTP/2] [3] [accept-encoding: deflate, gzip, br, zstd]
+19:41:02.154633 http.c:938              == Info: [HTTP/2] [3] [pragma: no-cache]
+19:41:02.154633 http.c:885              => Send header, 0000000288 bytes (0x00000120)
+19:41:02.154633 http.c:897              => Send header: GET /jtledbet/Cinement.git/info/refs?service=git-receive-pack HTTP/2
+19:41:02.154633 http.c:897              => Send header: Host: github.com
+19:41:02.154633 http.c:897              => Send header: Authorization: Basic <redacted>
+19:41:02.154633 http.c:897              => Send header: User-Agent: git/2.47.0.windows.2
+19:41:02.154633 http.c:897              => Send header: Accept: */*
+19:41:02.154633 http.c:897              => Send header: Accept-Encoding: deflate, gzip, br, zstd
+19:41:02.154633 http.c:897              => Send header: Pragma: no-cache
+19:41:02.154633 http.c:897              => Send header:
+19:41:02.154633 http.c:938              == Info: Request completely sent off
+19:41:02.568057 http.c:885              <= Recv header, 0000000013 bytes (0x0000000d)
+19:41:02.568057 http.c:897              <= Recv header: HTTP/2 200
+19:41:02.568057 http.c:885              <= Recv header, 0000000026 bytes (0x0000001a)
+19:41:02.568057 http.c:897              <= Recv header: server: GitHub-Babel/3.0
+19:41:02.568057 http.c:885              <= Recv header, 0000000060 bytes (0x0000003c)
+19:41:02.568057 http.c:897              <= Recv header: content-type: application/x-git-receive-pack-advertisement
+19:41:02.568057 http.c:885              <= Recv header, 0000000054 bytes (0x00000036)
+19:41:02.568057 http.c:897              <= Recv header: content-security-policy: default-src 'none'; sandbox
+19:41:02.568057 http.c:885              <= Recv header, 0000000040 bytes (0x00000028)
+19:41:02.568057 http.c:897              <= Recv header: expires: Fri, 01 Jan 1980 00:00:00 GMT
+19:41:02.568057 http.c:885              <= Recv header, 0000000018 bytes (0x00000012)
+19:41:02.568057 http.c:897              <= Recv header: pragma: no-cache
+19:41:02.568057 http.c:885              <= Recv header, 0000000053 bytes (0x00000035)
+19:41:02.568057 http.c:897              <= Recv header: cache-control: no-cache, max-age=0, must-revalidate
+19:41:02.568057 http.c:885              <= Recv header, 0000000023 bytes (0x00000017)
+19:41:02.568057 http.c:897              <= Recv header: vary: Accept-Encoding
+19:41:02.568057 http.c:885              <= Recv header, 0000000037 bytes (0x00000025)
+19:41:02.568057 http.c:897              <= Recv header: date: Thu, 09 Apr 2026 23:41:03 GMT
+19:41:02.568057 http.c:885              <= Recv header, 0000000059 bytes (0x0000003b)
+19:41:02.568057 http.c:897              <= Recv header: x-github-request-id: 1390:151CD8:2217CF7:2DB7EA0:69D83909
+19:41:02.568057 http.c:885              <= Recv header, 0000000023 bytes (0x00000017)
+19:41:02.568057 http.c:897              <= Recv header: x-frame-options: DENY
+19:41:02.568057 http.c:885              <= Recv header, 0000000073 bytes (0x00000049)
+19:41:02.568057 http.c:897              <= Recv header: strict-transport-security: max-age=31536000; includeSubDomains; preload
+19:41:02.568057 http.c:885              <= Recv header, 0000000002 bytes (0x00000002)
+19:41:02.568057 http.c:897              <= Recv header:
+19:41:02.568616 http.c:938              == Info: Connection #0 to host github.com left intact
+19:41:02.568616 run-command.c:667       trace: run_command: 'git credential-manager store'
+19:41:02.569653 run-command.c:928       trace: start_command: 'C:/Program Files/Git/usr/bin/sh.exe' -c 'git credential-manager store' 'git credential-manager store'
+19:41:02.667291 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+19:41:02.685143 git.c:783               trace: exec: git-credential-manager store
+19:41:02.685143 run-command.c:667       trace: run_command: git-credential-manager store
+19:41:02.686165 run-command.c:928       trace: start_command: git-credential-manager store
+19:41:02.843431 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+19:41:02.859524 git.c:479               trace: built-in: git config --null --list
+19:41:02.956091 ...\Application.cs:106  trace: [RunInternalAsync] Version: 2.6.0.0
+19:41:02.958178 ...\Application.cs:107  trace: [RunInternalAsync] Runtime: .NET Framework 4.8.9221.0
+19:41:02.958178 ...\Application.cs:108  trace: [RunInternalAsync] Platform: Windows (x86-64)
+19:41:02.958178 ...\Application.cs:109  trace: [RunInternalAsync] OSVersion: 10.0 (build 26200)
+19:41:02.958178 ...\Application.cs:110  trace: [RunInternalAsync] AppPath: C:\Program Files\Git\mingw64\bin\git-credential-manager.exe
+19:41:02.958178 ...\Application.cs:111  trace: [RunInternalAsync] InstallDir: C:\Program Files\Git\mingw64\bin\
+19:41:02.958178 ...\Application.cs:112  trace: [RunInternalAsync] Arguments: store
+19:41:03.028987 ...GitCommandBase.cs:32 trace: [ExecuteAsync] Start 'store' command...
+19:41:03.050353 ...GitCommandBase.cs:46 trace: [ExecuteAsync] Detecting host provider for input:
+19:41:03.053567 ...GitCommandBase.cs:47 trace: [ExecuteAsync] 	protocol=https
+19:41:03.053567 ...GitCommandBase.cs:47 trace: [ExecuteAsync] 	host=github.com
+19:41:03.053567 ...GitCommandBase.cs:47 trace: [ExecuteAsync] 	username=jtledbet
+19:41:03.053567 ...GitCommandBase.cs:47 trace: [ExecuteAsync] 	password=********
+19:41:03.060827 ...viderRegistry.cs:149 trace: [GetProviderAsync] Performing auto-detection of host provider.
+19:41:03.061366 ...viderRegistry.cs:162 trace: [GetProviderAsync] Auto-detect probe timeout is 2 ms.
+19:41:03.062933 ...viderRegistry.cs:170 trace: [GetProviderAsync] Checking against 4 host providers registered with priority 'Normal'.
+19:41:03.065328 ...GitCommandBase.cs:49 trace: [ExecuteAsync] Host provider 'GitHub' was selected.
+19:41:03.066394 ...bHostProvider.cs:257 trace: [StoreCredentialAsync] Storing credential with service=https://github.com account=jtledbet...
+19:41:03.077898 ...bHostProvider.cs:259 trace: [StoreCredentialAsync] Credential was successfully stored.
+19:41:03.077898 ...GitCommandBase.cs:53 trace: [ExecuteAsync] End 'store' command...
+19:41:03.100987 run-command.c:667       trace: run_command: 'git credential-store store'
+19:41:03.102008 run-command.c:928       trace: start_command: 'C:/Program Files/Git/usr/bin/sh.exe' -c 'git credential-store store' 'git credential-store store'
+19:41:03.211326 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+19:41:03.228227 git.c:479               trace: built-in: git credential-store store
+19:41:03.267167 pkt-line.c:86           packet:          git< # service=git-receive-pack
+19:41:03.267167 pkt-line.c:86           packet:          git< 0000
+19:41:03.267167 pkt-line.c:86           packet:          git< 1181e9d9ac6bf2352e4a1155cbc67bab32d62a3c refs/heads/Devin\0report-status report-status-v2 delete-refs side-band-64k ofs-delta atomic object-format=sha1 quiet agent=github/spokes-receive-pack-acac8763c60f636c44baaf5c3887895cf5f55c30 session-id=1390:151CD8:2217CF7:2DB7EA0:69D83909 push-options
+19:41:03.268546 pkt-line.c:86           packet:          git< 94282ba7aaa5c3834404b970d8c73437e1f72f48 refs/heads/fix/local-summary-mainjs
+19:41:03.268546 pkt-line.c:86           packet:          git< ab3187db32715bd780f46adebd4cb71049419760 refs/heads/jtledbet-patch-1
+19:41:03.268546 pkt-line.c:86           packet:          git< bd6522c88c1f3f431c4e1b7deaf164fc201e38da refs/heads/master
+19:41:03.268546 pkt-line.c:86           packet:          git< 7f0438d3a82a22fa61f0809db382929c42e93595 refs/heads/patch-summary-fix
+19:41:03.268546 pkt-line.c:86           packet:          git< 58413a51f5596fb931f77c61f992a97d148d201b refs/heads/solo_design
+19:41:03.268546 pkt-line.c:86           packet:          git< e200cabd9254fc431403675d5d20eee7b27074cd refs/tags/GPT
+19:41:03.268546 pkt-line.c:86           packet:          git< 0000
+19:41:03.274699 pkt-line.c:86           packet:          git> refs/heads/master:refs/heads/master
+19:41:03.274699 pkt-line.c:86           packet:          git> 0000
+19:41:03.274699 run-command.c:667       trace: run_command: git send-pack --stateless-rpc --helper-status --thin --verbose --no-progress https://github.com/jtledbet/Cinement.git/ --stdin
+19:41:03.274699 run-command.c:928       trace: start_command: git send-pack --stateless-rpc --helper-status --thin --verbose --no-progress https://github.com/jtledbet/Cinement.git/ --stdin
+19:41:03.301388 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+19:41:03.320310 git.c:479               trace: built-in: git send-pack --stateless-rpc --helper-status --thin --verbose --no-progress https://github.com/jtledbet/Cinement.git/ --stdin
+19:41:03.322979 pkt-line.c:86           packet:          git< refs/heads/master:refs/heads/master
+19:41:03.322979 pkt-line.c:86           packet:          git< 0000
+19:41:03.322979 pkt-line.c:86           packet:          git< 1181e9d9ac6bf2352e4a1155cbc67bab32d62a3c refs/heads/Devin\0report-status report-status-v2 delete-refs side-band-64k ofs-delta atomic object-format=sha1 quiet agent=github/spokes-receive-pack-acac8763c60f636c44baaf5c3887895cf5f55c30 session-id=1390:151CD8:2217CF7:2DB7EA0:69D83909 push-options
+19:41:03.322979 pkt-line.c:86           packet:          git< 94282ba7aaa5c3834404b970d8c73437e1f72f48 refs/heads/fix/local-summary-mainjs
+19:41:03.322979 pkt-line.c:86           packet:          git< ab3187db32715bd780f46adebd4cb71049419760 refs/heads/jtledbet-patch-1
+19:41:03.322979 pkt-line.c:86           packet:          git< bd6522c88c1f3f431c4e1b7deaf164fc201e38da refs/heads/master
+19:41:03.322979 pkt-line.c:86           packet:          git< 7f0438d3a82a22fa61f0809db382929c42e93595 refs/heads/patch-summary-fix
+19:41:03.322979 pkt-line.c:86           packet:          git< 58413a51f5596fb931f77c61f992a97d148d201b refs/heads/solo_design
+19:41:03.322979 pkt-line.c:86           packet:          git< e200cabd9254fc431403675d5d20eee7b27074cd refs/tags/GPT
+19:41:03.322979 pkt-line.c:86           packet:          git< 0000
+19:41:03.333836 pkt-line.c:86           packet:          git> bd6522c88c1f3f431c4e1b7deaf164fc201e38da 7f0438d3a82a22fa61f0809db382929c42e93595 refs/heads/master\0 report-status-v2 side-band-64k quiet object-format=sha1 agent=git/2.47.0.windows.2
+19:41:03.333836 pkt-line.c:86           packet:          git> 0000
+19:41:03.333836 pkt-line.c:86           packet:          git< 00bbbd6522c88c1f3f431c4e1b7deaf164fc201e38da 7f0438d3a82a22fa61f0809db382929c42e93595 refs/heads/master\0 report-status-v2 side-band-64k quiet object-format=sha1 agent=git/2.47.0.windows.20000
+19:41:03.333836 run-command.c:667       trace: run_command: git pack-objects --all-progress-implied --revs --stdout --thin --delta-base-offset -q
+19:41:03.333836 run-command.c:928       trace: start_command: git pack-objects --all-progress-implied --revs --stdout --thin --delta-base-offset -q
+19:41:03.354011 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+19:41:03.370363 git.c:479               trace: built-in: git pack-objects --all-progress-implied --revs --stdout --thin --delta-base-offset -q
+19:41:03.379054 pkt-line.c:86           packet:          git< PACK ...
+19:41:03.383082 pkt-line.c:86           packet:          git> 0000
+POST git-receive-pack (223 bytes)
+19:41:03.383082 http.c:938              == Info: Re-using existing connection with host github.com
+19:41:03.383082 http.c:938              == Info: Server auth using Basic with user 'jtledbet'
+19:41:03.383082 http.c:938              == Info: [HTTP/2] [5] OPENED stream for https://github.com/jtledbet/Cinement.git/git-receive-pack
+19:41:03.383082 http.c:938              == Info: [HTTP/2] [5] [:method: POST]
+19:41:03.383082 http.c:938              == Info: [HTTP/2] [5] [:scheme: https]
+19:41:03.383082 http.c:938              == Info: [HTTP/2] [5] [:authority: github.com]
+19:41:03.383082 http.c:938              == Info: [HTTP/2] [5] [:path: /jtledbet/Cinement.git/git-receive-pack]
+19:41:03.383082 http.c:938              == Info: [HTTP/2] [5] [authorization: Basic <redacted>]
+19:41:03.383082 http.c:938              == Info: [HTTP/2] [5] [user-agent: git/2.47.0.windows.2]
+19:41:03.383082 http.c:938              == Info: [HTTP/2] [5] [accept-encoding: deflate, gzip, br, zstd]
+19:41:03.383082 http.c:938              == Info: [HTTP/2] [5] [content-type: application/x-git-receive-pack-request]
+19:41:03.383082 http.c:938              == Info: [HTTP/2] [5] [accept: application/x-git-receive-pack-result]
+19:41:03.383082 http.c:938              == Info: [HTTP/2] [5] [content-length: 223]
+19:41:03.383082 http.c:885              => Send header, 0000000362 bytes (0x0000016a)
+19:41:03.383082 http.c:897              => Send header: POST /jtledbet/Cinement.git/git-receive-pack HTTP/2
+19:41:03.383082 http.c:897              => Send header: Host: github.com
+19:41:03.384087 http.c:897              => Send header: Authorization: Basic <redacted>
+19:41:03.384087 http.c:897              => Send header: User-Agent: git/2.47.0.windows.2
+19:41:03.384087 http.c:897              => Send header: Accept-Encoding: deflate, gzip, br, zstd
+19:41:03.384087 http.c:897              => Send header: Content-Type: application/x-git-receive-pack-request
+19:41:03.384087 http.c:897              => Send header: Accept: application/x-git-receive-pack-result
+19:41:03.384087 http.c:897              => Send header: Content-Length: 223
+19:41:03.384087 http.c:897              => Send header:
+19:41:03.384087 http.c:938              == Info: upload completely sent off: 223 bytes
+19:41:03.503943 http.c:885              <= Recv header, 0000000013 bytes (0x0000000d)
+19:41:03.503943 http.c:897              <= Recv header: HTTP/2 200
+19:41:03.503943 http.c:885              <= Recv header, 0000000026 bytes (0x0000001a)
+19:41:03.503943 http.c:897              <= Recv header: server: GitHub-Babel/3.0
+19:41:03.503943 http.c:885              <= Recv header, 0000000053 bytes (0x00000035)
+19:41:03.503943 http.c:897              <= Recv header: content-type: application/x-git-receive-pack-result
+19:41:03.503943 http.c:885              <= Recv header, 0000000054 bytes (0x00000036)
+19:41:03.503943 http.c:897              <= Recv header: content-security-policy: default-src 'none'; sandbox
+19:41:03.504478 http.c:885              <= Recv header, 0000000040 bytes (0x00000028)
+19:41:03.504478 http.c:897              <= Recv header: expires: Fri, 01 Jan 1980 00:00:00 GMT
+19:41:03.504478 http.c:885              <= Recv header, 0000000018 bytes (0x00000012)
+19:41:03.504478 http.c:897              <= Recv header: pragma: no-cache
+19:41:03.504478 http.c:885              <= Recv header, 0000000053 bytes (0x00000035)
+19:41:03.504478 http.c:897              <= Recv header: cache-control: no-cache, max-age=0, must-revalidate
+19:41:03.504478 http.c:885              <= Recv header, 0000000023 bytes (0x00000017)
+19:41:03.504478 http.c:897              <= Recv header: vary: Accept-Encoding
+19:41:03.504478 http.c:885              <= Recv header, 0000000037 bytes (0x00000025)
+19:41:03.504478 http.c:897              <= Recv header: date: Thu, 09 Apr 2026 23:41:04 GMT
+19:41:03.504478 http.c:885              <= Recv header, 0000000059 bytes (0x0000003b)
+19:41:03.504478 http.c:897              <= Recv header: x-github-request-id: 1390:151CD8:221830C:2DB867F:69D8390F
+19:41:03.504478 http.c:885              <= Recv header, 0000000023 bytes (0x00000017)
+19:41:03.504478 http.c:897              <= Recv header: x-frame-options: DENY
+19:41:03.504478 http.c:885              <= Recv header, 0000000073 bytes (0x00000049)
+19:41:03.504478 http.c:897              <= Recv header: strict-transport-security: max-age=31536000; includeSubDomains; preload
+19:41:03.504478 http.c:885              <= Recv header, 0000000002 bytes (0x00000002)
+19:41:03.504478 http.c:897              <= Recv header:
+19:41:03.516455 pkt-line.c:86           packet:     sideband< \2\0
+19:41:03.907318 pkt-line.c:86           packet:     sideband< \1000eunpack ok
+19:41:03.907318 http.c:938              == Info: Connection #0 to host github.com left intact
+19:41:03.907318 pkt-line.c:86           packet:     sideband< \10019ok refs/heads/master
+19:41:03.907318 pkt-line.c:86           packet:     sideband< \10000
+19:41:03.907318 pkt-line.c:86           packet:          git< unpack ok
+19:41:03.907318 pkt-line.c:86           packet:     sideband< 0000
+19:41:03.907318 pkt-line.c:86           packet:          git< ok refs/heads/master
+19:41:03.907318 pkt-line.c:86           packet:          git< 0000
+19:41:03.907318 pkt-line.c:86           packet:          git> 0000
+Pushing to https://github.com/jtledbet/Cinement.git
+To https://github.com/jtledbet/Cinement.git
+   bd6522c..7f0438d  master -> master
+updating local tracking ref 'refs/remotes/origin/master'
