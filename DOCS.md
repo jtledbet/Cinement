@@ -1,7 +1,9 @@
 # Cinement — Developer Documentation
 
 > Branch: `docs/cinement-documentation`
-> Last updated: 2026-04-15
+> Last updated: 2026-04-14
+
+> ⚠️ **Current API Status:** Parallel Dots keys are expired (all return `{"status":"Unauthorized"}`). MeaningCloud summarization is blocked by CORS when called from a browser. Both features are non-functional as of April 2026. See §9 for details and replacement options.
 
 ---
 
@@ -28,7 +30,7 @@
 
 ## 1. Project Overview
 
-**Cinement** is a client-side movie sentiment analysis web app. A user searches for a movie by title; Cinement pulls that film's written reviews from The Movie Database (TMDB), runs them through Hugging Face Inference API models for sentiment, emotion, and summarization. The results are displayed in a styled "focus" panel alongside the film's poster, title, year, and aggregate ratings.
+**Cinement** is a client-side movie sentiment analysis web app. A user searches for a movie by title; Cinement pulls that film's written reviews from The Movie Database (TMDB), runs them through Parallel Dots for sentiment and emotion analysis, and sends them to MeaningCloud for summarization. The results are displayed in a styled "focus" panel alongside the film's poster, title, year, and aggregate ratings.
 
 There is no backend. Every API call is made directly from the browser using jQuery Ajax.
 
@@ -42,25 +44,31 @@ The project was built by three collaborators. Understanding who owns what is use
 
 | Contributor | GitHub | Primary Responsibility |
 |---|---|---|
-| **Jon Ledbetter** (`jtledbet`) | [@jtledbet](https://github.com/jtledbet) | API configuration, Hugging Face integration, sentiment/emotion analysis logic, ratings |
+| **Jon Ledbetter** (`jtledbet`) | [@jtledbet](https://github.com/jtledbet) | API configuration, MeaningCloud integration, Parallel Dots analysis logic, ratings, recent 2026 API fixes |
 | **Devin Price** (`devingprice`) | [@devingprice](https://github.com/devingprice) | TMDB integration, data pipeline, Foundation init, event handlers, show/hide logic |
 | **Cody Swank** (`codyswank`) | [@codyswank](https://github.com/codyswank) | CSS & visual design, HTML layout, collapsible UI, frosted-glass effect |
 
 ### Ownership by File
 
-#### `assets/javascript/main.js`
+#### `assets/javascript/main.js` (510 lines)
 | Lines | Owner | Area |
 |---|---|---|
 | 1–3 | Devin | Foundation init, `getTrending()` startup call |
-| 8–10 | **Jon** | API keys (`apiKeyMD`, `apiKeyHF`, `HF_BASE`) |
-| 13–68 | Devin + **Jon** | `getReviews`, `getFirstReview`, `getTrending` |
-| 70–96 | **Jon** | `getSummary` — Hugging Face BART summarization |
-| 98–145 | **Jon** | `getParallelDotsSentiment` — HF RoBERTa + classification logic |
-| 147–179 | **Jon** | `getParallelDotsEmotion` — HF emotion model + sort & display |
-| 181–196 | Devin + **Jon** | `getFeels` — orchestrator with `gotReview` param |
-| 198–230 | **Jon** + Devin | `getRatings`, `combineReviewsText`, `updateFocus` |
-| 232–271 | **Jon** | `createTrendingDiv` |
-| 273–337 | Devin | All event handlers (collapsible, trending click, search, hide) |
+| 8–38 | **Jon** | All API keys, `ajaxOptions` template |
+| 44–52 | **Jon** | First `getFeels` definition *(shadowed — see §9)* |
+| 54–65 | **Jon** | First `getSummary` definition *(shadowed — see §9)* |
+| 67–94 | **Jon** | First `getSentimentMC` definition *(shadowed — see §9)* |
+| 96–117 | Devin + **Jon** | `getReviews` — Devin scaffolded TMDB call; Jon added the `overView` fallback |
+| 119–163 | Devin | `getFirstReview`, `getTrending` |
+| 165–176 | Devin | **Effective** `getSummary` *(wins over duplicate above)* |
+| 178–205 | **Jon** | **Effective** `getSentimentMC` *(currently unused dead code)* |
+| 207–266 | **Jon** | `getParallelDotsSentiment` — full classification logic |
+| 268–281 | **Jon** | `getParallelDotsKeyword` *(broken/disabled, error 500)* |
+| 283–338 | **Jon** | `getParallelDotsEmotion` — emotion sort & display |
+| 343–358 | Devin + **Jon** | **Effective** `getFeels` — orchestrator with `gotReview` param |
+| 360–393 | **Jon** + Devin | `getRatings`, `combineReviewsText`, `updateFocus` |
+| 395–434 | **Jon** | `createTrendingDiv` |
+| 436–510 | Devin | All event handlers (collapsible, trending click, search, hide) |
 
 #### `assets/css/style.css` (256 lines)
 Cody Swank authored ~182 of 256 lines (the bulk of all layout, component, and responsive styling). Jon contributed text shadows and minor tweaks. Devin contributed the `#focus` slide-down and `.focus-show` class.
@@ -91,8 +99,8 @@ getFirstReview(movieName)          [TMDB: search/movie]
                           ┌─────────────────┼─────────────────┐
                           ▼                 ▼                 ▼
                     getSummary(text)  getParallelDots-   getParallelDots-
-                    [HF BART]         Sentiment(text)    Emotion(text)
-                          │          [HF RoBERTa]        [HF distilRoBERTa]
+                    [MeaningCloud]    Sentiment(text)    Emotion(text)
+                          │          [ParallelDots]      [ParallelDots]
                           │                │                   │
                     #review-summary   #gen-sent           #emo-reading
                        (DOM)            (DOM)               (DOM)
@@ -100,7 +108,7 @@ getFirstReview(movieName)          [TMDB: search/movie]
 
 **Fallback behavior:** When TMDB returns zero reviews for a movie, `getFeels` is called with the movie's `overview` text and `gotReview = false`. In that case `getSummary` is skipped; the overview text is written directly to `#review-summary`, and sentiment/emotion analysis still runs on it.
 
-**Rate limiting:** Hugging Face Inference API enforces free-tier rate limits. Requests that hit the limit receive an HTTP 429 response; the `.fail()` handler in each function shows a graceful "unavailable" message rather than crashing.
+**Rate limiting:** Parallel Dots enforces per-key rate limits. Jon built an 8-key rotation array (`apiKeysArrayPD`). Both `getParallelDotsSentiment` and `getParallelDotsEmotion` detect a rate-limit response (using the `code` field) and re-call themselves with the next key. See §9 for a bug in this logic.
 
 ---
 
@@ -208,13 +216,26 @@ The page uses the [Foundation 6.5.3](https://get.foundation/sites/docs/) grid fr
 
 ### 6.1 Global State & Configuration
 
-> **Owner: Jon Ledbetter**  (`main.js` lines 8–10)
+> **Owner: Jon Ledbetter**  (`main.js` lines 8–38)
 
 ```javascript
-var apiKeyMD   // The Movie Database API key (query-string format: "api_key=...")
-var apiKeyHF   // Hugging Face Inference API token ("hf_...")
-var HF_BASE    // "https://api-inference.huggingface.co/models/" — base URL for all HF calls
+var apiKeyMC     // MeaningCloud API key
+var apiKeyMD     // The Movie Database API key (query-string format: "api_key=...")
+var apiKeysArrayPD   // Array of 8 Parallel Dots API keys
+var apiKeyIndex      // Current index into apiKeysArrayPD
+var apiKeyPD         // Active Parallel Dots key (= apiKeysArrayPD[apiKeyIndex])
+
+var baseURL      // "https://api.meaningcloud.com/"
+var summaryURL   // "summarization-1.0/"
+var sentimentURL // "sentiment-2.1"
+var numSentences // 5 — number of sentences in MeaningCloud summaries
+
+var queryURL     // Placeholder URL string (unused at runtime)
+var ajaxOptions  // Template Ajax options object (crossDomain, Content-Type headers)
+                 // Not used directly; individual calls construct their own options
 ```
+
+**API key rotation (Parallel Dots):** `apiKeyIndex` and `apiKeysArrayPD` together power the rate-limit rotation. When a Parallel Dots call detects a rate-limit response, it increments `apiKeyIndex` and sets `apiKeyPD` to the next key before retrying. See §9 for a logic bug in this system.
 
 ---
 
@@ -274,31 +295,42 @@ Fetches popular movies from TMDB and renders them as cards.
 
 ---
 
-#### `getSummary(text)`
-> **Owner: Jon Ledbetter**
+#### `getSummary(text)` *(effective version)*
+> Lines 165–176 | **Owner: Devin Price** (refactor); original by **Jon Ledbetter** (lines 54–65, shadowed)
 
-Calls the Hugging Face BART summarization model and writes the result to `#review-summary`.
+Calls MeaningCloud's summarization API and writes the result to `#review-summary`.
 
-- URL-decodes the input (reviews arrive URL-encoded from `combineReviewsText`); truncates to 1,000 characters (BART token limit)
-- `POST https://api-inference.huggingface.co/models/facebook/bart-large-cnn`
-- Headers: `Authorization: Bearer {apiKeyHF}`, `Content-Type: application/json`
-- Body: `{"inputs": decodedText}`
-- Response: `[{"summary_text": "..."}]`
-- On success: `$("#review-summary").text(response[0].summary_text)`
-- On failure (e.g. 429 rate limit): `$("#review-summary").text("Summary unavailable.")`
+- Truncates input to 6,000 characters before sending
+- `POST https://api.meaningcloud.com/summarization-1.0/?key={apiKeyMC}&txt={text}&sentences=5`
+- On success: `$("#review-summary").text(response.summary)`
+- Returns the jQuery promise (not currently awaited by `getFeels`)
+
+**API status:** MeaningCloud summarization is the primary area of recent API breakage. The summary endpoint was broken (returning no summary) as of 2026. See §9.
+
+---
+
+#### `getSentimentMC(text)` *(effective version — currently dead code)*
+> Lines 178–205 | **Owner: Jon Ledbetter**
+
+Calls MeaningCloud's sentiment analysis endpoint.
+
+- `POST https://api.meaningcloud.com/sentiment-2.1?key={apiKeyMC}&txt={text}&lang=en`
+- Returns: `score_tag` (P+/P/NEU/N/N+), `agreement`, `irony`, `subjectivity`, `confidence`
+- **Not called anywhere in the current execution path.** Jon's note in the code: *"EVIDENTLY ONLY WORKS ON SINGLE SENTENCES?"*
+
+This function was written as an alternative sentiment source but was never wired into `getFeels`. Parallel Dots is used for sentiment instead.
 
 ---
 
 #### `getParallelDotsSentiment(text)`
-> **Owner: Jon Ledbetter**
+> Lines 207–266 | **Owner: Jon Ledbetter**
 
-Calls a Hugging Face sentiment model (Cardiff NLP RoBERTa) and classifies the result into a human-readable label.
+Calls Parallel Dots sentiment API and classifies the result into a human-readable label.
 
-- URL-decodes and truncates input to 512 characters
-- `POST https://api-inference.huggingface.co/models/cardiffnlp/twitter-roberta-base-sentiment-latest`
-- Response: `[[{"label":"positive","score":0.9}, {"label":"neutral","score":0.08}, {"label":"negative","score":0.02}]]`
+- `POST https://apis.paralleldots.com/v4/sentiment` with `{api_key, text}`
+- Response: `{sentiment: {positive, neutral, negative}}` (floats 0–1)
 
-**Classification logic** (Jon's thresholds, unchanged from Parallel Dots version):
+**Classification logic** (Jon's thresholds):
 
 | Dominant score | Label |
 |---|---|
@@ -314,22 +346,34 @@ Calls a Hugging Face sentiment model (Cardiff NLP RoBERTa) and classifies the re
 
 Output: `$("#gen-sent").text("Positive (78%)")` — percentage is the dominant score × 100.
 
+**Rate-limit handling:** If `response.code <= 200 || response.code >= 400`, rotates to the next key and retries recursively. See §9 for the bug in this condition.
+
 ---
 
 #### `getParallelDotsEmotion(text)`
-> **Owner: Jon Ledbetter**
+> Lines 283–338 | **Owner: Jon Ledbetter**
 
-Calls a Hugging Face emotion model (Jochen Hartmann distilRoBERTa), sorts results by intensity, and renders a ranked list.
+Calls Parallel Dots emotion API, sorts results by intensity, and renders a ranked list.
 
-- URL-decodes and truncates input to 512 characters
-- `POST https://api-inference.huggingface.co/models/j-hartmann/emotion-english-distilroberta-base`
-- Response emotions: `anger`, `disgust`, `fear`, `joy`, `neutral`, `sadness`, `surprise` (floats 0–1)
+- `POST https://apis.paralleldots.com/v4/emotion` with `{api_key, text}`
+- Response emotions: `Angry`, `Bored`, `Excited`, `Fear`, `Happy`, `Sad` (floats 0–1)
 
 **Display logic:**
-1. Maps HF labels to capitalized strings (e.g. `joy` → `Joy`)
+1. Builds array of `{emotion, num}` objects
 2. Sorts descending by score
-3. For each emotion where `percentage > 1`: appends `"Joy (41%)<br>"` to `#emo-reading`
+3. For each emotion where `percentage > 1`: appends `"Happy (41%)<br>"` to `#emo-reading`
 4. Emotions scoring ≤ 1% are hidden
+
+Same rate-limit rotation logic as `getParallelDotsSentiment`.
+
+A comment in the code reads `// Morgan wrote this:` above the sort logic — this refers to an algorithm snippet, not a collaborator listed in the README.
+
+---
+
+#### `getParallelDotsKeyword(text)` *(broken — not called)*
+> Lines 268–281 | **Owner: Jon Ledbetter**
+
+Calls Parallel Dots keyword extraction API. Currently always returns HTTP 500. Not wired into any call path. Code comment: *"currently does not work (error 500)"*.
 
 ---
 
@@ -360,13 +404,12 @@ All three calls are fire-and-forget (no `Promise.all`). The fade-in animation st
 ### 6.4 Data Processing
 
 #### `combineReviewsText(reviewsRaw)`
-> **Owner: Devin Price**
+> Lines 371–385 | **Owner: Devin Price**
 
 Concatenates all review `.content` strings from TMDB, URL-encodes the result, and truncates to 9,000 characters.
 
 - Also writes `"Total Number of Reviews Collected: N"` to `#total-reviews`
-- Returns the combined + encoded string
-- The HF analysis functions (`getSummary`, `getParallelDotsSentiment`, `getParallelDotsEmotion`) each call `decodeURIComponent()` internally before sending the text to HF; a `try/catch` handles the plain-text overview fallback path (where no encoding was applied)
+- Returns the combined + encoded string, ready for API submission
 
 ---
 
@@ -514,54 +557,112 @@ Relevant movie object fields: `id`, `title`, `release_date`, `overview`, `poster
 
 ---
 
-### Hugging Face Inference API
+### MeaningCloud
 
-**Base URL:** `https://api-inference.huggingface.co/models/`
-**Auth:** `Authorization: Bearer {apiKeyHF}` request header
-**CORS:** Supported — callable directly from the browser.
-**Rate limits:** Free tier; HTTP 429 on excess requests. The `.fail()` handler in each function displays a graceful "unavailable" message.
+**Base URL:** `https://api.meaningcloud.com/`
+**Auth:** `key` query parameter
 
-| Model | Used in | Request body | Response |
-|---|---|---|---|
-| `facebook/bart-large-cnn` | `getSummary` | `{"inputs": text}` (≤ 1,000 chars) | `[{"summary_text": "..."}]` |
-| `cardiffnlp/twitter-roberta-base-sentiment-latest` | `getParallelDotsSentiment` | `{"inputs": text}` (≤ 512 chars) | `[[{"label":"positive\|neutral\|negative","score":float},...]]` |
-| `j-hartmann/emotion-english-distilroberta-base` | `getParallelDotsEmotion` | `{"inputs": text}` (≤ 512 chars) | `[[{"label":"anger\|disgust\|fear\|joy\|neutral\|sadness\|surprise","score":float},...]]` |
+| Endpoint | Used in | Notes |
+|---|---|---|
+| `POST /summarization-1.0/?key=...&txt=...&sentences=5` | `getSummary` | Returns `{summary: "..."}`. Text truncated to 6,000 chars before sending. **Currently broken — see §9.** |
+| `POST /sentiment-2.1?key=...&txt=...&lang=en` | `getSentimentMC` | Returns `score_tag`, `agreement`, `irony`, `subjectivity`, `confidence`. **Not called — dead code.** |
 
-All score values are floats in [0, 1] (probability). Each model returns scores for all its classes simultaneously, sorted by confidence.
+---
+
+### Parallel Dots
+
+**Base URL:** `https://apis.paralleldots.com/v4/`
+**Auth:** `api_key` POST body parameter
+
+| Endpoint | Used in | Returns |
+|---|---|---|
+| `POST /sentiment` | `getParallelDotsSentiment` | `{sentiment: {positive, neutral, negative}}` |
+| `POST /emotion` | `getParallelDotsEmotion` | `{emotion: {Angry, Bored, Excited, Fear, Happy, Sad}}` |
+| `POST /keywords` | `getParallelDotsKeyword` | Keywords — **HTTP 500, non-functional** |
+
+All values are floats in [0, 1] representing probability/confidence.
 
 ---
 
 ## 9. Known Issues & Technical Debt
 
-### 9.1 Duplicate Function Definitions — Resolved
+These are the existing problems you'll want to understand when continuing to fix the API issues.
 
-~~`main.js` contained duplicate definitions of `getSummary`, `getSentimentMC`, and `getFeels` due to the revert commit `00e74e9`.~~ **Resolved April 2026** — the full rewrite removed all duplicates, dead `getSentimentMC`, and the non-functional `getParallelDotsKeyword`.
+### 9.1 Duplicate Function Definitions
 
----
+`main.js` currently defines three functions twice each:
 
-### 9.2 MeaningCloud Summary API — Resolved
+| Function | First def (lines) | Second def (lines) | Effective version |
+|---|---|---|---|
+| `getSummary` | 54–65 (Jon) | 165–176 (Devin) | **Lines 165–176** |
+| `getSentimentMC` | 67–94 (Jon) | 178–205 (Jon) | **Lines 178–205** (identical) |
+| `getFeels` | 44–52 (Jon) | 343–358 (Devin+Jon) | **Lines 343–358** |
 
-~~MeaningCloud's summarization endpoint is blocked by CORS when called from a browser.~~ **Resolved April 2026** — `getSummary` now calls `facebook/bart-large-cnn` via Hugging Face Inference API, which supports CORS.
+**Why this happened:** The commit `00e74e9` ("restore main.js and index.html to pre-summary-fix state") on 2026-04-09 reverted `main.js` to a pre-patch state that contained earlier versions of these functions, but didn't fully remove the original/later definitions, resulting in both copies coexisting. In JavaScript, function declarations are hoisted; when two declarations share the same name, the last one in source order takes effect.
 
----
-
-### 9.3 Parallel Dots API Keys — Resolved
-
-~~All 8 keys in `apiKeysArrayPD` return `{"status":"Unauthorized"}` (keys from 2019, service changed ownership).~~ **Resolved April 2026** — Parallel Dots replaced with Hugging Face Inference API for both sentiment (`cardiffnlp/twitter-roberta-base-sentiment-latest`) and emotion (`j-hartmann/emotion-english-distilroberta-base`).
-
-The rate-limit inversion bug (`b56d213`) and the key-rotation infrastructure are no longer needed and have been removed.
+**The dead first definitions have no runtime effect.** They are purely cosmetic clutter but could mislead someone reading the code. The first `getFeels` (lines 44–52) in particular is missing the `gotReview` parameter, which would make analysis silently wrong if it were the active version.
 
 ---
 
-### 9.4 API Keys Hardcoded in Client-Side JS
+### 9.2 MeaningCloud Summary API — Confirmed Broken (CORS)
 
-All API keys are visible in the browser source. This is by design for a student/demo project with no backend, but is a security concern if any keys have billing attached. TMDB and Hugging Face free-tier tokens are low-risk; neither has automatic billing.
+**Symptom:** `#review-summary` shows no text or stale placeholder after a search.
+
+**History (from git log):**
+- `94282ba` — "Replace dead MeaningCloud summary call with local summarizer" — Devin rewrote `getSummary` to use a local alternative because the MC endpoint stopped working.
+- `7f0438d` — "patch broken client-side summary feature" — Jon patched it.
+- `640ac96` — "Revert 'patch broken client-side summary feature'" — patch reverted.
+- `167221f` — "remove broken patch-summary override"
+- `00e74e9` — "restore main.js and index.html to pre-summary-fix state" — code restored to pre-patch, meaning the MeaningCloud POST call is back as-is.
+
+**Root cause (confirmed April 2026):** MeaningCloud's API is designed for server-side use (Python/PHP SDKs only). It does not support CORS for browser-originated requests, meaning `$.post(...)` calls from a GitHub Pages domain will always fail. The free tier (~40k calls/month) still exists and the key may be valid, but the API cannot be called directly from the browser without a backend proxy.
+
+**Replacement options (free, browser-compatible):**
+1. **Chrome Summarizer API** — `window.ai.summarizer` — free, runs locally, no CORS, no key required. Requires Chrome 138+ with ~22GB disk / 4GB VRAM for the on-device model. Chrome-only.
+2. **Backend proxy** — a small serverless function (Cloudflare Workers free tier, Vercel, etc.) that forwards the request to MeaningCloud, bypassing CORS. Adds a backend dependency.
+3. **Client-side extractive summarizer** — a pure JS library (e.g. `node-summarizer`, custom sentence-scoring) that runs in the browser with no API at all. No accounts, no limits, works everywhere.
+
+The `getSentimentMC` function (lines 178–205) has the same CORS problem and is additionally never called — it is dead code.
 
 ---
 
-### 9.5 `getFeels` Calls Are Not Awaited
+### 9.3 Rate-Limit Detection Logic Bug — Fixed
+
+~~Both `getParallelDotsSentiment` and `getParallelDotsEmotion` had an inverted condition that fired key rotation on every *successful* call.~~ **Fixed in commit `b56d213`** — condition corrected from `response.code <= 200 || response.code >= 400` to `response.code >= 400`.
+
+### 9.3a Parallel Dots API Keys — All Expired (Confirmed April 2026)
+
+All 8 keys in `apiKeysArrayPD` return `{"status":"Unauthorized"}`. The keys are from 2019; Parallel Dots has changed ownership and pricing since then. The key rotation system is intact but has nothing valid to rotate through.
+
+**Replacement options (free tier, browser-compatible via CORS):**
+1. **VADER / `compromise` JS** — client-side sentiment via pure JS NLP library. No API, no account, no CORS. Less accurate than ML-based APIs.
+2. **Hugging Face Inference API (free tier)** — hosted ML models, CORS-friendly, requires a free account and token. Rate-limited but functional.
+3. **Twinword Sentiment API** — has a free tier and CORS support. Replacement for both sentiment and emotion in one endpoint.
+4. **owen-api / text-processing.com** — older free NLP APIs, varying reliability.
+
+---
+
+### 9.4 `getParallelDotsKeyword` — Non-Functional
+
+Always returns HTTP 500. Code comment acknowledges this. Not wired into `getFeels`. Can be removed or debugged separately from the rest.
+
+---
+
+### 9.5 API Keys Hardcoded in Client-Side JS
+
+All API keys are visible in the browser source. This is by design for a student/demo project with no backend, but is a security concern if any of these keys have billing attached. TMDB keys in particular are tied to accounts.
+
+---
+
+### 9.6 `getFeels` Calls Are Not Awaited
 
 `getSummary`, `getParallelDotsSentiment`, and `getParallelDotsEmotion` are all called fire-and-forget inside `getFeels`. The `#main-cell` fade-in starts immediately. In practice this means the panel slides open before any API responses arrive and the data fields populate asynchronously as each call completes. This is visible behavior (fields appear to "pop in"). Using `Promise.all` would allow coordinating the fade-in with data readiness if desired.
+
+---
+
+### 9.7 Minor: `ajaxOptions` Object is Unused
+
+The global `ajaxOptions` template object (lines 28–38, Jon) sets `Content-Type: application/json` and `Accept: JSON` headers. None of the actual Ajax calls reference it; they each construct their own `$.ajax({})` or `$.post()` call independently.
 
 ---
 
@@ -571,4 +672,4 @@ The app is deployed via **GitHub Pages** from the `master` branch of `https://gi
 
 **To run locally:** No build step is required. Open `index.html` directly in a browser, or serve it with any static file server (e.g., `python -m http.server 8080`). Some browsers block cross-origin requests from `file://` — a local server avoids this.
 
-**Note on CORS:** Because all API calls originate from the browser, they are subject to each API provider's CORS policy. TMDB and Hugging Face Inference API both support cross-origin requests from the browser.
+**Note on CORS:** Because all API calls originate from the browser, they are subject to each API provider's CORS policy. TMDB and Parallel Dots permit cross-origin requests. MeaningCloud's behavior in this regard is a likely contributor to the summary feature's broken state.
